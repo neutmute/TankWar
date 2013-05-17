@@ -13,6 +13,8 @@ namespace TankWar
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            RouteTable.Routes.MapHubs();
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
