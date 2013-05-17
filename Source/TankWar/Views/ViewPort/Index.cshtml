@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Tank War View Port";
+}
+<a href="?canvas=1" id="canvas-mode">Use canvas engine.</a>
+<a href="?html=1" id="html-mode">Use HTML engine</a>
+<a href="?webgl=1" id="webgl-mode">Use WebGL engine (experimental)</a>
+  <style>.sjs{border:2px #999 solid;}</style>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+
+        varying vec2 vTextureCoord;
+
+        void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            vTextureCoord = aTextureCoord;
+        }
+    </script>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+        #ifdef GL_ES
+            precision highp float;
+        #endif
+
+        varying vec2 vTextureCoord;
+
+        uniform sampler2D uSampler;
+
+        void main(void) {
+            gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        }
+    </script>
+
+<h2>Tank War View Port</h2>
+
+<div class="row">
+    <div class="span10" id="sceneDiv"></div>
+    <div class="span2"></div>
+</div>
+@section Scripts {
+    <script src="~/Scripts/sprite.js"></script>
+    
+<script>
+
+    window.onload = function () {
+
+        var scene = sjs.Scene({ w: 800, h: 400, parent: document.getElementById('sceneDiv') });
+
+        scene.loadImages(['Content/Sprites/Tank1.gif'], function () {
+
+            var canvas = window.location.href.indexOf('canvas') != -1;
+            var webgl = window.location.href.indexOf('webgl') != -1;
+
+            var sprites = [];
+            if (canvas) {
+                document.getElementById('canvas-mode').style.display = 'none';
+                var layer = scene.Layer("layer", { useCanvas: true });
+            } else if (webgl) {
+                document.getElementById('webgl-mode').style.display = 'none';
+                var layer = scene.Layer("layer", { useWebGL: true });
+            } else {
+                document.getElementById('html-mode').style.display = 'none';
+                var layer = scene.Layer("layer", { useCanvas: false });
+            }
+
+            for (var i = 0; i < 1; i++) {
+                var sp = scene.Sprite('Content/Sprites/Tank1.gif', layer);
+                sp.size(40, 33);
+                sp.setYOffset(2);
+                // sp.move(6 * i + 10, 70 + ((i%4) * 60));
+                sprites.push(sp);
+            }
+
+            var cycle = sjs.Cycle([[18, 60, 5],
+                                   [60, 60, 5],
+                                   [100, 60, 5],
+                                   [140, 60, 5],
+                                   [180, 60, 5],
+                                   [220, 60, 5],
+                                   [260, 60, 5]]);
+            cycle.addSprites(sprites);
+
+            tankSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
+            tankSprite.size(40, 40);
+            tankSprite.setYOffset(2);
+            tankSprite.move(40, 50);
+
+            shellSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
+            shellSprite.size(8, 8);
+            shellSprite.setYOffset(0);
+            shellSprite.move(90, 150);
+
+            var shootCycle = sjs.Cycle([[5, 6, 5],
+                                           [55, 6, 5],
+                                           [100, 6, 5],
+                                           [145, 6, 5],
+                                           [190, 6, 5]]);
+            shootCycle.addSprites(tankSprite);
+
+            var shellCycle = sjs.Cycle([[238, 26, 5],
+                                           [250, 26, 5]]);
+
+            shellCycle.addSprites(shellSprite);
+
+            var sin_cycle = 0,
+                ms_to_render = 0,
+                average_ms = 0,
+                load = document.getElementById('load'),
+                fps = document.getElementById('fps');
+
+
+
+            // apply the latest visual changes to the sprite
+            // (draw if canvas, update attribute if DOM);
+            tankSprite.update();
+
+            tankSprite.name = 'ben';
+
+
+        });
+
+    };
+</script>
+}
