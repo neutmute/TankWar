@@ -13,16 +13,16 @@ namespace TankWar.Hubs
 
         #region IViewPortClients Members
 
-        public void InitGame(ViewPortGameState viewPortGameState)
+        public void StartGame(ViewPortState viewPortState)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ViewPortHub>();
-            context.Clients.All.initGame(viewPortGameState);
+            context.Clients.All.startGame(viewPortState);
         }
 
-        public void Tick(ViewPortGameState viewPortGameState)
+        public void Tick(ViewPortState viewPortState)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ViewPortHub>();
-            context.Clients.All.tick(viewPortGameState);
+            context.Clients.All.tick(viewPortState);
         }
 
         #endregion
@@ -30,7 +30,7 @@ namespace TankWar.Hubs
 
     public class ViewPortHub : CoreHub, IViewPortHub
     {
-        public void SendTick(ViewPortGameState viewPortGameState)
+        public void SendTick(ViewPortState viewPortState)
         {
          //   Clients.
         }

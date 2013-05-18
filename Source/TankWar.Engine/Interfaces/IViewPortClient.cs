@@ -2,8 +2,8 @@
 {
     public interface IViewPortClients
     {
-        void InitGame(ViewPortGameState viewPortGameState);
+        void StartGame(ViewPortState viewPortState);
 
-        void Tick(ViewPortGameState viewPortGameState);
+        void Tick(ViewPortState viewPortState);
     }
 }

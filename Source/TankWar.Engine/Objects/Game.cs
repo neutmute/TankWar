@@ -66,6 +66,7 @@ namespace TankWar.Engine
             Log.Info("Game initialised");
             Status = GameStatus.WaitingForPlayers;
             _countDown = CountDownSeconds;
+
         }
 
         public void PlayerJoined(string name)
@@ -81,6 +82,15 @@ namespace TankWar.Engine
             _gameClock.Start();
             _time = 0;
             Log.Info("Game on!");
+
+
+            var viewPortState = new ViewPortState();
+            var tank1 = new Tank { Id = 1, Point = new Point(100, 350) };
+            var tank2 = new Tank { Id = 2, Point = new Point(400, 350) };
+
+            viewPortState.Tanks.Add(tank1);
+            viewPortState.Tanks.Add(tank2);
+            GetViewPortClients().StartGame(viewPortState);
         }
 
         public void Stop()
@@ -106,7 +116,7 @@ namespace TankWar.Engine
         {
             Log.Info("Tick!");
             _time++;
-            GetViewPortClients().Tick(new ViewPortGameState());
+            GetViewPortClients().Tick(new ViewPortState());
 
         }
     }

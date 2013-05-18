@@ -1,3 +1,5 @@
+@using TankWar.Models
+@model ViewPortModel
 @{
     ViewBag.Title = "Tank War View Port";
 }
@@ -45,31 +47,68 @@
     <script src="~/Scripts/sprite.js"></script>
     
     <script>
+        function sceneControllerClass() {
+
+            var self = this;
+            var scene = null;
+            var tankSprites = [];
+
+            this.startGame = function(viewState) {
+
+                console.log('startGame');
+
+                if (scene != null) {
+                    scene.reset();
+                }
+
+                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv') });
+
+                scene.loadImages(['Content/Sprites/Tank1.gif'], function() {
+
+                    var layer = scene.Layer("layer", { useCanvas: false });
+
+                    for (var i = 0; i < viewState.Tanks.length; i++) {
+
+                        var viewStateTank = viewState.Tanks[i];
+                        var tankSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
+                        tankSprite.size(43, 30);
+                        tankSprite.setXOffset(5);
+                        tankSprite.setYOffset(16);
+
+                        tankSprite.move(viewStateTank.Point.X, viewStateTank.Point.Y);
+                        tankSprite.serverId = viewStateTank.Id;
+
+                        tankSprites.push(tankSprite);
+                        tankSprite.update();
+                    }
+                });
+            }
+        }
+
+
         $(function() {
-            //var hub = $.connection.viewPortHub;
 
-            $.connection.viewPortHub.client.initGame = function (viewState) {
-                console.log('initGame');
-            };
+            
+            var sceneController = new sceneControllerClass();
 
-            $.connection.viewPortHub.client.tick = function (viewState) {
-                console.log('tick');
-            };
-            
-            $.connection.hub.start().done(function () {
-                console.log("started hub!");
-                $.connection.viewPortHub.server.ping();
-                
-               
-            });
-            
+            $.connection.viewPortHub.client.startGame = sceneController.startGame;
+
+            $.connection.viewPortHub.client.tick = function(viewState) {
+            console.log('tick');
+        };
+
+            $.connection.hub.start().done(function() {
+            console.log("started hub!");
+            $.connection.viewPortHub.server.ping();
+        });
+
 
         });
 
-        window.onload = function() {
+            window.onload = function() {
 
-            var scene = sjs.Scene({ w: 800, h: 400, parent: document.getElementById('sceneDiv') });
-
+            //var scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv') });
+            /*
             scene.loadImages(['Content/Sprites/Tank1.gif'], function() {
 
                 var canvas = window.location.href.indexOf('canvas') != -1;
@@ -141,7 +180,7 @@
 
 
             });
-
+            */
         };
     </script>
 }

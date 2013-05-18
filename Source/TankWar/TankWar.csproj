@@ -200,6 +200,7 @@
     <Compile Include="Hubs\CoreHub.cs" />
     <Compile Include="Hubs\GamepadHub.cs" />
     <Compile Include="Hubs\ViewPortHub.cs" />
+    <Compile Include="Models\ViewPortModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -339,7 +340,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

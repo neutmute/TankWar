@@ -34,9 +34,9 @@ namespace TankWar
             appdata.LogStartup();
 
 
+            Game.Instance.GetViewPortClients = () => new ViewPortHubClientsProxy();
             Game.Instance.Init();
 
-            Game.Instance.GetViewPortClients = () => new ViewPortHubClientsProxy();
             //Game.Instance.Start();
         }
     }
