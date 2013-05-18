@@ -69,9 +69,9 @@
                         tankSprite.update();
                     }
                     
-                    var tankFiringCycle = sjs.Cycle([   [5, 6, 5],
-                                                        [55, 6, 5],
-                                                        [100, 6, 5],
+                    var tankFiringCycle = sjs.Cycle([   [5, 6, 1],
+                                                        [55, 6, 10],
+                                                        [100, 6, 10],
                                                         [145, 6, 5],
                                                         [190, 6, 5]]);
 
@@ -118,7 +118,7 @@
 
             $.connection.viewPortHub.client.startGame = sceneController.startGame;
 
-           // $.connection.viewPortHub.client.tick = sceneController.tick;
+            $.connection.viewPortHub.client.tick = sceneController.tick;
 
             $.connection.hub.start().done(function() {
                 console.log("started hub!");
@@ -128,82 +128,5 @@
 
         });
 
-        window.onload = function() {
-
-            //var scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv') });
-            /*
-            scene.loadImages(['Content/Sprites/Tank1.gif'], function() {
-
-                var canvas = window.location.href.indexOf('canvas') != -1;
-                var webgl = window.location.href.indexOf('webgl') != -1;
-
-                var sprites = [];
-                if (canvas) {
-                    document.getElementById('canvas-mode').style.display = 'none';
-                    var layer = scene.Layer("layer", { useCanvas: true });
-                } else if (webgl) {
-                    document.getElementById('webgl-mode').style.display = 'none';
-                    var layer = scene.Layer("layer", { useWebGL: true });
-                } else {
-                    document.getElementById('html-mode').style.display = 'none';
-                    var layer = scene.Layer("layer", { useCanvas: false });
-                }
-
-                for (var i = 0; i < 1; i++) {
-                    var sp = scene.Sprite('Content/Sprites/Tank1.gif', layer);
-                    sp.size(40, 33);
-                    sp.setYOffset(2);
-                    // sp.move(6 * i + 10, 70 + ((i%4) * 60));
-                    sprites.push(sp);
-                }
-
-                var cycle = sjs.Cycle([[18, 60, 5],
-                    [60, 60, 5],
-                    [100, 60, 5],
-                    [140, 60, 5],
-                    [180, 60, 5],
-                    [220, 60, 5],
-                    [260, 60, 5]]);
-                cycle.addSprites(sprites);
-
-                tankSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
-                tankSprite.size(40, 40);
-                tankSprite.setYOffset(2);
-                tankSprite.move(40, 50);
-
-                shellSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
-                shellSprite.size(8, 8);
-                shellSprite.setYOffset(0);
-                shellSprite.move(90, 150);
-
-                var shootCycle = sjs.Cycle([[5, 6, 5],
-                    [55, 6, 5],
-                    [100, 6, 5],
-                    [145, 6, 5],
-                    [190, 6, 5]]);
-                shootCycle.addSprites(tankSprite);
-
-                var shellCycle = sjs.Cycle([[238, 26, 5],
-                    [250, 26, 5]]);
-
-                shellCycle.addSprites(shellSprite);
-
-                var sin_cycle = 0,
-                    ms_to_render = 0,
-                    average_ms = 0,
-                    load = document.getElementById('load'),
-                    fps = document.getElementById('fps');
-
-
-                // apply the latest visual changes to the sprite
-                // (draw if canvas, update attribute if DOM);
-                tankSprite.update();
-
-                tankSprite.name = 'ben';
-
-
-            });
-            */
-        };
     </script>
 }
