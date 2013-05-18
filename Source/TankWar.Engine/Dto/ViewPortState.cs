@@ -8,7 +8,7 @@ namespace TankWar.Engine
 {
     public class ViewPortState
     {
-        public List<Tank> Tanks { get; private set; }
+        public List<Tank> Tanks { get; set; }
 
         public List<Shell> Shells { get; private set; }
 

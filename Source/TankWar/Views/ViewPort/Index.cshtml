@@ -83,29 +83,49 @@
                     }
                 });
             }
+
+            this.tick = function(viewState) {
+                console.log('tick');
+                for(var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
+                    var sprite = tankSprites[spriteIndex];
+                    var viewStateTank = null;
+                    for (var i = 0; i < viewState.Tanks.length; i++) {
+                        var viewStateTankCandidate = viewState.Tanks[i]; 
+                        if (sprite.serverId == viewStateTankCandidate.Id) {
+                            viewStateTank = viewStateTankCandidate;
+                        }
+                    }
+                    if (viewStateTank == null) {
+                        sprite.remove();
+                        console.log('removing sprite');
+                    } else {
+                        sprite.setX(viewStateTank.Point.X);
+                        sprite.setY(viewStateTank.Point.Y);
+                        sprite.update();
+                    }
+                }
+            };
         }
 
 
         $(function() {
 
-            
+
             var sceneController = new sceneControllerClass();
 
             $.connection.viewPortHub.client.startGame = sceneController.startGame;
 
-            $.connection.viewPortHub.client.tick = function(viewState) {
-            console.log('tick');
-        };
+            $.connection.viewPortHub.client.tick = sceneController.tick;
 
             $.connection.hub.start().done(function() {
-            console.log("started hub!");
-            $.connection.viewPortHub.server.ping();
-        });
+                console.log("started hub!");
+                $.connection.viewPortHub.server.ping();
+            });
 
 
         });
 
-            window.onload = function() {
+        window.onload = function() {
 
             //var scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv') });
             /*
