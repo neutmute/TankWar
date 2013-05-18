@@ -79,6 +79,7 @@ namespace TankWar.Engine
         public void CountdownTick(object sender, ElapsedEventArgs e)
         {
             _countDown--;
+            
             if (_countDown == 0)
             {
                 Start();
@@ -92,6 +93,8 @@ namespace TankWar.Engine
         public void GameTick(object sender, ElapsedEventArgs e)
         {
             Log.Info("Tick!");
+            _time++;
+
         }
     }
 }

@@ -44,6 +44,9 @@
     <Reference Include="Kraken.Framework.Core">
       <HintPath>..\..\ReferencedAssemblies\Kraken.Framework.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Kraken.Framework.Core.FullFx">
+      <HintPath>..\..\ReferencedAssemblies\Kraken.Framework.Core.FullFx.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.1.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -194,7 +197,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\CoreHub.cs" />
     <Compile Include="Hubs\GamepadHub.cs" />
+    <Compile Include="Hubs\ViewPortHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

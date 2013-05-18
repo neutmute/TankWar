@@ -6,7 +6,7 @@ using Microsoft.AspNet.SignalR;
 
 namespace TankWar.Hubs
 {
-    public class GamepadHub : Hub
+    public class GamepadHub : CoreHub
     {
     }
 }
