@@ -38,10 +38,12 @@ namespace TankWar.Engine
             _gameClock = new Timer();
             _gameClock.Interval = 500;
             _gameClock.Elapsed += GameTick;
+            _gameClock.Stop();
 
             _countDownClock = new Timer();
             _countDownClock.Interval = 1000;
             _countDownClock.Elapsed += CountdownTick;
+            _countDownClock.Stop();
         }
 
 

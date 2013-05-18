@@ -13,6 +13,12 @@ namespace TankWar.Hubs
         {
             
         }
+
+        public void Ping()
+        {
+            Log.Info("Ping from {0}", Context.ConnectionId);
+        }
+
         public void DoWork()
         {
             bool result = false;

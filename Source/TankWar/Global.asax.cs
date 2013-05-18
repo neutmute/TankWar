@@ -34,7 +34,7 @@ namespace TankWar
 
 
             Game.Instance.Init();
-            Game.Instance.Start();
+            //Game.Instance.Start();
         }
     }
 }
