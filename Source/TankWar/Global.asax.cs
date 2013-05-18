@@ -9,6 +9,7 @@ using System.Web.Routing;
 using Kraken.Framework.Core;
 using NLog;
 using TankWar.Engine;
+using TankWar.Hubs;
 
 namespace TankWar
 {
@@ -34,6 +35,8 @@ namespace TankWar
 
 
             Game.Instance.Init();
+
+            Game.Instance.GetViewPortClients = () => new ViewPortHubClientsProxy();
             //Game.Instance.Start();
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TankWar.Engine
 {
-    public class Tick
+    public class ViewPortGameState
     {
         List<Tank> Tanks { get; set; }
 

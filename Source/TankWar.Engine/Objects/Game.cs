@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using NLog;
+using TankWar.Engine.Dto;
+using TankWar.Engine.Interfaces;
 
 namespace TankWar.Engine
 {
@@ -44,12 +46,20 @@ namespace TankWar.Engine
             _countDownClock.Interval = 1000;
             _countDownClock.Elapsed += CountdownTick;
             _countDownClock.Stop();
+
+            Screen = new Area(0, 0, 800, 400);
         }
 
 
         #endregion
+        /// <summary>
+        /// IOC property injection
+        /// </summary>
+        public Func<IViewPortClients> GetViewPortClients { get; set; }
 
         public GameStatus Status {get;set;}
+
+        public Area Screen { get; private set; }
 
         public void Init()
         {
@@ -96,6 +106,7 @@ namespace TankWar.Engine
         {
             Log.Info("Tick!");
             _time++;
+            GetViewPortClients().Tick(new ViewPortGameState());
 
         }
     }

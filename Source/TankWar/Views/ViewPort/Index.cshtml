@@ -47,11 +47,22 @@
     <script>
         $(function() {
             //var hub = $.connection.viewPortHub;
+
+            $.connection.viewPortHub.client.initGame = function (viewState) {
+                console.log('initGame');
+            };
+
+            $.connection.viewPortHub.client.tick = function (viewState) {
+                console.log('tick');
+            };
             
             $.connection.hub.start().done(function () {
                 console.log("started hub!");
                 $.connection.viewPortHub.server.ping();
+                
+               
             });
+            
 
         });
 
