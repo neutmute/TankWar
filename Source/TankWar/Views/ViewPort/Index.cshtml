@@ -3,39 +3,9 @@
 @{
     ViewBag.Title = "Tank War View Port";
 }
-<a href="?canvas=1" id="canvas-mode">Use canvas engine.</a>
-<a href="?html=1" id="html-mode">Use HTML engine</a>
-<a href="?webgl=1" id="webgl-mode">Use WebGL engine (experimental)</a>
-  <style>.sjs{border:2px #999 solid;}</style>
 
-    <script id="shader-vs" type="x-shader/x-vertex">
-        attribute vec3 aVertexPosition;
-        attribute vec2 aTextureCoord;
+<style>.sjs{border:2px #999 solid;}</style>
 
-        uniform mat4 uMVMatrix;
-        uniform mat4 uPMatrix;
-
-        varying vec2 vTextureCoord;
-
-        void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-            vTextureCoord = aTextureCoord;
-        }
-    </script>
-
-<script id="shader-fs" type="x-shader/x-fragment">
-        #ifdef GL_ES
-            precision highp float;
-        #endif
-
-        varying vec2 vTextureCoord;
-
-        uniform sampler2D uSampler;
-
-        void main(void) {
-            gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-        }
-    </script>
 
 <h2>Tank War View Port</h2>
 
@@ -52,7 +22,23 @@
             var self = this;
             var scene = null;
             var tankSprites = [];
-
+            var cycleTicker = null;
+            var cycleList = sjs.List();
+            
+            
+            this.cycleAnimations = function() {
+                var cycle;
+                console.log('cylcingticker');
+                while(cycle = cycleList.iterate()) {
+                    cycle.next();
+                    if (cycle.done) {
+                        cycle.reset();
+                        cycleList.remove(cycle);
+                    }
+                    cycle.update();
+                }
+            }
+            
             this.startGame = function(viewState) {
 
                 console.log('startGame');
@@ -61,19 +47,20 @@
                     scene.reset();
                 }
 
-                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv') });
+                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause:false });
 
                 scene.loadImages(['Content/Sprites/Tank1.gif'], function() {
 
                     var layer = scene.Layer("layer", { useCanvas: false });
 
+                    // load player tanks
                     for (var i = 0; i < viewState.Tanks.length; i++) {
 
                         var viewStateTank = viewState.Tanks[i];
                         var tankSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
-                        tankSprite.size(43, 30);
+                        tankSprite.size(43, 40);
                         tankSprite.setXOffset(5);
-                        tankSprite.setYOffset(16);
+                        tankSprite.setYOffset(6);
 
                         tankSprite.move(viewStateTank.Point.X, viewStateTank.Point.Y);
                         tankSprite.serverId = viewStateTank.Id;
@@ -81,8 +68,24 @@
                         tankSprites.push(tankSprite);
                         tankSprite.update();
                     }
+                    
+                    var tankFiringCycle = sjs.Cycle([   [5, 6, 5],
+                                                        [55, 6, 5],
+                                                        [100, 6, 5],
+                                                        [145, 6, 5],
+                                                        [190, 6, 5]]);
+
+                    tankFiringCycle.repeat = false;
+                    tankFiringCycle.addSprite(tankSprites[1]);
+                    cycleList.add(tankFiringCycle);
+                    
+                    
+                    cycleTicker = scene.Ticker(30, self.cycleAnimations);
+                    cycleTicker.run();
+
                 });
             }
+            
 
             this.tick = function(viewState) {
                 console.log('tick');
@@ -115,7 +118,7 @@
 
             $.connection.viewPortHub.client.startGame = sceneController.startGame;
 
-            $.connection.viewPortHub.client.tick = sceneController.tick;
+           // $.connection.viewPortHub.client.tick = sceneController.tick;
 
             $.connection.hub.start().done(function() {
                 console.log("started hub!");

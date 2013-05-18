@@ -119,7 +119,7 @@ namespace TankWar.Engine
 
         public void GameTick(object sender, ElapsedEventArgs e)
         {
-            Log.Info("Tick!");
+            //Log.Info("Tick!");
             _time++;
 
             var tanks = ServerGameState.AllTanks;
