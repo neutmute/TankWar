@@ -19,6 +19,8 @@
     <script>
         function sceneControllerClass() {
 
+
+            var tankSpriteUrl = '@Url.Content("~/Content/Sprites/Tank1.gif")';
             var self = this;
             var scene = null;
             var tankSprites = [];
@@ -49,7 +51,7 @@
 
                 scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause:false });
 
-                scene.loadImages(['Content/Sprites/Tank1.gif'], function() {
+                scene.loadImages([tankSpriteUrl], function() {
 
                     var layer = scene.Layer("layer", { useCanvas: false });
 
@@ -57,7 +59,7 @@
                     for (var i = 0; i < viewState.Tanks.length; i++) {
 
                         var viewStateTank = viewState.Tanks[i];
-                        var tankSprite = scene.Sprite('Content/Sprites/Tank1.gif', layer);
+                        var tankSprite = scene.Sprite(tankSpriteUrl, layer);
                         tankSprite.size(43, 40);
                         tankSprite.setXOffset(5);
                         tankSprite.setYOffset(6);
