@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Kraken.Framework.Core;
+using NLog;
+using TankWar.Engine;
 
 namespace TankWar
 {
@@ -14,6 +17,8 @@ namespace TankWar
 
     public class WebApiApplication : System.Web.HttpApplication
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -22,6 +27,14 @@ namespace TankWar
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Log.Info("-------------------------------------------------------------------------------------------------------");
+            var appdata = ExecutionEnvironment.GetApplicationMetadata();
+            appdata.LogStartup();
+
+
+            Game.Instance.Init();
+            Game.Instance.Start();
         }
     }
 }
