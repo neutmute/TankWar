@@ -41,11 +41,16 @@ namespace TankWar.Hubs
             var player = FindPlayer();
             if (player != null)
             {
+                Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
                 player.Name = name;
-                Log.Info("Player {0} is now known as '{1}'", Context.ConnectionId, name);
             }
-            player.Status = PlayerStatus.WaitingForName;
+            player.Status = PlayerStatus.GameInPlay;
             return player.Status;
+        }
+
+        public void UpdateTurretStatus(int power, int angle)
+        {
+            Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
         }
         
         public void Shoot(int power, int angle)
@@ -56,6 +61,17 @@ namespace TankWar.Hubs
         private Player FindPlayer()
         {
             return Game.Instance.State.Players.FirstOrDefault(p => p.ConnectionId == Context.ConnectionId);
+        }
+
+        private string GetPlayerName()
+        {
+            var name = Context.ConnectionId;
+            var player = FindPlayer();
+            if (player != null && !string.IsNullOrEmpty(player.Name))
+            {
+                name = player.Name;
+            }
+            return name;
         }
     }
 }

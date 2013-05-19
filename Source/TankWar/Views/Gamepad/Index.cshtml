@@ -38,7 +38,7 @@
 
 @section Scripts {
     <script>
-        ko.bindingHandlers.slider = {            
+        ko.bindingHandlers.slider = {
             init: function(element, valueAccessor, allBindingsAccessor) {
                 var options = allBindingsAccessor().sliderOptions || {};
                 $(element).slider(options);
@@ -70,6 +70,7 @@
             this.power = ko.observable(0);
             this.angle = ko.observable(90);
             this.playerStatus = ko.observable();
+            var connected = false;
 
             self.stateWaitingForName = ko.computed(function() {
                 return self.playerStatus() == 0;
@@ -91,14 +92,25 @@
                 this.hub.server.ping()
                     .done(this.updatePlayerStatus)
                     .fail(this.handleError);
+
+                connected = true;
+            }
+
+            this.sendTurretStatus = function() {
+
+                if (connected) {
+                    self.hub.server.updateTurretStatus(self.power(), self.angle())
+                        //.done(this.updatePlayerStatus)
+                        .fail(self.handleError);
+                }
             }
 
             this.updatePlayerStatus = function(status) {
                 console.log('playerStatus=' + status);
                 self.playerStatus(status);
             }
-            
-            this.handleError = function (error) {
+
+            this.handleError = function(error) {
                 console.warn(error);
             }
 
@@ -114,6 +126,9 @@
                         console.log('Kapoom!');
                     }).fail(this.handleError);
             }
+
+            this.angle.subscribe(self.sendTurretStatus);
+            this.power.subscribe(self.sendTurretStatus);
 
         }
 
