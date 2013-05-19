@@ -200,6 +200,7 @@
     <Compile Include="Hubs\ViewPortHub.cs" />
     <Compile Include="Models\ViewPortModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -335,6 +336,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\ViewPort\Index.cshtml" />
+    <Content Include="Views\Gamepad\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
