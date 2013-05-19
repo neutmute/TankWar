@@ -39,7 +39,7 @@ namespace TankWar.Engine
         private Game()
         {
             _gameClock = new Timer();
-            _gameClock.Interval = 5;
+            _gameClock.Interval = 20;
             _gameClock.Elapsed += GameTick;
             _gameClock.Stop();
 
@@ -123,7 +123,14 @@ namespace TankWar.Engine
             _time++;
 
             var tanks = ServerGameState.AllTanks;
-            tanks.ForEach(t => t.Point.X += 1);
+            tanks.ForEach(t => { 
+                //t.Point.X += 1;
+                                   t.TurretAngle++;
+                if (t.TurretAngle > 180)
+                {
+                    t.TurretAngle = 0;
+                }
+            });
 
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = ServerGameState.AllTanks;
