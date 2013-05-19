@@ -24,5 +24,10 @@ namespace TankWar.Hubs
         {
             return Game.Instance.State.Status;
         }
+
+        public void Shoot(int power, int angle)
+        {
+            Log.Info("Shoot {0}, {1} from {2}", power, angle, Context.ConnectionId);
+        }
     }
 }

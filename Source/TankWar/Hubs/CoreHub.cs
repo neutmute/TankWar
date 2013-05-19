@@ -21,6 +21,12 @@ namespace TankWar.Hubs
             return base.OnConnected();
         }
 
+        public override Task OnReconnected()
+        {
+            Log.Info("{0} *re*connected to {2} from {1}", Context.ConnectionId, WebLogic.ClientIdentity, this.GetType().Name);
+            return base.OnReconnected();
+        }
+
         public override Task OnDisconnected()
         {
             Log.Info("{0} disconnected", Context.ConnectionId);

@@ -17,25 +17,5 @@ namespace TankWar.Hubs
             Game.Instance.Start();
         }
 
-        //public void SendTick(ViewPortState viewPortState)
-        //{
-        // //   Clients.
-        //}
-
-
-        //public void DoWork()
-        //{
-        //    bool result = false;
-
-        //    try
-        //    {
-               
-        //    }
-        //    catch (Exception)
-        //    {
-        //        Clients.Caller.raiseError("Unable to update the Person.");
-        //    }
-
-        //}
     }
 }

@@ -2,7 +2,6 @@
     ViewBag.Title = "Tank War Gamepad";
 }
 
-
 <form class="form-search">
   <input type="text" class="input-medium"  placeholder="Type something…">
   <button type="submit" class="btn">Go</button>
@@ -12,31 +11,32 @@
     <div class="span2">
         <div class="row">
             <div class="span2">
-                <div id="sliderAngle"></div>        
+                <div id="sliderAngle" data-bind="slider:angle"></div>        
             </div>
         </div>
         <div class="row">
             <div class="span2"><br />
-                Power:<br />
-                Angle:
+                Power:<span data-bind="text:power"></span><br />
+                Angle:<span data-bind="text: angle"></span>
             </div>
         </div>
         
     </div>
     <div class="span2">
         
-        <div id="sliderPower"></div>
+        <div id="sliderPower" data-bind="slider:power"></div>
     </div>
 </div>
 <div class="row">
     <div class="span4">
-        <button class="btn btn-danger btn-large"><i class="icon-white icon-arrow-up"></i> Fire!</button>
+        <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
     </div>
 </div>
 
 @section Scripts {
     <script>
         ko.bindingHandlers.slider = {
+            
             init: function(element, valueAccessor, allBindingsAccessor) {
                 var options = allBindingsAccessor().sliderOptions || {};
                 $(element).slider(options);
@@ -52,6 +52,7 @@
                     observable(ui.value);
                 });
             },
+            
             update: function(element, valueAccessor) {
                 var value = ko.utils.unwrapObservable(valueAccessor());
                 if (isNaN(value)) value = 0;
@@ -61,14 +62,31 @@
         };
 
         function gamepadViewModel() {
-            this.hub = $.connection.gamepadHub;
-
             var self = this;
-            var gameStatus = ko.observable();
+            this.hub = $.connection.gamepadHub;
+            this.power = ko.observable(0);
+            this.angle = ko.observable(90);
+            this.gameStatus = ko.observable();
 
             this.init = function () {
-                gameStatus(this.hub.server.getGameStatus());
+                this.hub.server.getGameStatus()
+                    .done(function (result) {
+                        console.log('gamestate=' + result);
+                        self.gameStatus(result);
+                    }).fail(function (error) {
+                        console.warn(error);
+                    });;
             }
+            
+            this.shoot = function() {
+                this.hub.server.shoot(this.power(), this.angle())
+                    .done(function () {
+                        console.log('Kapow!');
+                    }).fail(function (error) {
+                        console.warn(error);
+                    });
+            }
+            
         }
 
         $(function() {
