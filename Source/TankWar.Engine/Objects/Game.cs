@@ -19,6 +19,14 @@ namespace TankWar.Engine
         GameOver
     }
 
+    public enum PlayerStatus
+    {
+        WaitingForName,
+        GameInCountdown,
+        GameInPlay,
+        WaitingForNextGame
+    }
+
     public class Game
     {
         #region Fields
@@ -61,8 +69,7 @@ namespace TankWar.Engine
         public Func<IViewPortClients> GetViewPortClients { get; set; }
 
         public Func<IGamepadClients> GetGamepadClients { get; set; }
-
-
+        
         public Area Screen { get; private set; }
 
         public ServerGameState State { get; private set; }

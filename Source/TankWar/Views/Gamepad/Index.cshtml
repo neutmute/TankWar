@@ -2,41 +2,43 @@
     ViewBag.Title = "Tank War Gamepad";
 }
 
-<form class="form-search">
-  <input type="text" class="input-medium"  placeholder="Type something…">
-  <button type="submit" class="btn">Go</button>
-</form>
+<div class="row" data-bind="visible: stateWaitingForName">
+    <form class="form-horizontal">
+        <input type="text" class="input-large"  placeholder="What is your name soldier?" data-bind="value:name">
+        <button type="submit" class="btn" data-bind="click: setName">Sir, Yes, Sir!</button>
+    </form>
+</div>
 
-<div class="row">
-    <div class="span2">
-        <div class="row">
-            <div class="span2">
-                <div id="sliderAngle" data-bind="slider:angle"></div>        
+<span data-bind="visible: stateGameInPlay">
+    <div class="row">
+        <div class="span2">
+            <div class="row">
+                <div class="span2">
+                    <div id="sliderAngle" data-bind="slider:angle"></div>        
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2"><br />
+                    Power:<span data-bind="text:power"></span><br />
+                    Angle:<span data-bind="text:angle"></span>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="span2"><br />
-                Power:<span data-bind="text:power"></span><br />
-                Angle:<span data-bind="text: angle"></span>
-            </div>
+        <div class="span2">
+        
+            <div id="sliderPower" data-bind="slider:power"></div>
         </div>
-        
     </div>
-    <div class="span2">
-        
-        <div id="sliderPower" data-bind="slider:power"></div>
+    <div class="row">
+        <div class="span4">
+            <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="span4">
-        <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
-    </div>
-</div>
+</span>
 
 @section Scripts {
     <script>
-        ko.bindingHandlers.slider = {
-            
+        ko.bindingHandlers.slider = {            
             init: function(element, valueAccessor, allBindingsAccessor) {
                 var options = allBindingsAccessor().sliderOptions || {};
                 $(element).slider(options);
@@ -52,7 +54,7 @@
                     observable(ui.value);
                 });
             },
-            
+
             update: function(element, valueAccessor) {
                 var value = ko.utils.unwrapObservable(valueAccessor());
                 if (isNaN(value)) value = 0;
@@ -64,29 +66,55 @@
         function gamepadViewModel() {
             var self = this;
             this.hub = $.connection.gamepadHub;
+            this.name = ko.observable();
             this.power = ko.observable(0);
             this.angle = ko.observable(90);
-            this.gameStatus = ko.observable();
+            this.playerStatus = ko.observable();
 
-            this.init = function () {
-                this.hub.server.getGameStatus()
-                    .done(function (result) {
-                        console.log('gamestate=' + result);
-                        self.gameStatus(result);
-                    }).fail(function (error) {
-                        console.warn(error);
-                    });;
+            self.stateWaitingForName = ko.computed(function() {
+                return self.playerStatus() == 0;
+            });
+
+            self.stateGameInCountdown = ko.computed(function() {
+                return self.playerStatus() == 1;
+            });
+
+            self.stateGameInPlay = ko.computed(function() {
+                return self.playerStatus() == 2;
+            });
+
+            self.stateWaitingForNextGame = ko.computed(function() {
+                return self.playerStatus() == 3;
+            });
+
+            this.init = function() {
+                this.hub.server.ping()
+                    .done(this.updatePlayerStatus)
+                    .fail(this.handleError);
+            }
+
+            this.updatePlayerStatus = function(status) {
+                console.log('playerStatus=' + status);
+                self.playerStatus(status);
             }
             
+            this.handleError = function (error) {
+                console.warn(error);
+            }
+
+            this.setName = function() {
+                this.hub.server.setName(this.name())
+                    .done(this.updatePlayerStatus)
+                    .fail(this.handleError);
+            }
+
             this.shoot = function() {
                 this.hub.server.shoot(this.power(), this.angle())
-                    .done(function () {
-                        console.log('Kapow!');
-                    }).fail(function (error) {
-                        console.warn(error);
-                    });
+                    .done(function() {
+                        console.log('Kapoom!');
+                    }).fail(this.handleError);
             }
-            
+
         }
 
         $(function() {
@@ -106,11 +134,11 @@
             });
         }
         );
-        
+
         var viewModel = new gamepadViewModel();
         ko.applyBindings(viewModel);
 
-        $.connection.hub.start().done(function () {
+        $.connection.hub.start().done(function() {
             viewModel.init();
         });
     </script>

@@ -13,5 +13,7 @@ namespace TankWar.Engine.Objects
         public string ConnectionId { get; set; }
 
         public Tank Tank { get; set; }
+
+        public PlayerStatus Status { get; set; }
     }
 }
