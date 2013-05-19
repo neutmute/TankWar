@@ -35,6 +35,7 @@ namespace TankWar
 
 
             Game.Instance.GetViewPortClients = () => new ViewPortHubClientsProxy();
+            Game.Instance.GetGamepadClients = () => new GamepadHubClientsProxy();
             Game.Instance.Init();
 
             //Game.Instance.Start();

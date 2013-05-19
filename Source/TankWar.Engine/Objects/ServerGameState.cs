@@ -10,6 +10,8 @@ namespace TankWar.Engine.Objects
     {
         public List<Player> Players { get; private set; }
 
+        public GameStatus Status { get; set; }
+
         public ServerGameState()
         {
             Players = new List<Player>();

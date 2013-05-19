@@ -17,7 +17,7 @@ namespace TankWar.Hubs
 
         public override Task OnConnected()
         {
-            Log.Info("{0} connected from {1}", Context.ConnectionId, WebLogic.ClientIdentity);
+            Log.Info("{0} connected to {2} from {1}", Context.ConnectionId, WebLogic.ClientIdentity, this.GetType().Name);
             return base.OnConnected();
         }
 
@@ -26,5 +26,6 @@ namespace TankWar.Hubs
             Log.Info("{0} disconnected", Context.ConnectionId);
             return base.OnDisconnected();
         }
+
     }
 }

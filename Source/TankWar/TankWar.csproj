@@ -198,6 +198,7 @@
     <Compile Include="Hubs\CoreHub.cs" />
     <Compile Include="Hubs\GamepadHub.cs" />
     <Compile Include="Hubs\ViewPortHub.cs" />
+    <Compile Include="Hubs\ViewPortHubClientsProxy.cs" />
     <Compile Include="Models\ViewPortModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
