@@ -1,15 +1,36 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tank War Gamepad";
 }
 
-<h4>this is the controller</h4>
+
+<form class="form-search">
+  <input type="text" class="input-medium"  placeholder="Type something…">
+  <button type="submit" class="btn">Go</button>
+</form>
 
 <div class="row">
     <div class="span2">
-        <div id="sliderAngle"></div>
+        <div class="row">
+            <div class="span2">
+                <div id="sliderAngle"></div>        
+            </div>
+        </div>
+        <div class="row">
+            <div class="span2"><br />
+                Power:<br />
+                Angle:
+            </div>
+        </div>
+        
     </div>
     <div class="span2">
+        
         <div id="sliderPower"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="span4">
+        <button class="btn btn-danger btn-large"><i class="icon-white icon-arrow-up"></i> Fire!</button>
     </div>
 </div>
 
