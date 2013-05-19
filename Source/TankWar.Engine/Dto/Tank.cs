@@ -14,7 +14,7 @@ namespace TankWar.Engine
 
     public class Tank : Sprite
     {
-        public Orientation Orientation { get; set; }
+        public int TurretAngle { get; set; }
 
         /// <summary>
         /// Initiate explosion

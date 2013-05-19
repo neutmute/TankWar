@@ -17,6 +17,35 @@
     <script src="~/Scripts/sprite.js"></script>
     
     <script>
+        function TankModel(sprite) {
+            var self = this;
+            var _sprite = sprite;
+
+            this.setTurret = function(tankModel) {
+                if (tankModel.TurretAngle < 23) {
+                    _sprite.setXOffset(5);
+                    _sprite.setYOffset(6);
+                    _sprite.setXScale(1);
+                } else if (tankModel.TurretAngle < 68) {
+                    _sprite.setXOffset(260);
+                    _sprite.setYOffset(6);
+                    _sprite.setXScale(-1);
+                } else if (tankModel.TurretAngle < 113) {
+                    _sprite.setXOffset(297);
+                    _sprite.setYOffset(6);
+                    
+                } else if (tankModel.TurretAngle < 158) {
+                    _sprite.setXOffset(260);
+                    _sprite.setYOffset(6);
+                    _sprite.setXScale(1);
+                } else {
+                    _sprite.setXOffset(5);
+                    _sprite.setYOffset(6);
+                    _sprite.setXScale(-1);
+                }
+            }
+        }
+
         function sceneControllerClass() {
 
 
@@ -26,12 +55,12 @@
             var tankSprites = [];
             var cycleTicker = null;
             var cycleList = sjs.List();
-            
-            
+
+
             this.cycleAnimations = function() {
                 var cycle;
-                console.log('cylcingticker');
-                while(cycle = cycleList.iterate()) {
+               // console.log('cylcingticker');
+                while (cycle = cycleList.iterate()) {
                     cycle.next();
                     if (cycle.done) {
                         cycle.reset();
@@ -40,7 +69,7 @@
                     cycle.update();
                 }
             }
-            
+
             this.startGame = function(viewState) {
 
                 console.log('startGame');
@@ -49,7 +78,7 @@
                     scene.reset();
                 }
 
-                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause:false });
+                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause: false });
 
                 scene.loadImages([tankSpriteUrl], function() {
 
@@ -70,32 +99,50 @@
                         tankSprites.push(tankSprite);
                         tankSprite.update();
                     }
-                    
-                    var tankFiringCycle = sjs.Cycle([   [5, 6, 1],
-                                                        [55, 6, 10],
-                                                        [100, 6, 10],
-                                                        [145, 6, 5],
-                                                        [190, 6, 5]]);
 
+                    var tankFiringCycle = sjs.Cycle([[5, 6, 1],
+                        [55, 6, 10],
+                        [100, 6, 10],
+                        [145, 6, 5],
+                        [190, 6, 5]]);
+                    
+                    var tankDeathCycle = sjs.Cycle([[18, 52, 5],
+                                                    [61, 52, 5],
+                                                    [101, 52, 3],
+                                                    [143, 52, 3],
+                                                    [183, 52, 3],
+                                                    [183, 52, 3],
+                                                    [222, 52, 3],
+                                                    [261, 52, 3],
+                                                    [297, 52, 3]]);
+
+                    //var tankTurningCycle = sjs.Cycle([[5, 6, 1],
+                    //    [260, 6, 10],
+                    //    [296, 6, 10]]);
+                    tankDeathCycle.repeat = false;
                     tankFiringCycle.repeat = false;
+                    
+                    tankDeathCycle.addSprite(tankSprites[0]);
                     tankFiringCycle.addSprite(tankSprites[1]);
-                    cycleList.add(tankFiringCycle);
                     
-                    
+                   // cycleList.add(tankFiringCycle);
+                    cycleList.add(tankDeathCycle);
+
+
                     cycleTicker = scene.Ticker(30, self.cycleAnimations);
                     cycleTicker.run();
 
                 });
             }
-            
+
 
             this.tick = function(viewState) {
                 console.log('tick');
-                for(var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
+                for (var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
                     var sprite = tankSprites[spriteIndex];
                     var viewStateTank = null;
                     for (var i = 0; i < viewState.Tanks.length; i++) {
-                        var viewStateTankCandidate = viewState.Tanks[i]; 
+                        var viewStateTankCandidate = viewState.Tanks[i];
                         if (sprite.serverId == viewStateTankCandidate.Id) {
                             viewStateTank = viewStateTankCandidate;
                         }
@@ -106,6 +153,8 @@
                     } else {
                         sprite.setX(viewStateTank.Point.X);
                         sprite.setY(viewStateTank.Point.Y);
+                        var tankModel = new TankModel(sprite);
+                        //tankModel.setTurret(viewStateTank);
                         sprite.update();
                     }
                 }
