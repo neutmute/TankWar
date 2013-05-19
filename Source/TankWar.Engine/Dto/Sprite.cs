@@ -16,5 +16,10 @@ namespace TankWar.Engine
         /// Remove from viewport
         /// </summary>
         public bool IsDead { get; set; }
+
+        public Sprite()
+        {
+            Point = new Point();
+        }
     }
 }

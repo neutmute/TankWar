@@ -15,5 +15,15 @@ namespace TankWar.Engine.Objects
         public Tank Tank { get; set; }
 
         public PlayerStatus Status { get; set; }
+
+        public Player()
+        {
+            Tank = new Tank();
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

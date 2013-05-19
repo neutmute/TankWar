@@ -79,15 +79,16 @@ namespace TankWar.Engine
             Log.Info("Game initialised");
             State.Status = GameStatus.WaitingForPlayers;
             _countDown = CountDownSeconds;
-
-            State.Players.Add(new Player {Name = "Ben"});
-            State.Players.Add(new Player { Name = "Deb" });
         }
 
-        public void PlayerJoined(string name)
+        public void PlayerJoined(Player player)
         {
-            State.Status = GameStatus.WaitingForPlayers;
-            _countDownClock.Start();
+            if (State.Status == GameStatus.WaitingForPlayers)
+            {
+                Log.Info("'{0}' joined, countdown starting!", player);
+                State.Status = GameStatus.WaitingForPlayers;
+                _countDownClock.Start();
+            }
         }
 
         public void Start()
@@ -98,7 +99,7 @@ namespace TankWar.Engine
             _time = 0;
             Log.Info("Game on!");
 
-            State.AssignTanks();
+            State.PositionTanks();
             
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = State.AllTanks;
@@ -133,19 +134,17 @@ namespace TankWar.Engine
             var tanks = State.AllTanks;
             tanks.ForEach(t => { 
                 //t.Point.X += 1;
-                                   t.TurretAngle++;
-                if (t.TurretAngle > 180)
-                {
-                    t.TurretAngle = 0;
-                }
+                //                   t.Setting.Angle++;
+                //if (t.Setting.Angle > 180)
+                //{
+                //    t.TurretAngle = 0;
+                //}
             });
 
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = State.AllTanks;
 
-
             GetViewPortClients().Tick(viewPortState);
-
         }
     }
 }

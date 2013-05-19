@@ -22,19 +22,19 @@
             var _sprite = sprite;
 
             this.setTurret = function(tankModel) {
-                if (tankModel.TurretAngle < 23) {
+                if (tankModel.Setting.Angle < 23) {
                     _sprite.setXOffset(5);
                     _sprite.setYOffset(6);
                     _sprite.setXScale(1);
-                } else if (tankModel.TurretAngle < 68) {
+                } else if (tankModel.Setting.Angle < 68) {
                     _sprite.setXOffset(260);
                     _sprite.setYOffset(6);
                     _sprite.setXScale(-1);
-                } else if (tankModel.TurretAngle < 113) {
+                } else if (tankModel.Setting.Angle < 113) {
                     _sprite.setXOffset(297);
                     _sprite.setYOffset(6);
                     
-                } else if (tankModel.TurretAngle < 158) {
+                } else if (tankModel.Setting.Angle < 158) {
                     _sprite.setXOffset(260);
                     _sprite.setYOffset(6);
                     _sprite.setXScale(1);
@@ -72,7 +72,7 @@
 
             this.startGame = function(viewState) {
 
-                console.log('startGame');
+                console.log('startGame with ' + viewState.Tanks.length + ' tanks');
 
                 if (scene != null) {
                     scene.reset();
@@ -122,11 +122,11 @@
                     tankDeathCycle.repeat = false;
                     tankFiringCycle.repeat = false;
                     
-                    tankDeathCycle.addSprite(tankSprites[0]);
-                    tankFiringCycle.addSprite(tankSprites[1]);
+                  //  tankDeathCycle.addSprite(tankSprites[0]);
+                 //   tankFiringCycle.addSprite(tankSprites[1]);
                     
                    // cycleList.add(tankFiringCycle);
-                    cycleList.add(tankDeathCycle);
+                 //   cycleList.add(tankDeathCycle);
 
 
                     cycleTicker = scene.Ticker(30, self.cycleAnimations);
@@ -141,20 +141,24 @@
                 for (var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
                     var sprite = tankSprites[spriteIndex];
                     var viewStateTank = null;
+                    
                     for (var i = 0; i < viewState.Tanks.length; i++) {
                         var viewStateTankCandidate = viewState.Tanks[i];
                         if (sprite.serverId == viewStateTankCandidate.Id) {
                             viewStateTank = viewStateTankCandidate;
                         }
                     }
+                    
                     if (viewStateTank == null) {
                         sprite.remove();
                         console.log('removing sprite');
                     } else {
                         sprite.setX(viewStateTank.Point.X);
                         sprite.setY(viewStateTank.Point.Y);
+                        
                         var tankModel = new TankModel(sprite);
-                        //tankModel.setTurret(viewStateTank);
+                        tankModel.setTurret(viewStateTank);
+                        
                         sprite.update();
                     }
                 }

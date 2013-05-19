@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace TankWar.Engine
 {
-    public enum Orientation
-    {
-        Left,
-        Right
-    }
-
     public class Tank : Sprite
     {
-        public int TurretAngle { get; set; }
+        public TurretSetting Setting { get; set; }
 
         /// <summary>
         /// Initiate explosion
         /// </summary>
         public bool IsHit { get; set; }
+
+        public Tank()
+        {
+            Setting = new TurretSetting();
+        }
     }
 }

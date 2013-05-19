@@ -17,12 +17,12 @@ namespace TankWar.Engine.Objects
             Players = new List<Player>();
         }
 
-        public void AssignTanks()
+        public void PositionTanks()
         {
             for (int i = 0; i < Players.Count; i++)
             {
                 var player = Players[i];
-                player.Tank = new Tank {Id = i, Point = new Point(i*100, 200)};
+                player.Tank.Point = new Point(i*100, 200);
             }
         }
 

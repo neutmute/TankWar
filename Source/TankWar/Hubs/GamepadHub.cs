@@ -51,6 +51,10 @@ namespace TankWar.Hubs
         public void UpdateTurretStatus(int power, int angle)
         {
             Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
+
+            var player = FindPlayer();
+            player.Tank.Setting.Angle = angle;
+            player.Tank.Setting.Power = power;
         }
         
         public void Shoot(int power, int angle)

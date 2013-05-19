@@ -54,6 +54,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Dto\Area.cs" />
+    <Compile Include="Dto\TurretSetting.cs" />
     <Compile Include="Interfaces\IViewPortClient.cs" />
     <Compile Include="Interfaces\IViewPortHub.cs" />
     <Compile Include="Objects\Game.cs" />
