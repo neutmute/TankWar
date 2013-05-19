@@ -50,7 +50,7 @@ namespace TankWar.Engine
 
             Screen = new Area(0, 0, 800, 400);
 
-            ServerGameState = new ServerGameState();
+            State = new ServerGameState();
         }
 
 
@@ -60,40 +60,41 @@ namespace TankWar.Engine
         /// </summary>
         public Func<IViewPortClients> GetViewPortClients { get; set; }
 
-        public GameStatus Status {get;set;}
+        public Func<IGamepadClients> GetGamepadClients { get; set; }
+
 
         public Area Screen { get; private set; }
 
-        public ServerGameState ServerGameState { get; private set; }
+        public ServerGameState State { get; private set; }
 
         public void Init()
         {
             Log.Info("Game initialised");
-            Status = GameStatus.WaitingForPlayers;
+            State.Status = GameStatus.WaitingForPlayers;
             _countDown = CountDownSeconds;
 
-            ServerGameState.Players.Add(new Player {Name = "Ben"});
-            ServerGameState.Players.Add(new Player { Name = "Deb" });
+            State.Players.Add(new Player {Name = "Ben"});
+            State.Players.Add(new Player { Name = "Deb" });
         }
 
         public void PlayerJoined(string name)
         {
-            Status = GameStatus.WaitingForPlayers;
+            State.Status = GameStatus.WaitingForPlayers;
             _countDownClock.Start();
         }
 
         public void Start()
         {
             _countDownClock.Stop();
-            Status = GameStatus.Playing;
+            State.Status = GameStatus.Playing;
             _gameClock.Start();
             _time = 0;
             Log.Info("Game on!");
 
-            ServerGameState.AssignTanks();
+            State.AssignTanks();
             
             var viewPortState = new ViewPortState();
-            viewPortState.Tanks = ServerGameState.AllTanks;
+            viewPortState.Tanks = State.AllTanks;
 
             GetViewPortClients().StartGame(viewPortState);
         }
@@ -122,7 +123,7 @@ namespace TankWar.Engine
             //Log.Info("Tick!");
             _time++;
 
-            var tanks = ServerGameState.AllTanks;
+            var tanks = State.AllTanks;
             tanks.ForEach(t => { 
                 //t.Point.X += 1;
                                    t.TurretAngle++;
@@ -133,7 +134,7 @@ namespace TankWar.Engine
             });
 
             var viewPortState = new ViewPortState();
-            viewPortState.Tanks = ServerGameState.AllTanks;
+            viewPortState.Tanks = State.AllTanks;
 
 
             GetViewPortClients().Tick(viewPortState);

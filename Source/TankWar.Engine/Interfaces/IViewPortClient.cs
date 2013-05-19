@@ -6,4 +6,10 @@
 
         void Tick(ViewPortState viewPortState);
     }
+
+    public interface IGamepadClients
+    {
+        void NotifyGameStatus(GameStatus gameStatus);
+
+    }
 }

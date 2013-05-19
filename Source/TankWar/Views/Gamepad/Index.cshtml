@@ -35,23 +35,65 @@
 </div>
 
 @section Scripts {
-<script>
-    $(function() {
-        $("#sliderPower").slider({
-            orientation: "vertical",
-            range: "min",
-            min: 0,
-            max: 100,
-            value: 60
-        });
+    <script>
+        ko.bindingHandlers.slider = {
+            init: function(element, valueAccessor, allBindingsAccessor) {
+                var options = allBindingsAccessor().sliderOptions || {};
+                $(element).slider(options);
+                ko.utils.registerEventHandler(element, "slidechange", function(event, ui) {
+                    var observable = valueAccessor();
+                    observable(ui.value);
+                });
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                    $(element).slider("destroy");
+                });
+                ko.utils.registerEventHandler(element, "slide", function(event, ui) {
+                    var observable = valueAccessor();
+                    observable(ui.value);
+                });
+            },
+            update: function(element, valueAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                if (isNaN(value)) value = 0;
+                $(element).slider("value", value);
+
+            }
+        };
+
+        function gamepadViewModel() {
+            this.hub = $.connection.gamepadHub;
+
+            var self = this;
+            var gameStatus = ko.observable();
+
+            this.init = function () {
+                gameStatus(this.hub.server.getGameStatus());
+            }
+        }
+
+        $(function() {
+            $("#sliderPower").slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: 100,
+                value: 60
+            });
+
+            $("#sliderAngle").slider({
+                range: "min",
+                min: 0,
+                max: 180,
+                value: 90
+            });
+        }
+        );
         
-        $("#sliderAngle").slider({
-            range: "min",
-            min: 0,
-            max: 180,
-            value: 90
+        var viewModel = new gamepadViewModel();
+        ko.applyBindings(viewModel);
+
+        $.connection.hub.start().done(function () {
+            viewModel.init();
         });
-    }
-    );
-</script>
+    </script>
 }
