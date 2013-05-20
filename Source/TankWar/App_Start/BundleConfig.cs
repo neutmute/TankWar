@@ -29,7 +29,7 @@ namespace TankWar
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap-responsive"
+                "~/Content/bootstrap-responsive.css"
                 ,"~/Content/bootstrap.css")
             );
 
