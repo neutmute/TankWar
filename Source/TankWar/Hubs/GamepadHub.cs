@@ -44,6 +44,9 @@ namespace TankWar.Hubs
                 Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
                 player.Name = name;
             }
+
+            Game.Instance.PlayerJoined(player);
+
             player.Status = PlayerStatus.GameInPlay;
             return player.Status;
         }

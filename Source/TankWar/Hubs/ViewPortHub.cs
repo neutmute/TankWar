@@ -13,8 +13,7 @@ namespace TankWar.Hubs
 
         public void Ping()
         {
-            Log.Info("Ping from ViewPort {0} at {1}", Context.ConnectionId, WebLogic.ClientIdentity);
-            //Game.Instance.Start();
+            Log.Info("{1} pinged ViewPort from {0}", Context.ConnectionId, WebLogic.ClientIdentity);
         }
 
     }

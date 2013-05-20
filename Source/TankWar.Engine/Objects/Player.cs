@@ -25,5 +25,16 @@ namespace TankWar.Engine.Objects
         {
             return Name;
         }
+
+        public override bool Equals(object obj)
+        {
+            var objAsPlayer = obj as Player;
+            return objAsPlayer != null && objAsPlayer.ConnectionId == ConnectionId;
+        }
+
+        public override int GetHashCode()
+        {
+            return ConnectionId.GetHashCode();
+        }
     }
 }

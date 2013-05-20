@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Admin";
+}
+
+<h2>Admin</h2>
+
+@using(Html.BeginForm("ResetGameState", "ViewPort"))
+{
+    <input type="submit" class="btn btn-warning btn-large" value="Reset Game State"/>
+}

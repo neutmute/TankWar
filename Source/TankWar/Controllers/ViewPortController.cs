@@ -21,5 +21,16 @@ namespace TankWar.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Admin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetGameState()
+        {
+            Game.Instance.Init();
+            return RedirectToAction("Admin");
+        }
     }
 }

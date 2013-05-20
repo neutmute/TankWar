@@ -338,6 +338,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\ViewPort\Index.cshtml" />
     <Content Include="Views\Gamepad\Index.cshtml" />
+    <Content Include="Views\ViewPort\Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

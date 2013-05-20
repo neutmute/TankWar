@@ -76,8 +76,10 @@ namespace TankWar.Engine
 
         public void Init()
         {
-            Log.Info("Game initialised");
-            State.Status = GameStatus.WaitingForPlayers;
+            Log.Info("Game (re)initialised");
+            _gameClock.Stop();
+            _countDownClock.Stop();
+            State = new ServerGameState();
             _countDown = CountDownSeconds;
         }
 
