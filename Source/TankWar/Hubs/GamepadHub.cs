@@ -16,11 +16,11 @@ namespace TankWar.Hubs
     {
         private static readonly Logger _Log = LogManager.GetCurrentClassLogger();
 
-        public void NotifyGameStatus(GameStatus gameStatus)
+        public void NotifyGameStatus(GameStatus gameStatus, int countdown)
         {     
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
-            _Log.Info("Broadcasting gameStatus={0} to gamepads", gameStatus);
-            context.Clients.All.notifyGameStatus(gameStatus);
+            _Log.Info("Broadcasting gameStatus={0}, countdown={1} to gamepads", gameStatus, countdown);
+            context.Clients.All.notifyGameStatus(gameStatus, countdown);
         }
     }
 

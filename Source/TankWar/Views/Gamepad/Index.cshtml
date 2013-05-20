@@ -2,49 +2,49 @@
     ViewBag.Title = "Tank War Gamepad";
 }
 
-<div class="row" data-bind="visible: stateWaitingForName">
-    <form class="form-horizontal">
-        <input type="text" class="input-large"  placeholder="What is your name soldier?" data-bind="value:name">
-        <button type="submit" class="btn" data-bind="click: setName">Sir, Yes, Sir!</button>
-    </form>
-</div>
+<div style="display:none" data-bind="visible:true">
+    <div class="row" data-bind="visible: stateWaitingForName">
+        <form class="form-horizontal">
+            <input type="text" class="input-large"  placeholder="What is your name soldier?" data-bind="value:name">
+            <button type="submit" class="btn" data-bind="click: setName">Sir, Yes, Sir!</button>
+        </form>
+    </div>
 
-<div class="row" data-bind="visible: stateGameInCountdown">
-    <h3>Hostilities are commencing...</h3>
-    <img src="@Url.Content("~/Content/images/countdown.jpg")" />
-</div>
+    <div class="row" data-bind="visible: stateGameInCountdown">
+        <h3>Hostilities are commencing in <span data-bind="text: countdown"></span></h3>
+        <img src="@Url.Content("~/Content/images/countdown.jpg")" />
+    </div>
 
-<div class="row" data-bind="visible: stateGameOver">
-    <h3>Hostilities are commencing...</h3>
-    <img src="@Url.Content("~/Content/images/gameover.gif")" />
-</div>
+    <div class="row" data-bind="visible: stateGameOver">
+        <img src="@Url.Content("~/Content/images/gameover.gif")" />
+    </div>
 
-<span data-bind="visible: stateGameInPlay">
-    <div class="row">
-        <div class="span2">
-            <div class="row">
-                <div class="span2">
-                    <div id="sliderAngle" data-bind="slider:angle"></div>        
+    <span data-bind="visible: stateGameInPlay">
+        <div class="row">
+            <div class="span2">
+                <div class="row">
+                    <div class="span2">
+                        <div id="sliderAngle" data-bind="slider:angle"></div>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span2"><br />
+                        Power:<span data-bind="text:power"></span><br />
+                        Angle:<span data-bind="text:angle"></span>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="span2"><br />
-                    Power:<span data-bind="text:power"></span><br />
-                    Angle:<span data-bind="text:angle"></span>
-                </div>
+            <div class="span2">
+                <div id="sliderPower" data-bind="slider:power"></div>
             </div>
         </div>
-        <div class="span2">
-            <div id="sliderPower" data-bind="slider:power"></div>
+        <div class="row">
+            <div class="span4">
+                <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="span4">
-            <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
-        </div>
-    </div>
-</span>
-
+    </span>
+</div>
 @section Scripts {
     <script>
         ko.bindingHandlers.slider = {
@@ -78,6 +78,7 @@
             this.name = ko.observable();
             this.power = ko.observable(0);
             this.angle = ko.observable(90);
+            this.countdown = ko.observable('');
             this.playerStatus = ko.observable();
             this.gameStatus = ko.observable();
             var connected = false;
@@ -141,9 +142,10 @@
                     }).fail(this.handleError);
             }
             
-            this.notifyGameStatus = function (gameStatus) {
-                console.log("gameStatus=" + gameStatus);
+            this.notifyGameStatus = function (gameStatus, countdownValue) {
+                console.log("gameStatus=" + gameStatus + ", countdownValue=" + countdownValue);
                 self.gameStatus(gameStatus);
+                self.countdown(countdownValue);
             }
 
             this.angle.subscribe(self.sendTurretStatus);

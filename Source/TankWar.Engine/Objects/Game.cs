@@ -118,7 +118,12 @@ namespace TankWar.Engine
             GetViewPortClients().StartGame(viewPortState);
 
             State.Players.ForEach(p => p.Status = PlayerStatus.GameInPlay);
-            GetGamepadClients().NotifyGameStatus(State.Status);
+            BroadcastGameStateToGamepads();
+        }
+
+        private void BroadcastGameStateToGamepads()
+        {
+            GetGamepadClients().NotifyGameStatus(State.Status, _countDown);
         }
 
         public void Stop()
@@ -129,14 +134,10 @@ namespace TankWar.Engine
         public void CountdownTick(object sender, ElapsedEventArgs e)
         {
             _countDown--;
-            
+            BroadcastGameStateToGamepads();
             if (_countDown == 0)
             {
                 Start();
-            }
-            else
-            {
-                Log.Info("Game will begin in {0} seconds", _countDown);
             }
         }
 

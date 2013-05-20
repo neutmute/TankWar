@@ -9,6 +9,6 @@
 
     public interface IGamepadClients
     {
-        void NotifyGameStatus(GameStatus gameStatus);
+        void NotifyGameStatus(GameStatus gameStatus, int countdown);
     }
 }
