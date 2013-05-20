@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Kraken.Framework.Core.Web;
 using Microsoft.AspNet.SignalR;
+using NLog;
 using TankWar.Engine;
 using TankWar.Engine.Interfaces;
 using TankWar.Engine.Objects;
@@ -13,9 +14,12 @@ namespace TankWar.Hubs
 {
     public class GamepadHubClientsProxy : IGamepadClients
     {
+        private static readonly Logger _Log = LogManager.GetCurrentClassLogger();
+
         public void NotifyGameStatus(GameStatus gameStatus)
         {     
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
+            _Log.Info("Broadcasting gameStatus={0} to gamepads", gameStatus);
             context.Clients.All.notifyGameStatus(gameStatus);
         }
     }
@@ -29,8 +33,7 @@ namespace TankWar.Hubs
 
             if (player == null)
             {
-                player = new Player {ConnectionId = Context.ConnectionId};
-                Game.Instance.State.Players.Add(player);
+                player = Game.Instance.PlayerJoined(Context.ConnectionId);
             }
 
             return player.Status;
@@ -39,19 +42,16 @@ namespace TankWar.Hubs
         public PlayerStatus SetName(string name)
         {
             var player = FindPlayer();
-            if (player != null)
-            {
-                Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
-                player.Name = name;
-            }
 
-            Game.Instance.PlayerJoined(player);
+            Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
+            player.Name = name;
 
-            player.Status = PlayerStatus.GameInPlay;
+            Game.Instance.PlayerReady(player);
+
             return player.Status;
         }
 
-        public void UpdateTurretStatus(int power, int angle)
+        public void SetTurret(int power, int angle)
         {
             Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
 
@@ -60,9 +60,9 @@ namespace TankWar.Hubs
             player.Tank.Setting.Power = power;
         }
         
-        public void Shoot(int power, int angle)
+        public void Fire()
         {
-            Log.Info("Shoot {0}, {1} from {2}", power, angle, Context.ConnectionId);
+            Log.Info("{0} firing", GetPlayerName());
         }
 
         private Player FindPlayer()

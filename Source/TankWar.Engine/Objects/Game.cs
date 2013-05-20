@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -83,12 +84,20 @@ namespace TankWar.Engine
             _countDown = CountDownSeconds;
         }
 
-        public void PlayerJoined(Player player)
+        public Player PlayerJoined(string connectionId)
+        {
+            var player = new Player { ConnectionId = connectionId };
+            State.Players.Add(player);
+            return player;
+        }
+
+        public void PlayerReady(Player player)
         {
             if (State.Status == GameStatus.WaitingForPlayers)
             {
+                player.Status = PlayerStatus.GameInCountdown;
+
                 Log.Info("'{0}' joined, countdown starting!", player);
-                State.Status = GameStatus.WaitingForPlayers;
                 _countDownClock.Start();
             }
         }
@@ -107,6 +116,9 @@ namespace TankWar.Engine
             viewPortState.Tanks = State.AllTanks;
 
             GetViewPortClients().StartGame(viewPortState);
+
+            State.Players.ForEach(p => p.Status = PlayerStatus.GameInPlay);
+            GetGamepadClients().NotifyGameStatus(State.Status);
         }
 
         public void Stop()

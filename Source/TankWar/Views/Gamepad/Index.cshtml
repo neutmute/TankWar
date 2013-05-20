@@ -9,6 +9,16 @@
     </form>
 </div>
 
+<div class="row" data-bind="visible: stateGameInCountdown">
+    <h3>Hostilities are commencing...</h3>
+    <img src="@Url.Content("~/Content/images/countdown.jpg")" />
+</div>
+
+<div class="row" data-bind="visible: stateGameOver">
+    <h3>Hostilities are commencing...</h3>
+    <img src="@Url.Content("~/Content/images/gameover.gif")" />
+</div>
+
 <span data-bind="visible: stateGameInPlay">
     <div class="row">
         <div class="span2">
@@ -25,7 +35,6 @@
             </div>
         </div>
         <div class="span2">
-        
             <div id="sliderPower" data-bind="slider:power"></div>
         </div>
     </div>
@@ -70,6 +79,7 @@
             this.power = ko.observable(0);
             this.angle = ko.observable(90);
             this.playerStatus = ko.observable();
+            this.gameStatus = ko.observable();
             var connected = false;
 
             self.stateWaitingForName = ko.computed(function() {
@@ -77,11 +87,15 @@
             });
 
             self.stateGameInCountdown = ko.computed(function() {
-                return self.playerStatus() == 1;
+                return self.playerStatus() == 1 && self.gameStatus() != 2;
             });
 
             self.stateGameInPlay = ko.computed(function() {
-                return self.playerStatus() == 2;
+                return self.gameStatus() == 2; // playing
+            });
+            
+            self.stateGameOver = ko.computed(function () {
+                return self.gameStatus() == 3;
             });
 
             self.stateWaitingForNextGame = ko.computed(function() {
@@ -99,7 +113,7 @@
             this.sendTurretStatus = function() {
 
                 if (connected) {
-                    self.hub.server.updateTurretStatus(self.power(), self.angle())
+                    self.hub.server.setTurret(self.power(), self.angle())
                         //.done(this.updatePlayerStatus)
                         .fail(self.handleError);
                 }
@@ -121,10 +135,15 @@
             }
 
             this.shoot = function() {
-                this.hub.server.shoot(this.power(), this.angle())
+                this.hub.server.fire()
                     .done(function() {
                         console.log('Kapoom!');
                     }).fail(this.handleError);
+            }
+            
+            this.notifyGameStatus = function (gameStatus) {
+                console.log("gameStatus=" + gameStatus);
+                self.gameStatus(gameStatus);
             }
 
             this.angle.subscribe(self.sendTurretStatus);
@@ -152,6 +171,8 @@
 
         var viewModel = new gamepadViewModel();
         ko.applyBindings(viewModel);
+        
+        $.connection.gamepadHub.client.notifyGameStatus = viewModel.notifyGameStatus;
 
         $.connection.hub.start().done(function() {
             viewModel.init();

@@ -10,6 +10,5 @@
     public interface IGamepadClients
     {
         void NotifyGameStatus(GameStatus gameStatus);
-
     }
 }
