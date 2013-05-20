@@ -37,6 +37,7 @@ namespace TankWar.Engine
         private int _time;
         private int _countDown;
         private const int CountDownSeconds = 10;
+        private int _shellCounter;
         #endregion
         
         #region Singleton
@@ -60,6 +61,7 @@ namespace TankWar.Engine
             Screen = new Area(0, 0, 800, 400);
 
             State = new ServerGameState();
+            _shellCounter = 0;
         }
 
 
@@ -102,6 +104,12 @@ namespace TankWar.Engine
             }
         }
 
+        public void PlayerFire(Player player)
+        {
+            var shell = new Shell { Id = _shellCounter++, LaunchState = player.Tank.Setting };
+            player.Shells.Add(shell);
+        }
+
         public void Start()
         {
             _countDownClock.Stop();
@@ -114,6 +122,7 @@ namespace TankWar.Engine
             
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = State.AllTanks;
+            viewPortState.Shells = State.AllShells;
 
             GetViewPortClients().StartGame(viewPortState);
 
@@ -145,6 +154,10 @@ namespace TankWar.Engine
         {
             //Log.Info("Tick!");
             _time++;
+
+            var shells = State.AllShells.Where(s => !s.IsDead).ToList();
+            var projectileMotion = new ProjectileMotion(_time);
+            shells.ForEach(projectileMotion.Calculate);
 
             var tanks = State.AllTanks;
             tanks.ForEach(t => { 

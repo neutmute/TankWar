@@ -10,9 +10,9 @@ namespace TankWar.Engine
     {
         public List<Tank> Tanks { get; set; }
 
-        public List<Shell> Shells { get; private set; }
+        public List<Shell> Shells { get;  set; }
 
-        public List<Message> NewMessages { get; private set; }
+        public List<Message> NewMessages { get;  set; }
 
         public ViewPortState()
         {

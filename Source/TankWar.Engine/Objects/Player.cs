@@ -14,13 +14,17 @@ namespace TankWar.Engine.Objects
 
         public Tank Tank { get; set; }
 
+        public List<Shell> Shells { get; set; }
+
         public PlayerStatus Status { get; set; }
 
         public Player()
         {
             Tank = new Tank();
+            Shells = new List<Shell>();
         }
 
+        
         public override string ToString()
         {
             return Name;

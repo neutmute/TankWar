@@ -7,7 +7,7 @@
 <style>.sjs{border:2px #999 solid;}</style>
 
 
-<h2>Tank War View Port</h2>
+<h5>Tank War View Port</h5>
 
 <div class="row">
     <div class="span10" id="sceneDiv"></div>
@@ -53,6 +53,7 @@
             var self = this;
             var scene = null;
             var tankSprites = [];
+            var shellSprites = sjs.List();
             var cycleTicker = null;
             var cycleList = sjs.List();
 
@@ -106,6 +107,17 @@
                         [145, 6, 5],
                         [190, 6, 5]]);
                     
+                    
+                    var shellSprite = scene.Sprite(tankSpriteUrl, layer);
+                    shellSprite.size(8,8);
+                    shellSprite.setYOffset(0);
+                    shellSprite.move(90,150);
+                    
+                    var shellCycle = sjs.Cycle([[	238,      26, 5],
+                                                   [250,  	26, 5]]);
+								   
+                    shellCycle.addSprites(shellSprite);
+                    
                     var tankDeathCycle = sjs.Cycle([[18, 52, 5],
                                                     [61, 52, 5],
                                                     [101, 52, 3],
@@ -137,7 +149,6 @@
 
 
             this.tick = function(viewState) {
-                console.log('tick');
                 for (var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
                     var sprite = tankSprites[spriteIndex];
                     var viewStateTank = null;
@@ -162,6 +173,30 @@
                         sprite.update();
                     }
                 }
+                
+                var shellSprite;
+                while(shellSprite = shellSprites.iterate()) {
+                    var viewStateShell = null;
+                    
+                    for (var i = 0; i < viewState.Shells.length; i++) {
+                        var viewStateShellCandidate = viewState.Shells[i];
+                        if (sprite.serverId == viewStateShellCandidate.Id) {
+                            viewStateShell = viewStateShellCandidate;
+                        }
+                    }
+                    
+                    if (viewStateShell == null || shellSprite.IsDead) {
+                        shellSprite.remove();
+                        console.log('removing shell sprite');
+                    } else {
+                        shellSprite.setX(viewStateShell.Point.X);
+                        shellSprite.setY(viewStateShell.Point.Y);
+                        
+                        shellSprite.update();
+                    }
+                }
+                
+               
             };
         }
 

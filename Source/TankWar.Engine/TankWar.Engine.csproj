@@ -63,6 +63,7 @@
     <Compile Include="Dto\Sprite.cs" />
     <Compile Include="Dto\ViewPortState.cs" />
     <Compile Include="Objects\Player.cs" />
+    <Compile Include="Objects\ProjectileMotion.cs" />
     <Compile Include="Objects\ServerGameState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Dto\Shell.cs" />

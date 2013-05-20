@@ -30,5 +30,16 @@ namespace TankWar.Engine.Objects
         {
             get{ return (Players.Select(p => p.Tank)).ToList();}
         }
+
+        public List<Shell> AllShells
+        {
+            
+            get
+            {
+                var allShells = new List<Shell>();
+                Players.ForEach(p => allShells = allShells.Concat(p.Shells).ToList());
+                return allShells;
+            }
+        }
     }
 }

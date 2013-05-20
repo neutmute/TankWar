@@ -8,5 +8,8 @@ namespace TankWar.Engine
 {
     public class Shell : Sprite
     {
+        public TurretSetting LaunchState { get; set; }
+
+
     }
 }

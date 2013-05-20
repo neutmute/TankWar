@@ -63,6 +63,8 @@ namespace TankWar.Hubs
         public void Fire()
         {
             Log.Info("{0} firing", GetPlayerName());
+            var player = FindPlayer();
+            Game.Instance.PlayerFire(player);
         }
 
         private Player FindPlayer()
