@@ -5,13 +5,20 @@
 
 <h2>Admin</h2>
 
-@using(Html.BeginForm("ResetGameState", "ViewPort"))
-{
-    <input type="submit" class="btn btn-warning btn-large" value="Reset Game State"/>
-}
+ <fieldset>
+    <legend>Reset</legend>
+    @using(Html.BeginForm("ResetGameState", "ViewPort"))
+    {
+        <input type="submit" class="btn btn-warning btn-large" value="Reset Game State"/>
+    }
+</fieldset>
 
-@using (Html.BeginForm("SetGameParams", "ViewPort"))
-{
-    @Html.EditorForModel();
-    <input type="submit" class="btn btn-warning btn-large" value="Set Parameters"/>
-}
+<fieldset>
+    <legend>Game Parameters</legend>
+    @using (Html.BeginForm("SetGameParams", "ViewPort"))
+    {
+        @Html.EditorForModel();
+        <input type="submit" class="btn btn-warning btn-large" value="Set Parameters"/>
+
+    }
+</fieldset>
