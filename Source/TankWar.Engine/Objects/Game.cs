@@ -25,6 +25,7 @@ namespace TankWar.Engine
         WaitingForName,
         GameInCountdown,
         GameInPlay,
+        Dead,
         WaitingForNextGame
     }
 

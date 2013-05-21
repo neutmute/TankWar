@@ -22,6 +22,13 @@ namespace TankWar.Hubs
             _Log.Info("Broadcasting gameStatus={0}, countdown={1} to gamepads", gameStatus, countdown);
             context.Clients.All.notifyGameStatus(gameStatus, countdown);
         }
+
+        public void PushPlayerStatus(Player player)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
+            _Log.Info("Informing '{0}' they are status={1}", GamepadHub.GetPlayerName(player));
+            context.Clients.Client(player.ConnectionId).receivePlayerStatus(player.Status.ToString());
+        }
     }
 
     public class GamepadHub : CoreHub
@@ -74,11 +81,24 @@ namespace TankWar.Hubs
 
         private string GetPlayerName()
         {
-            var name = Context.ConnectionId;
             var player = FindPlayer();
-            if (player != null && !string.IsNullOrEmpty(player.Name))
+            return GetPlayerName(player, Context.ConnectionId);
+        }
+
+        internal static string GetPlayerName(Player player, string connectionId = null)
+        {
+            var name = connectionId;
+            if (player != null)
             {
                 name = player.Name;
+            }
+            if (string.IsNullOrEmpty(name) && player != null)
+            {
+                name = player.ConnectionId;
+            }
+            if (string.IsNullOrEmpty(name))
+            {
+                name = connectionId;
             }
             return name;
         }
