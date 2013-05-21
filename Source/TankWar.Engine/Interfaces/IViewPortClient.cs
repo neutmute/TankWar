@@ -1,4 +1,6 @@
-﻿namespace TankWar.Engine.Interfaces
+﻿using TankWar.Engine.Objects;
+
+namespace TankWar.Engine.Interfaces
 {
     public interface IViewPortClients
     {
@@ -10,5 +12,7 @@
     public interface IGamepadClients
     {
         void NotifyGameStatus(GameStatus gameStatus, int countdown);
+
+        void PushPlayerStatus(Player player);
     }
 }

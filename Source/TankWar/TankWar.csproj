@@ -199,10 +199,11 @@
     <Compile Include="Hubs\GamepadHub.cs" />
     <Compile Include="Hubs\ViewPortHub.cs" />
     <Compile Include="Hubs\ViewPortHubClientsProxy.cs" />
-    <Compile Include="Models\ViewPortModel.cs" />
+    <Compile Include="Models\ViewPortModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\images\countdown.jpg" />
     <Content Include="Content\images\gameover.gif" />
+    <Content Include="Content\images\inProgress.jpg" />
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
   </ItemGroup>
   <ItemGroup>

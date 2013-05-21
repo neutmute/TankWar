@@ -12,6 +12,11 @@ using TankWar.Engine.Objects;
 
 namespace TankWar.Engine
 {
+    //public class ExtensionMethods
+    //{
+    //    public static bool Contains(this List<Enum> )    
+    //}
+
     public enum GameStatus
     {
         WaitingForPlayers,
@@ -37,7 +42,7 @@ namespace TankWar.Engine
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private int _time;
         private int _countDown;
-        private const int CountDownSeconds = 10;
+        
         private int _shellCounter;
         #endregion
         
@@ -63,20 +68,39 @@ namespace TankWar.Engine
 
             State = new ServerGameState();
             _shellCounter = 0;
+
+            CountDownSeconds = 10;
         }
 
 
         #endregion
+
+
+
+        #region Properties
+        public int CountDownSeconds { get; set; }
+
+        public double GameLoopIntervalMilliseconds
+        {
+            get { return _gameClock.Interval; }
+            set {_gameClock.Interval = value; }
+        }
+        
+
         /// <summary>
         /// IOC property injection
         /// </summary>
         public Func<IViewPortClients> GetViewPortClients { get; set; }
 
         public Func<IGamepadClients> GetGamepadClients { get; set; }
-        
+
         public Area Screen { get; private set; }
 
         public ServerGameState State { get; private set; }
+
+        #endregion
+
+        #region Methods
 
         public void Init()
         {
@@ -89,25 +113,29 @@ namespace TankWar.Engine
 
         public Player PlayerJoined(string connectionId)
         {
-            var player = new Player { ConnectionId = connectionId };
+            var player = new Player {ConnectionId = connectionId};
             State.Players.Add(player);
             return player;
         }
 
         public void PlayerReady(Player player)
         {
-            if (State.Status == GameStatus.WaitingForPlayers)
+            if (new []{GameStatus.WaitingForPlayers, GameStatus.Countdown}.Contains(State.Status))
             {
-                player.Status = PlayerStatus.GameInCountdown;
+                SetPlayerStatus(player, PlayerStatus.GameInCountdown);
 
                 Log.Info("'{0}' joined, countdown starting!", player);
                 _countDownClock.Start();
+            }
+            else
+            {
+                SetPlayerStatus(player, PlayerStatus.WaitingForNextGame);
             }
         }
 
         public void PlayerFire(Player player)
         {
-            var shell = new Shell { Id = _shellCounter++, LaunchState = player.Tank.Setting };
+            var shell = new Shell {Id = _shellCounter++, LaunchState = player.Tank.Setting};
             player.Shells.Add(shell);
         }
 
@@ -120,15 +148,31 @@ namespace TankWar.Engine
             Log.Info("Game on!");
 
             State.PositionTanks();
-            
+
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = State.AllTanks;
             viewPortState.Shells = State.AllShells;
 
             GetViewPortClients().StartGame(viewPortState);
+            UpdatePlayers(PlayerStatus.GameInCountdown, PlayerStatus.GameInPlay);
+            //    BroadcastGameStateToGamepads();
+        }
 
-            State.Players.ForEach(p => p.Status = PlayerStatus.GameInPlay);
-            BroadcastGameStateToGamepads();
+        private void UpdatePlayers(PlayerStatus from, PlayerStatus to)
+        {
+
+            State
+                .Players
+                .Where(p => p.Status == from)
+                .ToList()
+                .ForEach(p => SetPlayerStatus(p, to));
+
+        }
+
+        private void SetPlayerStatus(Player player, PlayerStatus status)
+        {
+            player.Status = status;
+            GetGamepadClients().PushPlayerStatus(player);
         }
 
         private void BroadcastGameStateToGamepads()
@@ -161,19 +205,23 @@ namespace TankWar.Engine
             shells.ForEach(projectileMotion.Calculate);
 
             var tanks = State.AllTanks;
-            tanks.ForEach(t => { 
-                //t.Point.X += 1;
-                //                   t.Setting.Angle++;
-                //if (t.Setting.Angle > 180)
-                //{
-                //    t.TurretAngle = 0;
-                //}
-            });
+            tanks.ForEach(t =>
+                {
+                    //t.Point.X += 1;
+                    //                   t.Setting.Angle++;
+                    //if (t.Setting.Angle > 180)
+                    //{
+                    //    t.TurretAngle = 0;
+                    //}
+                });
 
             var viewPortState = new ViewPortState();
             viewPortState.Tanks = State.AllTanks;
 
             GetViewPortClients().Tick(viewPortState);
         }
+
+        #endregion
+
     }
 }

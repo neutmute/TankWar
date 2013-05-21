@@ -15,10 +15,6 @@
         <img src="@Url.Content("~/Content/images/countdown.jpg")" />
     </div>
 
-    <div class="row" data-bind="visible: stateGameOver">
-        <img src="@Url.Content("~/Content/images/gameover.gif")" />
-    </div>
-
     <span data-bind="visible: stateGameInPlay">
         <div class="row">
             <div class="span2">
@@ -44,6 +40,16 @@
             </div>
         </div>
     </span>
+    
+    <div class="row" data-bind="visible: stateGameOver">
+        <img src="@Url.Content("~/Content/images/gameover.gif")" />
+    </div>
+    
+    <div class="row" data-bind="visible: stateWaitingForNextGame">
+        <h4>You are late, the battle has already started!</h4>
+        <img src="@Url.Content("~/Content/images/inProgress.gif")" />
+    </div>
+
 </div>
 @section Scripts {
     <script>
@@ -83,29 +89,15 @@
             this.gameStatus = ko.observable();
             var connected = false;
 
-            self.stateWaitingForName = ko.computed(function() {
-                return self.playerStatus() == 0;
-            });
-
-            self.stateGameInCountdown = ko.computed(function() {
-                return self.playerStatus() == 1 && self.gameStatus() != 2;
-            });
-
-            self.stateGameInPlay = ko.computed(function() {
-                return self.gameStatus() == 2; // playing
-            });
-            
-            self.stateGameOver = ko.computed(function () {
-                return self.gameStatus() == 3;
-            });
-
-            self.stateWaitingForNextGame = ko.computed(function() {
-                return self.playerStatus() == 3;
-            });
+            self.stateWaitingForName    = ko.computed(function() {return self.playerStatus()    == 'WaitingForName';});
+            self.stateGameInCountdown   = ko.computed(function() {return self.playerStatus()    == 'GameInCountdown';});
+            self.stateGameInPlay        = ko.computed(function() {return self.playerStatus()    == 'GameInPlay'; });
+            self.stateGameOver          = ko.computed(function() {return self.playerStatus()    == 'Dead'; });
+            self.stateWaitingForNextGame= ko.computed(function() {return self.playerStatus()    == 'WaitingForNextGame';});
 
             this.init = function() {
                 this.hub.server.ping()
-                    .done(this.updatePlayerStatus)
+                    .done(this.receivePlayerStatus)
                     .fail(this.handleError);
 
                 connected = true;
@@ -120,7 +112,7 @@
                 }
             }
 
-            this.updatePlayerStatus = function(status) {
+            this.receivePlayerStatus = function (status) {
                 console.log('playerStatus=' + status);
                 self.playerStatus(status);
             }
@@ -175,6 +167,7 @@
         ko.applyBindings(viewModel);
         
         $.connection.gamepadHub.client.notifyGameStatus = viewModel.notifyGameStatus;
+        $.connection.gamepadHub.client.receivePlayerStatus = viewModel.receivePlayerStatus;
 
         $.connection.hub.start().done(function() {
             viewModel.init();
