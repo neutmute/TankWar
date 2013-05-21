@@ -69,7 +69,7 @@ namespace TankWar.Engine
             State = new ServerGameState();
             _shellCounter = 0;
 
-            CountDownSeconds = 10;
+            CountDownSeconds = 1;
         }
 
 
@@ -80,9 +80,9 @@ namespace TankWar.Engine
         #region Properties
         public int CountDownSeconds { get; set; }
 
-        public double GameLoopIntervalMilliseconds
+        public int GameLoopIntervalMilliseconds
         {
-            get { return _gameClock.Interval; }
+            get { return Convert.ToInt32(_gameClock.Interval); }
             set {_gameClock.Interval = value; }
         }
         
@@ -124,7 +124,7 @@ namespace TankWar.Engine
             {
                 SetPlayerStatus(player, PlayerStatus.GameInCountdown);
 
-                Log.Info("'{0}' joined, countdown starting!", player);
+                Log.Info("'{0}' joined, countdown starting from {1}!", player, _countDown);
                 _countDownClock.Start();
             }
             else
@@ -145,7 +145,7 @@ namespace TankWar.Engine
             State.Status = GameStatus.Playing;
             _gameClock.Start();
             _time = 0;
-            Log.Info("Game on!");
+            Log.Info("Game on! Game loop interval = {0}ms", GameLoopIntervalMilliseconds);
 
             State.PositionTanks();
 
@@ -197,11 +197,10 @@ namespace TankWar.Engine
 
         public void GameTick(object sender, ElapsedEventArgs e)
         {
-            //Log.Info("Tick!");
             _time++;
 
             var shells = State.AllShells.Where(s => !s.IsDead).ToList();
-            var projectileMotion = new ProjectileMotion(_time);
+            var projectileMotion = new ProjectileMotion(_time, Screen, GameLoopIntervalMilliseconds);
             shells.ForEach(projectileMotion.Calculate);
 
             var tanks = State.AllTanks;

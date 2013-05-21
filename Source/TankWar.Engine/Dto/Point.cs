@@ -24,7 +24,7 @@ namespace TankWar.Engine
 
         public override string ToString()
         {
-            return String.Format("x={0}, y={1}", X, Y);
+            return String.Format("({0},{1})", X, Y);
         }
     }
 }
