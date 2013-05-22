@@ -53,6 +53,11 @@ namespace TankWar.Engine.Objects
             Power = power;
             Time = time;
         }
+
+        public override string ToString()
+        {
+            return string.Format("[A={0}, P={1}, t={2}]", Angle, Power, Time);
+        }
     }
 
     public class ProjectileMotion
@@ -89,12 +94,12 @@ namespace TankWar.Engine.Objects
                 var calcTime = physicsParam.Time;
 
                 newPoint.X = Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(physicsParam.Angle));
-                newPoint.Y = Convert.ToInt32(physicsParam.Power * calcTime * Math.Sin(physicsParam.Angle) - (0.5 * Gravity * calcTime * calcTime));
-                Log.Info("Shell={0} => {1}. Shell Time = {2}", shell, newPoint, shellTime);
+                newPoint.Y = Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(physicsParam.Angle)) - (0.5 * Gravity * calcTime * calcTime));
+                Log.Info("Shell={0} => {1}. ShellTime = {2}, Physics={3}", shell, newPoint, shellTime, physicsParam);
 
                 shell.Point = newPoint;
 
-                shell.IsDead = shellTime  > 10000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
+                shell.IsDead = shellTime  > 2000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
             }
         }
     }
