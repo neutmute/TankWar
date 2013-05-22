@@ -33,7 +33,7 @@
                 } else if (tankModel.Setting.Angle < 113) {
                     _sprite.setXOffset(297);
                     _sprite.setYOffset(6);
-                    
+
                 } else if (tankModel.Setting.Angle < 158) {
                     _sprite.setXOffset(260);
                     _sprite.setYOffset(6);
@@ -52,6 +52,7 @@
             var tankSpriteUrl = '@Url.Content("~/Content/Sprites/Tank1.gif")';
             var self = this;
             var scene = null;
+            var tankLayer = null;
             var tankSprites = [];
             var shellSprites = sjs.List();
             var cycleTicker = null;
@@ -69,133 +70,141 @@
                     cycle.update();
                 }
             }
+            
+            this.initScene = function() {
+                if (self.scene != null) {
+                    self.scene.reset();
+                } else {
+                    self.scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause: false });
+                 }
 
-            this.startGame = function(viewState) {
+                self.scene.loadImages([tankSpriteUrl], function() {
 
-                console.log('startGame with ' + viewState.Tanks.length + ' tanks');
-
-                if (scene != null) {
-                    scene.reset();
-                }
-
-                scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X, h: @Model.ViewSize.BottomRight.Y, parent: document.getElementById('sceneDiv'), autoPause: false });
-
-                scene.loadImages([tankSpriteUrl], function() {
-
-                    var layer = scene.Layer("layer", { useCanvas: false });
-
-                    // load player tanks
-                    for (var i = 0; i < viewState.Tanks.length; i++) {
-
-                        var viewStateTank = viewState.Tanks[i];
-                        var tankSprite = scene.Sprite(tankSpriteUrl, layer);
-                        tankSprite.size(43, 40);
-                        tankSprite.setXOffset(5);
-                        tankSprite.setYOffset(6);
-
-                        tankSprite.move(viewStateTank.Point.X, viewStateTank.Point.Y);
-                        tankSprite.serverId = viewStateTank.Id;
-
-                        tankSprites.push(tankSprite);
-                        tankSprite.update();
-                    }
-
+                    self.tankLayer = self.scene.Layer("layer", { useCanvas: false });
+                    
                     var tankFiringCycle = sjs.Cycle([[5, 6, 1],
                         [55, 6, 10],
                         [100, 6, 10],
                         [145, 6, 5],
                         [190, 6, 5]]);
-                    
-                    
-                    var shellSprite = scene.Sprite(tankSpriteUrl, layer);
-                    shellSprite.size(8,8);
+
+                    var shellSprite = self.scene.Sprite(tankSpriteUrl, self.tankLayer);
+                    shellSprite.size(8, 8);
                     shellSprite.setYOffset(0);
-                    shellSprite.move(90,150);
-                    
-                    var shellCycle = sjs.Cycle([[	238,      26, 5],
-                                                   [250,  	26, 5]]);
-								   
+                    shellSprite.move(90, 150);
+
+                    var shellCycle = sjs.Cycle([[238, 26, 5],
+                        [250, 26, 5]]);
+
                     shellCycle.addSprites(shellSprite);
-                    
+
                     var tankDeathCycle = sjs.Cycle([[18, 52, 5],
-                                                    [61, 52, 5],
-                                                    [101, 52, 3],
-                                                    [143, 52, 3],
-                                                    [183, 52, 3],
-                                                    [183, 52, 3],
-                                                    [222, 52, 3],
-                                                    [261, 52, 3],
-                                                    [297, 52, 3]]);
+                        [61, 52, 5],
+                        [101, 52, 3],
+                        [143, 52, 3],
+                        [183, 52, 3],
+                        [183, 52, 3],
+                        [222, 52, 3],
+                        [261, 52, 3],
+                        [297, 52, 3]]);
 
                     //var tankTurningCycle = sjs.Cycle([[5, 6, 1],
                     //    [260, 6, 10],
                     //    [296, 6, 10]]);
                     tankDeathCycle.repeat = false;
                     tankFiringCycle.repeat = false;
-                    
-                  //  tankDeathCycle.addSprite(tankSprites[0]);
-                 //   tankFiringCycle.addSprite(tankSprites[1]);
-                    
-                   // cycleList.add(tankFiringCycle);
-                 //   cycleList.add(tankDeathCycle);
+
+                    //  tankDeathCycle.addSprite(tankSprites[0]);
+                    //   tankFiringCycle.addSprite(tankSprites[1]);
+
+                    // cycleList.add(tankFiringCycle);
+                    //   cycleList.add(tankDeathCycle);
 
 
-                    cycleTicker = scene.Ticker(30, self.cycleAnimations);
+                    cycleTicker = self.scene.Ticker(30, self.cycleAnimations);
                     cycleTicker.run();
 
                 });
             }
 
+            this.startGame = function(viewState) {
+
+                console.log('startGame with ' + viewState.Tanks.length + ' tanks');
+
+                self.initScene();
+            }
+
 
             this.tick = function(viewState) {
+    
+                if (self.scene == null) {
+                    self.initScene();
+                }
+                // loop through tank sprites
                 for (var spriteIndex = 0; spriteIndex < tankSprites.length; spriteIndex++) {
                     var sprite = tankSprites[spriteIndex];
                     var viewStateTank = null;
-                    
-                    for (var i = 0; i < viewState.Tanks.length; i++) {
+
+                    for (var i = viewState.Tanks.length - 1; i > -1 ; i--) {
                         var viewStateTankCandidate = viewState.Tanks[i];
                         if (sprite.serverId == viewStateTankCandidate.Id) {
                             viewStateTank = viewStateTankCandidate;
+                            viewState.Tanks.splice(i, 1); // remove that found tank from view state
                         }
                     }
-                    
+
                     if (viewStateTank == null) {
                         sprite.remove();
-                        console.log('removing sprite');
+                        console.log('removing tank sprite');
                     } else {
                         sprite.setX(viewStateTank.Point.X);
                         sprite.setY(viewStateTank.Point.Y);
-                        
+
                         var tankModel = new TankModel(sprite);
                         tankModel.setTurret(viewStateTank);
-                        
                         sprite.update();
                     }
                 }
                 
+                // left over tanks need to be created and added to the sene
+                for (var i = viewState.Tanks.length - 1; i > -1 ; i--) {
+                    var viewStateTank = viewState.Tanks[i];
+                    var tankSprite = self.scene.Sprite(tankSpriteUrl, self.tankLayer);
+                    tankSprite.size(43, 40);
+                    tankSprite.setXOffset(5);
+                    tankSprite.setYOffset(6);
+
+                    tankSprite.move(viewStateTank.Point.X, viewStateTank.Point.Y);
+                    tankSprite.serverId = viewStateTank.Id;
+
+                    tankSprites.push(tankSprite);
+                    tankSprite.update();
+                }
+
+
                 var shellSprite;
-                while(shellSprite = shellSprites.iterate()) {
+                while (shellSprite = shellSprites.iterate()) {
                     var viewStateShell = null;
-                    
+
                     for (var i = 0; i < viewState.Shells.length; i++) {
                         var viewStateShellCandidate = viewState.Shells[i];
                         if (sprite.serverId == viewStateShellCandidate.Id) {
                             viewStateShell = viewStateShellCandidate;
                         }
                     }
-                    
+
                     if (viewStateShell == null || shellSprite.IsDead) {
                         shellSprite.remove();
                         console.log('removing shell sprite');
                     } else {
                         shellSprite.setX(viewStateShell.Point.X);
                         shellSprite.setY(viewStateShell.Point.Y);
-                        
+
                         shellSprite.update();
                     }
                 }
-                
-               
+
+
             };
         }
 

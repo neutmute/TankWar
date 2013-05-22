@@ -203,7 +203,7 @@ namespace TankWar.Engine
             var tanks = State.AllTanks;
             tanks.ForEach(t =>
                 {
-                    t.Point.Y++;
+                    //t.Point.Y++;
                     //t.Point.X += 1;
                     //                   t.Setting.Angle++;
                     //if (t.Setting.Angle > 180)

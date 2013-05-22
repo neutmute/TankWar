@@ -63,8 +63,11 @@ namespace TankWar.Hubs
             Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
 
             var player = FindPlayer();
-            player.Tank.Setting.Angle = angle;
-            player.Tank.Setting.Power = power;
+            if (player != null)
+            {
+                player.Tank.Setting.Angle = angle;
+                player.Tank.Setting.Power = power;
+            }
         }
         
         public void Fire()
