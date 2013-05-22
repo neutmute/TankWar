@@ -19,5 +19,10 @@ namespace TankWar.Engine
         {
             Setting = new TurretSetting();
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}, turret=[{1}]", base.ToString(), Setting);
+        }
     }
 }

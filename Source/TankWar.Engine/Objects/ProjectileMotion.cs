@@ -8,10 +8,27 @@ using TankWar.Engine.Dto;
 
 namespace TankWar.Engine.Objects
 {
+    public class CartesianMapper
+    {
+        private Area _screen;
+
+        public CartesianMapper(Area screen)
+        {
+            _screen = screen;
+        }
+
+        public Point CartesianToScreen(Point point)
+        {
+            var newY = _screen.BottomRight.Y - point.Y;
+            var mappedPoint = new Point(point.X, newY, PointType.Screen);
+            return mappedPoint;
+        }
+    }
+
     public class PhysicsParamScreenTuneTransform : PhysicsParam
     {
-        public override int Angle { get { return Convert.ToInt32(base.Angle*Math.PI/_screenArea.BottomRight.X); } }
-        public override double Power { get { return base.Power/100000; } }
+        //public override int Angle { get { return Convert.ToInt32(base.Angle*Math.PI/_screenArea.BottomRight.X); } }
+        //public override double Power { get { return base.Power; } }
         public override double Time { get { return base.Time/_gameLoopIntervalMs; } }
 
         private Area _screenArea;
@@ -60,22 +77,24 @@ namespace TankWar.Engine.Objects
         {
             if (!shell.IsDead)
             {
+                var shellTime = (_time - shell.LaunchTime); 
                 var physicsParam = new PhysicsParamScreenTuneTransform(
                     shell.LaunchState.Angle
                     , shell.LaunchState.Power
-                    , _time
+                    , shellTime
                     , _screenArea
                     , _gameLoopIntervalMs);
 
                 var newPoint = new Point();
+                var calcTime = physicsParam.Time;
 
-                newPoint.X = Convert.ToInt32(physicsParam.Power * _time * Math.Cos(physicsParam.Angle));
-                newPoint.Y = Convert.ToInt32(physicsParam.Power * _time * Math.Sin(physicsParam.Angle) - (0.5 * Gravity * physicsParam.Time * physicsParam.Time));
-                Log.Info("Shell={0} => {1}", shell.Point, newPoint);
+                newPoint.X = Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(physicsParam.Angle));
+                newPoint.Y = Convert.ToInt32(physicsParam.Power * calcTime * Math.Sin(physicsParam.Angle) - (0.5 * Gravity * calcTime * calcTime));
+                Log.Info("Shell={0} => {1}. Shell Time = {2}", shell, newPoint, shellTime);
 
                 shell.Point = newPoint;
 
-                shell.IsDead = _time*1000 > 5000;// shell.Point.Y < 0;
+                shell.IsDead = shellTime  > 10000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
             }
         }
     }

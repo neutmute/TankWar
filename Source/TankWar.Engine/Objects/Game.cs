@@ -9,6 +9,7 @@ using NLog;
 using TankWar.Engine.Dto;
 using TankWar.Engine.Interfaces;
 using TankWar.Engine.Objects;
+using TankWar.Engine.Util;
 
 namespace TankWar.Engine
 {
@@ -135,7 +136,8 @@ namespace TankWar.Engine
 
         public void PlayerFire(Player player)
         {
-            var shell = new Shell {Id = _shellCounter++, LaunchState = player.Tank.Setting};
+            var shell = new Shell { Id = _shellCounter++, LaunchState = player.Tank.Setting, LaunchTime= _time};
+            shell.Point = Deep.Clone(player.Tank.Point);
             player.Shells.Add(shell);
         }
 
@@ -148,14 +150,9 @@ namespace TankWar.Engine
             Log.Info("Game on! Game loop interval = {0}ms", GameLoopIntervalMilliseconds);
 
             State.PositionTanks();
-
-            var viewPortState = new ViewPortState();
-            viewPortState.Tanks = State.AllTanks;
-            viewPortState.Shells = State.AllShells;
-
-            GetViewPortClients().StartGame(viewPortState);
+            
+            GetViewPortClients().StartGame(State.ToViewPortState((Screen)));
             UpdatePlayers(PlayerStatus.GameInCountdown, PlayerStatus.GameInPlay);
-            //    BroadcastGameStateToGamepads();
         }
 
         private void UpdatePlayers(PlayerStatus from, PlayerStatus to)
@@ -206,6 +203,7 @@ namespace TankWar.Engine
             var tanks = State.AllTanks;
             tanks.ForEach(t =>
                 {
+                    t.Point.Y++;
                     //t.Point.X += 1;
                     //                   t.Setting.Angle++;
                     //if (t.Setting.Angle > 180)
@@ -214,10 +212,8 @@ namespace TankWar.Engine
                     //}
                 });
 
-            var viewPortState = new ViewPortState();
-            viewPortState.Tanks = State.AllTanks;
 
-            GetViewPortClients().Tick(viewPortState);
+            GetViewPortClients().Tick(State.ToViewPortState((Screen)));
         }
 
         #endregion

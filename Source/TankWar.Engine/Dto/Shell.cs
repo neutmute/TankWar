@@ -10,6 +10,11 @@ namespace TankWar.Engine
     {
         public TurretSetting LaunchState { get; set; }
 
+        public int LaunchTime { get; set; }
 
+        public override string ToString()
+        {
+            return string.Format("{0}, LaunchState=[{1}]", base.ToString(), LaunchState);
+        }
     }
 }
