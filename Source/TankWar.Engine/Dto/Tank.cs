@@ -19,6 +19,8 @@ namespace TankWar.Engine
         /// </summary>
         public Area Target { get; set; }
 
+        public string Name { get; set; }
+
         public override Point Point
         {
             get { return base.Point; }

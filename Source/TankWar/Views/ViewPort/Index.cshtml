@@ -202,15 +202,22 @@
                     tankSprite.size(43, 40);
                     tankSprite.setXOffset(5);
                     tankSprite.setYOffset(6);
-
+                    
                     var x = viewStateTank.Point.X;
                     var y = viewStateTank.Point.Y;
-
+                    
+                    var imageUrl = '@Url.Content("~/Content/GetNameImage.ashx?text=")';
+                    var nameSprite = self.scene.Sprite(imageUrl + viewStateTank.Name, self.tankLayer);
+                  
                     tankSprite.move(x, y);
                     tankSprite.serverId = viewStateTank.Id;
 
                     tankSprites.push(tankSprite);
                     tankSprite.update();
+                    
+                    nameSprite.size(50, 16);
+                    nameSprite.move(x, y + 40);
+                    nameSprite.update();
                     console.log("Added tank {0} at {1},{2}".format(viewStateTank.Id, x, y));
                 }
 
@@ -270,7 +277,7 @@
         }
 
 
-        $(function() {
+        $(document).ready(function() {
 
 
             var sceneController = new sceneControllerClass();

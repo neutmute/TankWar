@@ -157,7 +157,6 @@ namespace TankWar.Engine
 
         private void UpdatePlayers(PlayerStatus from, PlayerStatus to)
         {
-
             State
                 .Players
                 .Where(p => p.Status == from)

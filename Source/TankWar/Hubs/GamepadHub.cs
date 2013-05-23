@@ -51,7 +51,7 @@ namespace TankWar.Hubs
             var player = FindPlayer();
 
             Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
-            player.Name = name;
+            player.Tank.Name = name;
 
             Game.Instance.PlayerReady(player);
 
@@ -93,7 +93,7 @@ namespace TankWar.Hubs
             string name = null;
             if (player != null)
             {
-                name = player.Name;
+                name = player.Tank.Name;
             }
             if (string.IsNullOrEmpty(name) && player != null)
             {
