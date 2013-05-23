@@ -34,6 +34,11 @@
             var _sprite = sprite;
 
             this.setTurret = function(tankModel) {
+                
+                if (_sprite.isAnimating) {
+                    return;
+                }
+
                 if (tankModel.Setting.Angle < 23) {
                     _sprite.setXOffset(5);
                     _sprite.setYOffset(6);
@@ -69,19 +74,36 @@
             var shellSprites = sjs.List();
             var shellCycle = null;
             var cycleTicker = null;
-            var cycleList = sjs.List();
+            var cycleList;
 
 
             this.cycleAnimations = function() {
                 var cycle;
-                while (cycle = cycleList.iterate()) {
+                while (cycle = self.cycleList.iterate()) {
                     cycle.next();
                     if (cycle.done) {
+                        //for (var i=0;i<cycle.sprites.length;i++) {
+                        //    cycle.sprites.isAnimating = false;
+                        //}
                         cycle.reset();
-                        cycleList.remove(cycle);
+                        self.cycleList.remove(cycle);
                     }
                     cycle.update();
                 }
+            }
+
+            this.animateTankFiring = function(tankSprite) {
+                var tankFiringCycle = sjs.Cycle([[5, 6, 1],
+                    [55, 6, 10],
+                    [100, 6, 10],
+                    [145, 6, 5],
+                    [190, 6, 5]]);
+
+
+                tankFiringCycle.repeat = false;
+                tankFiringCycle.addSprite(tankSprite);
+                tankSprite.isAnimating = true;
+                self.cycleList.add(tankFiringCycle);
             }
 
             this.initScene = function() {
@@ -93,13 +115,7 @@
 
                 self.scene.loadImages([tankSpriteUrl], function() {
 
-                    self.tankLayer = self.scene.Layer("layer", { useCanvas: false });
-
-                    var tankFiringCycle = sjs.Cycle([[5, 6, 1],
-                        [55, 6, 10],
-                        [100, 6, 10],
-                        [145, 6, 5],
-                        [190, 6, 5]]);
+                    self.tankLayer = self.scene.Layer("layer", { useCanvas: false });                   
 
 
                     self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
@@ -118,7 +134,6 @@
                     //    [260, 6, 10],
                     //    [296, 6, 10]]);
                     tankDeathCycle.repeat = false;
-                    tankFiringCycle.repeat = false;
 
                     //  tankDeathCycle.addSprite(tankSprites[0]);
                     //   tankFiringCycle.addSprite(tankSprites[1]);
@@ -127,6 +142,7 @@
                     //   cycleList.add(tankDeathCycle);
 
 
+                    self.cycleList = sjs.List();
                     cycleTicker = self.scene.Ticker(30, self.cycleAnimations);
                     cycleTicker.run();
 
@@ -162,13 +178,19 @@
 
                     if (viewStateTank == null) {
                         sprite.remove();
-                        console.log('removing tank sprite');
+                        sprite.update();
+                        console.log('removing tank sprite ' + sprite.serverId);
                     } else {
+
+                        //console.log('Updating tank ' + sprite.serverId);
                         sprite.setX(viewStateTank.Point.X);
                         sprite.setY(viewStateTank.Point.Y);
 
                         var tankModel = new TankModel(sprite);
                         tankModel.setTurret(viewStateTank);
+                        if (viewStateTank.IsFiring) {
+                       //     self.animateTankFiring(sprite);
+                        }
                         sprite.update();
                     }
                 }
@@ -216,7 +238,7 @@
                         shellSprite.setY(y);
                         //self.shellCycle.addSprite(shellSprite);
 
-                        console.log('Moving shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
+                       // console.log('Moving shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                         shellSprite.update();
                     }
                 }
@@ -228,7 +250,7 @@
                     if (!viewStateShell.IsDead) {
                         shellSprite = self.scene.Sprite(tankSpriteUrl, self.tankLayer);
                         shellSprite.size(8, 8);
-                        
+
                         shellSprite.setXOffset(238);
                         shellSprite.setYOffset(26);
 
