@@ -84,17 +84,25 @@ namespace TankWar.Engine.Objects
             {
                 var shellTime = (_time - shell.LaunchTime); 
                 var physicsParam = new PhysicsParamScreenTuneTransform(
-                    shell.LaunchState.Angle
-                    , shell.LaunchState.Power
+                    shell.Origin.Setting.Angle
+                    , shell.Origin.Setting.Power
                     , shellTime
                     , _screenArea
                     , _gameLoopIntervalMs);
 
                 var newPoint = new Point();
                 var calcTime = physicsParam.Time;
+                var radians = Math.PI/180*physicsParam.Angle;
 
-                newPoint.X = Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(physicsParam.Angle));
-                newPoint.Y = Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(physicsParam.Angle)) - (0.5 * Gravity * calcTime * calcTime));
+                // this is to make the shell appear from the correct side of the tank
+                var xOriginFudge = 0;
+                if (physicsParam.Angle > 90)
+                {
+                    xOriginFudge = Tank.Width;
+                }
+
+                newPoint.X = xOriginFudge + shell.Origin.Point.X + -Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(radians));
+                newPoint.Y = shell.Origin.Point.Y + Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(radians)) - (0.5 * Gravity * calcTime * calcTime));
                 Log.Info("Shell={0} => {1}. ShellTime = {2}, Physics={3}", shell, newPoint, shellTime, physicsParam);
 
                 shell.Point = newPoint;

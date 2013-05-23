@@ -135,8 +135,8 @@ namespace TankWar.Engine
 
         public void PlayerFire(Player player)
         {
-            var shell = new Shell { Id = _shellCounter++, LaunchState = player.Tank.Setting, LaunchTime= _time};
-            shell.Point = Deep.Clone(player.Tank.Point);
+            var shell = new Shell { Id = _shellCounter++, LaunchTime= _time};
+            shell.Origin = Deep.Clone(player.Tank);
             player.Shells.Add(shell);
         }
 
