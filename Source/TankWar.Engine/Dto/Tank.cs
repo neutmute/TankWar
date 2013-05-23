@@ -34,6 +34,8 @@ namespace TankWar.Engine
         /// </summary>
         public bool IsHit { get; set; }
 
+        public bool IsFiring { get; set; }
+
         public Tank()
         {
             Setting = new TurretSetting();

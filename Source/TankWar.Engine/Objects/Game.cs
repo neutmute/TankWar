@@ -138,6 +138,7 @@ namespace TankWar.Engine
             var shell = new Shell { Id = _shellCounter++, LaunchTime= _time};
             shell.Origin = Deep.Clone(player.Tank);
             player.Shells.Add(shell);
+            player.Tank.IsFiring = true;
         }
 
         public void Start()
@@ -213,6 +214,7 @@ namespace TankWar.Engine
 
 
             GetViewPortClients().Tick(State.ToViewPortState((Screen)));
+            tanks.ForEach(t => t.IsFiring = false);
         }
 
         #endregion
