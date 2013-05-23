@@ -17,7 +17,6 @@ namespace TankWar.Engine
         public int X { get;  set; }
         public int Y { get;  set; }
 
-
         public PointType Type { get; private set; }
 
         public Point(int x, int y, PointType type = PointType.Cartesian)

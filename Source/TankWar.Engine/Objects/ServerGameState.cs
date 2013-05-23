@@ -24,7 +24,7 @@ namespace TankWar.Engine.Objects
             for (int i = 0; i < Players.Count; i++)
             {
                 var player = Players[i];
-                player.Tank.Point = new Point(i * 100, 20);
+                player.Tank.Point = new Point(i * 100, 20 + Tank.Height);
             }
         }
 

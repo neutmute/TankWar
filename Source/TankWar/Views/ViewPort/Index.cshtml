@@ -17,6 +17,18 @@
     <script src="~/Scripts/sprite.js"></script>
     
     <script>
+        //http://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format
+        if (!String.prototype.format) {
+            String.prototype.format = function() {
+                var args = arguments;
+                return this.replace(/{(\d+)}/g, function(match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match;
+                });
+            };
+        }
+
         function TankModel(sprite) {
             var self = this;
             var _sprite = sprite;
@@ -91,7 +103,6 @@
 
 
                     self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
-                   
 
                     var tankDeathCycle = sjs.Cycle([[18, 52, 5],
                         [61, 52, 5],
@@ -131,7 +142,6 @@
 
 
             this.tick = function(viewState) {
-
                 // support late comers arriving after game in play
                 if (self.scene == null) {
                     self.initScene();
@@ -171,11 +181,15 @@
                     tankSprite.setXOffset(5);
                     tankSprite.setYOffset(6);
 
-                    tankSprite.move(viewStateTank.Point.X, viewStateTank.Point.Y);
+                    var x = viewStateTank.Point.X;
+                    var y = viewStateTank.Point.Y;
+
+                    tankSprite.move(x, y);
                     tankSprite.serverId = viewStateTank.Id;
 
                     tankSprites.push(tankSprite);
                     tankSprite.update();
+                    console.log("Added tank {0} at {1},{2}".format(viewStateTank.Id, x, y));
                 }
 
                 var shellSprite;
@@ -184,20 +198,25 @@
 
                     for (var i = viewState.Shells.length - 1; i > -1; i--) {
                         var viewStateShellCandidate = viewState.Shells[i];
-                        if (sprite.serverId == viewStateShellCandidate.Id) {
+                        if (shellSprite.serverId == viewStateShellCandidate.Id) {
                             viewStateShell = viewStateShellCandidate;
                             viewState.Shells.splice(i, 1); // remove from viewstate
                         }
                     }
 
-                    if (viewStateShell == null || shellSprite.IsDead) {
-                        console.log('removing shell sprite ' + shellSprite.serverId);
+                    if (viewStateShell == null || viewStateShell.IsDead) {
+                        console.log("Removing shell {0}".format(shellSprite.serverId));
                         shellSprites.remove(shellSprite);
                         shellSprite.remove();
                     } else {
-                        shellSprite.setX(viewStateShell.Point.X);
-                        shellSprite.setY(viewStateShell.Point.Y);
-                        self.shellCycle.addSprite(shellSprite);
+
+                        var x = viewStateShell.Point.X;
+                        var y = viewStateShell.Point.Y;
+                        shellSprite.setX(x);
+                        shellSprite.setY(y);
+                        //self.shellCycle.addSprite(shellSprite);
+
+                        console.log('Moving shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                         shellSprite.update();
                     }
                 }
@@ -209,16 +228,20 @@
                     if (!viewStateShell.IsDead) {
                         shellSprite = self.scene.Sprite(tankSpriteUrl, self.tankLayer);
                         shellSprite.size(8, 8);
-                        shellSprite.setYOffset(0);
+                        
+                        shellSprite.setXOffset(238);
+                        shellSprite.setYOffset(26);
 
-                        shellSprite.move(viewStateShell.Point.X, viewStateShell.Point.Y);
+                        var x = viewStateShell.Point.X;
+                        var y = viewStateShell.Point.Y;
+                        shellSprite.move(x, y);
                         shellSprite.serverId = viewStateShell.Id;
 
                         shellSprites.add(shellSprite);
                         shellSprite.update();
-                        console.log('Added shell ' + shellSprite.serverId);
+                        console.log('Added shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                     }
-                }                
+                }
 
 
             };

@@ -69,7 +69,7 @@ namespace TankWar.Engine
 
             State = new ServerGameState();
             _shellCounter = 0;
-
+            _time = 0;
             CountDownSeconds = 1;
         }
 
@@ -86,7 +86,6 @@ namespace TankWar.Engine
             get { return Convert.ToInt32(_gameClock.Interval); }
             set {_gameClock.Interval = value; }
         }
-        
 
         /// <summary>
         /// IOC property injection

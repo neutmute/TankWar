@@ -10,7 +10,7 @@ namespace TankWar.Engine
     {
         public int Id { get; set; }
 
-        public Point Point { get; set; }
+        public virtual Point Point { get; set; }
 
         /// <summary>
         /// Remove from viewport

@@ -99,7 +99,8 @@ namespace TankWar.Engine.Objects
 
                 shell.Point = newPoint;
 
-                shell.IsDead = shellTime  > 2000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
+               // shell.IsDead = shellTime  > 2000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
+                shell.IsDead = shell.Point.Y < 0;
             }
         }
     }
