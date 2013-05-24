@@ -29,6 +29,7 @@ namespace TankWar.Controllers
                 {
                     CountdownSeconds = game.CountDownSeconds
                     ,GameLoopIntervalMilliseconds = game.GameLoopIntervalMilliseconds
+                    ,MaximumGameTimeMinutes = Convert.ToInt32(game.MaximumGameRunTimeMilliseconds.TotalMinutes) 
                 };
             return View(model);
         }
@@ -46,7 +47,13 @@ namespace TankWar.Controllers
             Game.Instance.Start();
             return RedirectToAction("Admin");
         }
-        
+
+        [HttpPost]
+        public ActionResult GameOver()
+        {
+            Game.Instance.Stop();
+            return RedirectToAction("Admin");
+        }
 
         [HttpPost]
         public ActionResult SetGameParams(ViewPortAdminModel model)
@@ -55,6 +62,7 @@ namespace TankWar.Controllers
             {
                 Game.Instance.CountDownSeconds = model.CountdownSeconds;
                 Game.Instance.GameLoopIntervalMilliseconds = model.GameLoopIntervalMilliseconds;
+                Game.Instance.MaximumGameRunTimeMilliseconds = TimeSpan.FromMinutes(model.MaximumGameTimeMinutes);
                 Log.Info("Changed game settings: {0}", model);
 
             } 

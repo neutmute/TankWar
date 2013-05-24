@@ -32,7 +32,7 @@ namespace TankWar.Engine.Objects
         public override double Time { get { return base.Time/_gameLoopIntervalMs; } }
 
         private Area _screenArea;
-        private int _gameLoopIntervalMs;
+        private readonly int _gameLoopIntervalMs;
 
         public PhysicsParamScreenTuneTransform(int angle, int power, int time, Area screenArea, int gameLoopIntervalMs) : base(angle, power, time)
         {
@@ -84,13 +84,12 @@ namespace TankWar.Engine.Objects
             {
                 var shellTime = (_time - shell.LaunchTime); 
                 var physicsParam = new PhysicsParamScreenTuneTransform(
-                    shell.Origin.Setting.Angle
-                    , shell.Origin.Setting.Power
+                    shell.Origin.Turret.Angle
+                    , shell.Origin.Turret.Power
                     , shellTime
                     , _screenArea
                     , _gameLoopIntervalMs);
 
-                var newPoint = new Point();
                 var calcTime = physicsParam.Time;
                 var radians = Math.PI/180*physicsParam.Angle;
 
@@ -101,13 +100,11 @@ namespace TankWar.Engine.Objects
                     xOriginFudge = Tank.Width;
                 }
 
-                newPoint.X = xOriginFudge + shell.Origin.Point.X + -Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(radians));
-                newPoint.Y = shell.Origin.Point.Y + Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(radians)) - (0.5 * Gravity * calcTime * calcTime));
-                Log.Info("Shell={0} => {1}. ShellTime = {2}, Physics={3}", shell, newPoint, shellTime, physicsParam);
+                shell.Point.X = xOriginFudge + shell.Origin.Point.X + -Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(radians));
+                shell.Point.Y = shell.Origin.Point.Y + Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(radians)) - (0.5 * Gravity * calcTime * calcTime));
+                
+                //Log.Trace("Shell={0} => {1}. ShellTime = {2}, Physics={3}", shell, newPoint, shellTime, physicsParam);
 
-                shell.Point = newPoint;
-
-               // shell.IsDead = shellTime  > 2000 / _gameLoopIntervalMs;// shell.Point.Y < 0;
                 shell.IsDead = shell.Point.Y < 0;
             }
         }

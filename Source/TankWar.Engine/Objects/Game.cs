@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Kraken.Framework.Core;
 using NLog;
 using TankWar.Engine.Dto;
 using TankWar.Engine.Interfaces;
@@ -39,9 +40,9 @@ namespace TankWar.Engine
     public class Game
     {
         #region Fields
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private readonly Timer _gameClock;
         private readonly Timer _countDownClock;
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private int _time;
         private int _countDown;
         Stopwatch _stopwatch;
@@ -73,6 +74,7 @@ namespace TankWar.Engine
             _shellCounter = 0;
             _time = 0;
             CountDownSeconds = 1;
+            MaximumGameRunTimeMilliseconds = TimeSpan.FromMinutes(2);
         }
 
 
@@ -87,7 +89,7 @@ namespace TankWar.Engine
             set {_gameClock.Interval = value; }
         }
 
-        public int MaximumGameRunTimeMilliseconds { get; set; }
+        public TimeSpan MaximumGameRunTimeMilliseconds { get; set; }
 
         /// <summary>
         /// IOC property injection
@@ -111,6 +113,7 @@ namespace TankWar.Engine
             _countDownClock.Stop();
             State = new ServerGameState();
             _countDown = CountDownSeconds;
+
         }
 
         public Player PlayerJoined(string connectionId)
@@ -210,23 +213,21 @@ namespace TankWar.Engine
             shells.ForEach(projectileMotion.Calculate);
 
             var tanks = State.AllTanks;
-            tanks.ForEach(t =>
-                {
-                    //t.Point.Y++;
-                    //t.Point.X += 1;
-                    //                   t.Setting.Angle++;
-                    //if (t.Setting.Angle > 180)
-                    //{
-                    //    t.TurretAngle = 0;
-                    //}
-                });
 
+            var collisionDetector = new CollisionHandler();
 
+            var activeShells = shells.Where(s => !s.IsDead).ToList();
+            var activeTanks = tanks.Where(t => !t.IsDead).ToList();
+            
+            tanks.ForEach(t => t.IsDead &= t.IsHit); // kill off tanks that got hit from the prior tick 
+            activeShells.ForEach(s => activeTanks.ForEach(t => collisionDetector.Detect(s, t)));
+            
             GetViewPortClients().Tick(State.ToViewPortState((Screen)));
             tanks.ForEach(t => t.IsFiring = false);
 
-            if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds)
+            if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds.TotalMilliseconds)
             {
+                Log.Warn("Total allowed game time of {0} minutes elasped", MaximumGameRunTimeMilliseconds.TotalMinutes);
                 Stop();
             }
         }

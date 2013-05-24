@@ -66,6 +66,7 @@
     <Compile Include="Dto\TurretSetting.cs" />
     <Compile Include="Interfaces\IViewPortClient.cs" />
     <Compile Include="Interfaces\IViewPortHub.cs" />
+    <Compile Include="Objects\CollisionHandler.cs" />
     <Compile Include="Objects\Game.cs" />
     <Compile Include="Dto\Message.cs" />
     <Compile Include="Dto\Point.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Dto\Shell.cs" />
     <Compile Include="Dto\Tank.cs" />
-    <Compile Include="Util\Cloner.cs" />
+    <Compile Include="Util\DeepClone.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

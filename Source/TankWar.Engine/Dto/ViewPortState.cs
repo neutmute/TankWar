@@ -8,17 +8,14 @@ namespace TankWar.Engine
 {
     public class ViewPortState
     {
-        public List<Tank> Tanks { get; set; }
+        public List<TankDto> Tanks { get; set; }
 
-        public List<Shell> Shells { get;  set; }
-
-        public List<Message> NewMessages { get;  set; }
-
+        public List<ShellDto> Shells { get; set; }
+        
         public ViewPortState()
         {
-            Tanks = new List<Tank>();
-            Shells = new List<Shell>();
-            NewMessages = new List<Message>();
+            Tanks = new List<TankDto>();
+            Shells = new List<ShellDto>();
         }
     }
 }

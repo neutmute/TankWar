@@ -10,12 +10,7 @@ namespace TankWar.Engine
     {
         public int Id { get; set; }
 
-        public virtual Point Point { get; set; }
-
-        /// <summary>
-        /// Remove from viewport
-        /// </summary>
-        public bool IsDead { get; set; }
+        public Point Point { get; set; }
 
         public Sprite()
         {

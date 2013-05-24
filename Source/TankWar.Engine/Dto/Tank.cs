@@ -4,48 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankWar.Engine.Dto;
+using Omu.ValueInjecter;
 
 namespace TankWar.Engine
 {
-    public class Tank : Sprite
+    public class TankDto : Sprite
     {
-        public TurretSetting Setting { get; set; }
-
-        public const int Height = 40;
-        public const int Width = 40;
-
-        /// <summary>
-        /// Where the tank can get hit
-        /// </summary>
-        public Area Target { get; set; }
+        public TurretSetting Turret { get; set; }
 
         public string Name { get; set; }
-
-        public override Point Point
-        {
-            get { return base.Point; }
-            set 
-            { 
-                base.Point = value;
-                Target = new Area(value.X, value.Y, value.X + Width, value.Y+Height);
-            }
-        }
 
         /// <summary>
         /// Initiate explosion
         /// </summary>
         public bool IsHit { get; set; }
 
+        public override string ToString()
+        {
+            return string.Format("{0}, turret=[{1}]", base.ToString(), Turret);
+        }
+    }
+
+    public class Tank : TankDto
+    {
+        public const int Height = 40;
+        public const int Width = 40;
+
+        /// <summary>
+        /// Where the tank can get hit
+        /// </summary>
+        public Area Target { 
+            get
+            {
+                return new Area(Point.X, Point.Y, Point.X + Width, Point.Y - Height);
+            }
+        }
+
+        /// <summary>
+        /// Remove from viewport
+        /// </summary>
+        public bool IsDead { get; set; }
+
         public bool IsFiring { get; set; }
+
+        public Tank HitBy { get; set; }
 
         public Tank()
         {
-            Setting = new TurretSetting();
+            Turret = new TurretSetting();
         }
 
-        public override string ToString()
+        public TankDto ToDto()
         {
-            return string.Format("{0}, turret=[{1}]", base.ToString(), Setting);
+            var dto = new TankDto();
+            dto.InjectFrom(this);
+            return dto;
         }
+
     }
 }

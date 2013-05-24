@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using NLog;
 using TankWar.Engine;
 using TankWar.Engine.Interfaces;
 
@@ -6,6 +7,8 @@ namespace TankWar.Hubs
 {
     public class ViewPortHubClientsProxy : IViewPortClients
     {
+
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         #region IViewPortClients Members
 
@@ -23,7 +26,8 @@ namespace TankWar.Hubs
 
         public void EndGame()
         {
-            throw new System.NotImplementedException();
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ViewPortHub>();
+            context.Clients.All.gameOver();
         }
         #endregion
 

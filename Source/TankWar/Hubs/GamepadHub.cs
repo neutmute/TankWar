@@ -51,7 +51,10 @@ namespace TankWar.Hubs
             var player = FindPlayer();
 
             Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
-            player.Tank.Name = name;
+            if (player.Tank != null)
+            {
+                player.Tank.Name = name;
+            }
 
             Game.Instance.PlayerReady(player);
 
@@ -65,8 +68,8 @@ namespace TankWar.Hubs
             var player = FindPlayer();
             if (player != null)
             {
-                player.Tank.Setting.Angle = angle;
-                player.Tank.Setting.Power = power;
+                player.Tank.Turret.Angle = angle;
+                player.Tank.Turret.Power = power;
             }
         }
         

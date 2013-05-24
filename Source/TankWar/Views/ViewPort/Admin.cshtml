@@ -11,6 +11,14 @@
      <div class="row">
          <div class="span3">
              
+         <div class="span3">
+             
+            @using(Html.BeginForm("ResetGameState", "ViewPort"))
+            {
+                <input type="submit" class="btn btn-danger btn-large" value="Reset Game State"/>
+            }
+     
+         </div>
             @using(Html.BeginForm("ForceStart", "ViewPort"))
             {
                 <input type="submit" class="btn btn-info btn-large" value="Force Immediate Start"/>
@@ -18,9 +26,9 @@
          </div>
          <div class="span3">
              
-            @using(Html.BeginForm("ResetGameState", "ViewPort"))
+            @using(Html.BeginForm("GameOver", "ViewPort"))
             {
-                <input type="submit" class="btn btn-danger btn-large" value="Reset Game State"/>
+                <input type="submit" class="btn btn-warning btn-large" value="Game Over"/>
             }
      
          </div>
@@ -32,7 +40,7 @@
     @using (Html.BeginForm("SetGameParams", "ViewPort"))
     {
         @Html.EditorForModel();
-        <input type="submit" class="btn btn-warning btn-large" value="Set Parameters"/>
+        <input type="submit" class="btn btn-info btn-large" value="Set Parameters"/>
 
     }
 </fieldset>
