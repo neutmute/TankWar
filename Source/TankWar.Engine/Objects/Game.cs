@@ -219,7 +219,7 @@ namespace TankWar.Engine
             var activeShells = shells.Where(s => !s.IsDead).ToList();
             var activeTanks = tanks.Where(t => !t.IsDead).ToList();
             
-            tanks.ForEach(t => t.IsDead &= t.IsHit); // kill off tanks that got hit from the prior tick 
+            tanks.ForEach(t => t.IsDead |= t.IsHit); // kill off tanks that got hit from the prior tick 
             activeShells.ForEach(s => activeTanks.ForEach(t => collisionDetector.Detect(s, t)));
             
             GetViewPortClients().Tick(State.ToViewPortState((Screen)));

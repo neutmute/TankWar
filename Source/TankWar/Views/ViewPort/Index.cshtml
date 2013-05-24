@@ -106,6 +106,27 @@
                 self.cycleList.add(tankFiringCycle);
             }
 
+            this.animateTankDeath = function(tankSprite) {
+
+                var tankDeathCycle = sjs.Cycle([
+                    [18, 52, 5],
+                    [61, 52, 5],
+                    [101, 52, 3],
+                    [143, 52, 3],
+                    [183, 52, 3],
+                    [183, 52, 3],
+                    [222, 52, 3],
+                    [261, 52, 3],
+                    [297, 52, 3]]);
+
+                tankDeathCycle.repeat = false;
+
+                tankDeathCycle.addSprite(tankSprite);
+                tankSprite.isAnimating = true;
+                self.cycleList.add(tankDeathCycle);
+            }
+
+
             this.initScene = function() {
                 if (self.scene != null) {
                     self.scene.reset();
@@ -117,32 +138,11 @@
 
                     self.tankLayer = self.scene.Layer("layer", { useCanvas: false });
 
-
-                    self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
-
-                    var tankDeathCycle = sjs.Cycle([[18, 52, 5],
-                        [61, 52, 5],
-                        [101, 52, 3],
-                        [143, 52, 3],
-                        [183, 52, 3],
-                        [183, 52, 3],
-                        [222, 52, 3],
-                        [261, 52, 3],
-                        [297, 52, 3]]);
-
-                    //var tankTurningCycle = sjs.Cycle([[5, 6, 1],
-                    //    [260, 6, 10],
-                    //    [296, 6, 10]]);
-                    tankDeathCycle.repeat = false;
-
-                    //  tankDeathCycle.addSprite(tankSprites[0]);
-                    //   tankFiringCycle.addSprite(tankSprites[1]);
-
-                    // cycleList.add(tankFiringCycle);
-                    //   cycleList.add(tankDeathCycle);
-
-
                     self.cycleList = sjs.List();
+                    
+                    self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
+                    self.cycleList.add(self.shellCycle);
+                    
                     cycleTicker = self.scene.Ticker(30, self.cycleAnimations);
                     cycleTicker.run();
 
@@ -160,7 +160,7 @@
                 var bossCycle = sjs.Cycle([
                     [15, 15, 5], [192, 14, 5], [367, 13, 5]
                     //,[544, 14, 5]
-                   //,[367, 52, 5]
+                    //,[367, 52, 5]
                    //,[192, 52, 5]
                 ]);
 
@@ -214,12 +214,16 @@
                         var tankModel = new TankModel(sprite);
                         tankModel.setTurret(viewStateTank);
                         if (viewStateTank.IsFiring) {
-                            //     self.animateTankFiring(sprite);
+                            self.animateTankFiring(sprite);
                         }
                         if (viewStateTank.IsHit) {
                             console.log("{0} is hit!".format(viewStateTank.Name));
+                            self.animateTankDeath(sprite);
                         }
-                        sprite.update();
+
+                        if (!sprite.isAnimating) {
+                            sprite.update();
+                        }
                     }
                 }
 
@@ -271,7 +275,7 @@
                         var y = viewStateShell.Point.Y;
                         shellSprite.setX(x);
                         shellSprite.setY(y);
-                        //self.shellCycle.addSprite(shellSprite);
+                        self.shellCycle.addSprite(shellSprite);
 
                         // console.log('Moving shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                         shellSprite.update();
