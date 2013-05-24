@@ -46,15 +46,12 @@ namespace TankWar.Engine.Objects
 
         public ViewPortState ToViewPortState(Area screen)
         {
-            var allTanks = Deep.Clone(AllTanks);
-            var allShells = Deep.Clone(AllShells);
-
-            allTanks.RemoveAll(t => t.IsDead);
-            allShells.RemoveAll(s => s.IsDead);
-
+            var aliveTankDtos = AllTanks.Where(t => !t.IsDead).Select(t => t.ToDto()).ToList();
+            var aliveShellDtos = AllShells.Where(t => !t.IsDead).Select(t => t.ToDto()).ToList();
+            
             var viewPortState = new ViewPortState();
-            viewPortState.Tanks = allTanks.ConvertAll(t => t.ToDto());
-            viewPortState.Shells = allShells.ConvertAll(s => s.ToDto());
+            viewPortState.Tanks = aliveTankDtos;
+            viewPortState.Shells = aliveShellDtos;
 
             var mapper = new CartesianMapper(screen);
 

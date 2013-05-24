@@ -18,10 +18,9 @@ namespace TankWar.Engine.Objects
 
         public Player()
         {
-            Tank = new Tank();
+            Tank = new Tank{Owner = this};
             Shells = new List<Shell>();
         }
-
         
         public override string ToString()
         {

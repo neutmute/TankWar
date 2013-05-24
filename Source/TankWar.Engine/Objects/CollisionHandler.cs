@@ -8,9 +8,18 @@ using TankWar.Engine.Dto;
 
 namespace TankWar.Engine.Objects
 {
+    public delegate void NotifyPlayerMethod(Player player, PlayerStatus status);
+
     public class CollisionHandler
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private NotifyPlayerMethod _notifyPlayerMethod;
+
+        public CollisionHandler(NotifyPlayerMethod notifyPlayerMethod)
+        {
+            _notifyPlayerMethod = notifyPlayerMethod;
+          
+        }
 
         public void Detect(Shell shell, Tank tank)
         {
@@ -18,9 +27,11 @@ namespace TankWar.Engine.Objects
             if (hit)
             {
                 Log.Info("'{0}' hit '{1}'", shell.Origin.Name, tank.Name);
-                tank.HitBy = shell.Origin;
+                
                 tank.IsHit = true;
                 shell.IsDead = true;
+
+                _notifyPlayerMethod(tank.Owner, PlayerStatus.Dead);
             }
         }
         private  bool IsHit(Point point, Area area)

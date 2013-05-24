@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TankWar.Engine.Dto;
 using Omu.ValueInjecter;
+using TankWar.Engine.Objects;
 
 namespace TankWar.Engine
 {
@@ -49,6 +50,8 @@ namespace TankWar.Engine
 
         public Tank HitBy { get; set; }
 
+        public Player Owner { get; set; }
+
         public Tank()
         {
             Turret = new TurretSetting();
@@ -59,6 +62,17 @@ namespace TankWar.Engine
             var dto = new TankDto();
             dto.InjectFrom(this);
             return dto;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var objAsTank = obj as Tank;
+            return objAsTank != null && objAsTank.Id == Id;
         }
 
     }

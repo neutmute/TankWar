@@ -23,7 +23,7 @@ namespace TankWar.Engine
     {
         public int LaunchTime { get; set; }
 
-        public Tank Origin { get; set; }
+        public TankDto Origin { get; set; }
 
         /// <summary>
         /// Remove from viewport

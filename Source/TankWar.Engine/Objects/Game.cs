@@ -141,7 +141,7 @@ namespace TankWar.Engine
         public void PlayerFire(Player player)
         {
             var shell = new Shell { Id = _shellCounter++, LaunchTime= _time};
-            shell.Origin = Deep.Clone(player.Tank);
+            shell.Origin = Deep.Clone(player.Tank.ToDto());
             player.Shells.Add(shell);
             player.Tank.IsFiring = true;
         }
@@ -153,7 +153,6 @@ namespace TankWar.Engine
             _gameClock.Start();
             _stopwatch.Reset();
             _stopwatch.Start();
-
 
             _time = 0;
             Log.Info("Game on! Game loop interval = {0}ms", GameLoopIntervalMilliseconds);
@@ -214,7 +213,7 @@ namespace TankWar.Engine
 
             var tanks = State.AllTanks;
 
-            var collisionDetector = new CollisionHandler();
+            var collisionDetector = new CollisionHandler(SetPlayerStatus);
 
             var activeShells = shells.Where(s => !s.IsDead).ToList();
             var activeTanks = tanks.Where(t => !t.IsDead).ToList();
@@ -224,6 +223,11 @@ namespace TankWar.Engine
             
             GetViewPortClients().Tick(State.ToViewPortState((Screen)));
             tanks.ForEach(t => t.IsFiring = false);
+
+            if (activeTanks.Count == 0)
+            {
+                Stop();
+            }
 
             if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds.TotalMilliseconds)
             {

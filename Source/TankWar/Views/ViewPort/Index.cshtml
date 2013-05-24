@@ -128,6 +128,7 @@
 
 
             this.initScene = function() {
+                console.log('initing scene');
                 if (self.scene != null) {
                     self.scene.reset();
                 } else {
@@ -136,16 +137,16 @@
 
                 self.scene.loadImages([tankSpriteUrl], function() {
 
-                    self.tankLayer = self.scene.Layer("layer", { useCanvas: false });
+                self.tankLayer = self.scene.Layer("layer", { useCanvas: false });
 
-                    self.cycleList = sjs.List();
+                self.cycleList = sjs.List();
                     
-                    self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
-                    self.cycleList.add(self.shellCycle);
+                self.shellCycle = sjs.Cycle([[238, 26, 5], [250, 26, 5]]);
+                self.cycleList.add(self.shellCycle);
                     
-                    cycleTicker = self.scene.Ticker(30, self.cycleAnimations);
-                    cycleTicker.run();
-
+                cycleTicker = self.scene.Ticker(30, self.cycleAnimations);
+                cycleTicker.run();
+                console.log('inited scene');
                 });
             }
 
