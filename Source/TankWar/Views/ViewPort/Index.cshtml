@@ -72,7 +72,7 @@
             var scene = null;
             var tankLayer = null;
             var tankSprites = [];
-            var shellSprites = sjs.List();
+            var shellSprites = [];
             var shellCycle = null;
             var cycleTicker = null;
             var cycleList;
@@ -254,9 +254,10 @@
                     console.log("Added tank {0} at {1},{2}".format(viewStateTank.Id, x, y));
                 }
 
-                var shellSprite;
-                while (shellSprite = shellSprites.iterate()) {
+               
+                for (var shellSpriteIndex = shellSprites.length - 1; shellSpriteIndex > -1; shellSpriteIndex--) {
                     var viewStateShell = null;
+                    var shellSprite = shellSprites[shellSpriteIndex];
 
                     for (var i = viewState.Shells.length - 1; i > -1; i--) {
                         var viewStateShellCandidate = viewState.Shells[i];
@@ -268,7 +269,8 @@
 
                     if (viewStateShell == null || viewStateShell.IsDead) {
                         console.log("Removing shell {0}".format(shellSprite.serverId));
-                        shellSprites.remove(shellSprite);
+                        shellSprites.splice(shellSpriteIndex, 1);
+                        self.shellCycle.removeSprite(shellSprite);
                         shellSprite.remove();
                     } else {
 
@@ -299,7 +301,7 @@
                         shellSprite.move(x, y);
                         shellSprite.serverId = viewStateShell.Id;
 
-                        shellSprites.add(shellSprite);
+                        shellSprites.push(shellSprite);
                         shellSprite.update();
                         console.log('Added shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                     }
