@@ -202,9 +202,10 @@
                     }
 
                     if (viewStateTank == null) {
-                        sprite.remove();
-                        sprite.update();
                         console.log('removing tank sprite ' + sprite.serverId);
+                        tankSprites.splice(spriteIndex, 1);
+                        sprite.remove();
+                        //sprite.update();
                     } else {
 
                         //console.log('Updating tank ' + sprite.serverId);
@@ -218,7 +219,7 @@
                         }
                         if (viewStateTank.IsHit) {
                             console.log("{0} is hit!".format(viewStateTank.Name));
-                            self.animateTankDeath(sprite);
+                            //self.animateTankDeath(sprite);
                         }
 
                         if (!sprite.isAnimating) {
