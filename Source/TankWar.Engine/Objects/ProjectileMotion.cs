@@ -92,15 +92,8 @@ namespace TankWar.Engine.Objects
 
                 var calcTime = physicsParam.Time;
                 var radians = Math.PI/180*physicsParam.Angle;
-
-                // this is to make the shell appear from the correct side of the tank
-                var xOriginFudge = 0;
-                if (physicsParam.Angle > 90)
-                {
-                    xOriginFudge = Tank.Width;
-                }
-
-                shell.Point.X = xOriginFudge + shell.Origin.Point.X + -Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(radians));
+                
+                shell.Point.X = shell.Origin.Point.X + -Convert.ToInt32(physicsParam.Power * calcTime * Math.Cos(radians));
                 shell.Point.Y = shell.Origin.Point.Y + Convert.ToInt32((physicsParam.Power * calcTime * Math.Sin(radians)) - (0.5 * Gravity * calcTime * calcTime));
                 
                 //Log.Trace("Shell={0} => {1}. ShellTime = {2}, Physics={3}", shell, newPoint, shellTime, physicsParam);

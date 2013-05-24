@@ -11,7 +11,7 @@ namespace TankWar.Engine
 {
     public class TankDto : Sprite
     {
-        public TurretSetting Turret { get; set; }
+        public Turret Turret { get; set; }
 
         public string Name { get; set; }
 
@@ -54,7 +54,7 @@ namespace TankWar.Engine
 
         public Tank()
         {
-            Turret = new TurretSetting();
+            Turret = new Turret();
         }
 
         public TankDto ToDto()

@@ -36,8 +36,9 @@ namespace TankWar.Engine.Objects
         }
         private  bool IsHit(Point point, Area area)
         {
-            bool withinX = point.X >= area.TopLeft.X && point.X <= area.BottomRight.X;
-            bool withinY = point.Y <= area.TopLeft.Y && point.Y >= area.BottomRight.Y;
+            const int margin = 3;
+            bool withinX = point.X >= (area.TopLeft.X+margin) && point.X <= (area.BottomRight.X - margin);
+            bool withinY = point.Y <= (area.TopLeft.Y -margin)&& point.Y >= (area.BottomRight.Y + margin);
             return withinX && withinY;
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace TankWar.Engine
 {
-    public class TurretSetting
+    public class Turret
     {
         public int Angle { get; set; }
 

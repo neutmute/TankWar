@@ -112,7 +112,6 @@ namespace TankWar.Engine
             _gameClock.Stop();
             _countDownClock.Stop();
             State = new ServerGameState();
-            _countDown = CountDownSeconds;
 
         }
 
@@ -125,12 +124,11 @@ namespace TankWar.Engine
 
         public void PlayerReady(Player player)
         {
-            if (new []{GameStatus.WaitingForPlayers, GameStatus.Countdown}.Contains(State.Status))
+            if (new []{GameStatus.WaitingForPlayers, GameStatus.Countdown, GameStatus.GameOver}.Contains(State.Status))
             {
                 SetPlayerStatus(player, PlayerStatus.GameInCountdown);
-
                 Log.Info("'{0}' joined, countdown starting from {1}!", player, _countDown);
-                _countDownClock.Start();
+                StartCountdown();
             }
             else
             {
@@ -138,10 +136,22 @@ namespace TankWar.Engine
             }
         }
 
+        private void StartCountdown()
+        {
+            _countDown = CountDownSeconds;
+            State.Status = GameStatus.Countdown;
+            _countDownClock.Start();
+            BroadcastGameStateToGamepads();
+        }
+
         public void PlayerFire(Player player)
         {
             var shell = new Shell { Id = _shellCounter++, LaunchTime= _time};
             shell.Origin = Deep.Clone(player.Tank.ToDto());
+            
+            // make the shell appear to come from the correct side of the tank
+            shell.Origin.Point.X += Convert.ToInt32(player.Tank.Turret.Angle*Tank.Width/180);
+
             player.Shells.Add(shell);
             player.Tank.IsFiring = true;
         }
