@@ -41,6 +41,14 @@ namespace TankWar.Controllers
         }
 
         [HttpPost]
+        public ActionResult ForceStart()
+        {
+            Game.Instance.Start();
+            return RedirectToAction("Admin");
+        }
+        
+
+        [HttpPost]
         public ActionResult SetGameParams(ViewPortAdminModel model)
         {
             if (ModelState.IsValid)

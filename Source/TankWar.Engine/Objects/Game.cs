@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
@@ -43,7 +44,8 @@ namespace TankWar.Engine
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private int _time;
         private int _countDown;
-        
+        Stopwatch _stopwatch;
+
         private int _shellCounter;
         #endregion
         
@@ -66,7 +68,7 @@ namespace TankWar.Engine
             _countDownClock.Stop();
 
             Screen = new Area(0, 0, 800, 400);
-
+            _stopwatch = new Stopwatch();
             State = new ServerGameState();
             _shellCounter = 0;
             _time = 0;
@@ -76,8 +78,6 @@ namespace TankWar.Engine
 
         #endregion
 
-
-
         #region Properties
         public int CountDownSeconds { get; set; }
 
@@ -86,6 +86,8 @@ namespace TankWar.Engine
             get { return Convert.ToInt32(_gameClock.Interval); }
             set {_gameClock.Interval = value; }
         }
+
+        public int MaximumGameRunTimeMilliseconds { get; set; }
 
         /// <summary>
         /// IOC property injection
@@ -146,6 +148,10 @@ namespace TankWar.Engine
             _countDownClock.Stop();
             State.Status = GameStatus.Playing;
             _gameClock.Start();
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+
             _time = 0;
             Log.Info("Game on! Game loop interval = {0}ms", GameLoopIntervalMilliseconds);
 
@@ -178,7 +184,11 @@ namespace TankWar.Engine
 
         public void Stop()
         {
+            _stopwatch.Stop();
             _gameClock.Stop();
+            State.Status = GameStatus.GameOver;
+            BroadcastGameStateToGamepads();
+            GetViewPortClients().EndGame();
         }
 
         public void CountdownTick(object sender, ElapsedEventArgs e)
@@ -214,6 +224,11 @@ namespace TankWar.Engine
 
             GetViewPortClients().Tick(State.ToViewPortState((Screen)));
             tanks.ForEach(t => t.IsFiring = false);
+
+            if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds)
+            {
+                Stop();
+            }
         }
 
         #endregion

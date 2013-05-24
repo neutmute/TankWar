@@ -52,6 +52,10 @@ namespace TankWar.Engine.Objects
 
             var cloneViewState = Deep.Clone(viewPortState);
             var mapper = new CartesianMapper(screen);
+
+            cloneViewState.Shells.RemoveAll(s => s.IsDead);
+            cloneViewState.Tanks.RemoveAll(t => t.IsDead);
+
             cloneViewState.Tanks.ForEach(t => t.Point = mapper.CartesianToScreen(t.Point));
             cloneViewState.Shells.ForEach(t => t.Point = mapper.CartesianToScreen(t.Point));
 

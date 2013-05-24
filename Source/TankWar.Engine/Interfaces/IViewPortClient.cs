@@ -7,6 +7,8 @@ namespace TankWar.Engine.Interfaces
         void StartGame(ViewPortState viewPortState);
 
         void Tick(ViewPortState viewPortState);
+
+        void EndGame();
     }
 
     public interface IGamepadClients

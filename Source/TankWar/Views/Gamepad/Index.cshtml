@@ -15,7 +15,7 @@
         <img src="@Url.Content("~/Content/images/countdown.jpg")" />
     </div>
 
-    <span data-bind="visible: stateGameInPlay">
+    <div data-bind="visible: stateGameInPlay">
         <div class="row">
             <div class="span2">
                 <div class="row">
@@ -39,7 +39,7 @@
                 <button class="btn btn-danger btn-large" data-bind="click:shoot"><i class="icon-white icon-arrow-up"></i> Fire!</button>
             </div>
         </div>
-    </span>
+    </div>
     
     <div class="row" data-bind="visible: stateGameOver">
         <img src="@Url.Content("~/Content/images/gameover.gif")" />
@@ -84,7 +84,7 @@
             this.hub = $.connection.gamepadHub;
             this.name = ko.observable();
             this.power = ko.observable(0);
-            this.angle = ko.observable(90);
+            this.angle = ko.observable(0);
             this.countdown = ko.observable('');
             this.playerStatus = ko.observable();
             this.gameStatus = ko.observable();

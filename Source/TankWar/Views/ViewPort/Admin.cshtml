@@ -6,12 +6,26 @@
 <h2>Admin</h2>
 
  <fieldset>
-    <legend>Reset</legend>
-    @using(Html.BeginForm("ResetGameState", "ViewPort"))
-    {
-        <input type="submit" class="btn btn-warning btn-large" value="Reset Game State"/>
-    }
-</fieldset>
+     <legend>God Mode</legend>
+     
+     <div class="row">
+         <div class="span3">
+             
+            @using(Html.BeginForm("ForceStart", "ViewPort"))
+            {
+                <input type="submit" class="btn btn-info btn-large" value="Force Immediate Start"/>
+            }
+         </div>
+         <div class="span3">
+             
+            @using(Html.BeginForm("ResetGameState", "ViewPort"))
+            {
+                <input type="submit" class="btn btn-danger btn-large" value="Reset Game State"/>
+            }
+     
+         </div>
+     </div>
+ </fieldset>
 
 <fieldset>
     <legend>Game Parameters</legend>

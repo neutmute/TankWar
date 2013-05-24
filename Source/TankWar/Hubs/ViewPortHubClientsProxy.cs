@@ -21,6 +21,12 @@ namespace TankWar.Hubs
             context.Clients.All.tick(viewPortState);
         }
 
+        public void EndGame()
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
+
+
     }
 }

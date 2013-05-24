@@ -22,7 +22,6 @@ namespace TankWar.Engine
             Point = new Point();
         }
 
-
         public override string ToString()
         {
             return string.Format("id={0}, point={1}", Id, Point);
