@@ -181,6 +181,7 @@
       <DependentUpon>GetNameImage.ashx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GamepadController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ViewPortController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +197,31 @@
     <Content Include="Content\Sprites\gameboss.gif" />
     <Content Include="Content\images\gameover.gif" />
     <Content Include="Content\images\inProgress.jpg" />
+    <None Include="Views\Home\Preso.cshtml" />
+    <Content Include="Content\deckJs\core\deck.core.css" />
+    <Content Include="Content\deckJs\core\deck.core.js" />
+    <Content Include="Content\deckJs\extensions\goto\deck.goto.css" />
+    <Content Include="Content\deckJs\extensions\goto\deck.goto.html" />
+    <Content Include="Content\deckJs\extensions\goto\deck.goto.js" />
+    <Content Include="Content\deckJs\extensions\hash\deck.hash.css" />
+    <Content Include="Content\deckJs\extensions\hash\deck.hash.html" />
+    <Content Include="Content\deckJs\extensions\hash\deck.hash.js" />
+    <Content Include="Content\deckJs\extensions\menu\deck.menu.css" />
+    <Content Include="Content\deckJs\extensions\menu\deck.menu.js" />
+    <Content Include="Content\deckJs\extensions\navigation\deck.navigation.css" />
+    <Content Include="Content\deckJs\extensions\navigation\deck.navigation.html" />
+    <Content Include="Content\deckJs\extensions\navigation\deck.navigation.js" />
+    <Content Include="Content\deckJs\extensions\scale\deck.scale.css" />
+    <Content Include="Content\deckJs\extensions\scale\deck.scale.js" />
+    <Content Include="Content\deckJs\extensions\status\deck.status.css" />
+    <Content Include="Content\deckJs\extensions\status\deck.status.html" />
+    <Content Include="Content\deckJs\extensions\status\deck.status.js" />
+    <Content Include="Content\deckJs\themes\style\neon.css" />
+    <Content Include="Content\deckJs\themes\style\swiss.css" />
+    <Content Include="Content\deckJs\themes\style\web-2.0.css" />
+    <Content Include="Content\deckJs\themes\transition\fade.css" />
+    <Content Include="Content\deckJs\themes\transition\horizontal-slide.css" />
+    <Content Include="Content\deckJs\themes\transition\vertical-slide.css" />
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +297,19 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\GetNameImage.ashx" />
+    <Content Include="Content\deckJs\core\deck.core.scss" />
+    <Content Include="Content\deckJs\extensions\goto\deck.goto.scss" />
+    <Content Include="Content\deckJs\extensions\hash\deck.hash.scss" />
+    <Content Include="Content\deckJs\extensions\menu\deck.menu.scss" />
+    <Content Include="Content\deckJs\extensions\navigation\deck.navigation.scss" />
+    <Content Include="Content\deckJs\extensions\scale\deck.scale.scss" />
+    <Content Include="Content\deckJs\extensions\status\deck.status.scss" />
+    <Content Include="Content\deckJs\themes\style\neon.scss" />
+    <Content Include="Content\deckJs\themes\style\swiss.scss" />
+    <Content Include="Content\deckJs\themes\style\web-2.0.scss" />
+    <Content Include="Content\deckJs\themes\transition\fade.scss" />
+    <Content Include="Content\deckJs\themes\transition\horizontal-slide.scss" />
+    <Content Include="Content\deckJs\themes\transition\vertical-slide.scss" />
     <None Include="Scripts\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.0.js" />
     <Content Include="Scripts\jquery-2.0.0.min.js" />
