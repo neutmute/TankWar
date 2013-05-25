@@ -54,7 +54,13 @@ namespace TankWar.Engine
 
         private static readonly Lazy<Game> _instance = new Lazy<Game>(() => new Game());
 
-        public static Game Instance { get { return _instance.Value; } }
+        public static Game Instance 
+        { 
+            get
+            {
+                return _instance.Value;
+            } 
+        }
 
         private Game()
         {
@@ -119,6 +125,7 @@ namespace TankWar.Engine
         {
             var player = new Player {ConnectionId = connectionId};
             State.Players.Add(player);
+            player.Tank.Id = State.Players.Count;
             return player;
         }
 
