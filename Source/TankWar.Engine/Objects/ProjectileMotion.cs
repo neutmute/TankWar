@@ -10,7 +10,7 @@ namespace TankWar.Engine.Objects
 {
     public class CartesianMapper
     {
-        private Area _screen;
+        private readonly Area _screen;
 
         public CartesianMapper(Area screen)
         {
@@ -29,7 +29,7 @@ namespace TankWar.Engine.Objects
     {
         //public override int Angle { get { return Convert.ToInt32(base.Angle*Math.PI/_screenArea.BottomRight.X); } }
         //public override double Power { get { return base.Power; } }
-        public override double Time { get { return base.Time/_gameLoopIntervalMs; } }
+        public override double Time { get { return base.Time * 5 * _gameLoopIntervalMs  / 1000; } }
 
         private Area _screenArea;
         private readonly int _gameLoopIntervalMs;

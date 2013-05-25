@@ -1,13 +1,12 @@
 @using TankWar.Models
 @model ViewPortModel
 @{
-    ViewBag.Title = "Tank War View Port";
+    ViewBag.Title = "View Port";
 }
 
 <style>.sjs{border:2px #999 solid;}</style>
 
-
-<h5>Tank War View Port</h5>
+<h5>View Port</h5>
 
 <div class="row">
     <div class="span10" id="sceneDiv"></div>
@@ -80,15 +79,16 @@
 
             this.cycleAnimations = function() {
                 var cycle;
+                console.log('cycling');
                 while (cycle = self.cycleList.iterate()) {
                     cycle.next();
-                    if (cycle.done) {
-                        //for (var i=0;i<cycle.sprites.length;i++) {
-                        //    cycle.sprites.isAnimating = false;
-                        //}
-                        cycle.reset();
-                        self.cycleList.remove(cycle);
-                    }
+                    //if (cycle.done) {
+                    //    //for (var i=0;i<cycle.sprites.length;i++) {
+                    //    //    cycle.sprites.isAnimating = false;
+                    //    //}
+                    //    cycle.reset();
+                    //    self.cycleList.remove(cycle);
+                    //}
                     cycle.update();
                 }
             }
@@ -109,19 +109,26 @@
             this.animateTankDeath = function(tankSprite) {
 
                 var tankDeathCycle = sjs.Cycle([
-                    [18, 52, 5],
-                    [61, 52, 5],
-                    [101, 52, 3],
-                    [143, 52, 3],
-                    [183, 52, 3],
-                    [183, 52, 3],
-                    [222, 52, 3],
-                    [261, 52, 3],
-                    [297, 52, 3]]);
-
+                    //[18, 52, 5],
+                    [61, 52,    3],
+                    [101, 52,   3],
+                    [143, 52,   3],
+                    [183, 52,   3],
+                    [183, 52,   3],
+                    [222, 52,   3],
+                    [261, 52,   3],
+                    [297, 52,   3],
+                    [297, 102,  3] // blank the last
+                ]);
+                
+                var deathSprite = self.scene.Sprite(tankSpriteUrl, self.tankLayer);
+                deathSprite.size(43, 40);
+                deathSprite.setX(tankSprite.x);
+                deathSprite.setY(tankSprite.y);
+                
+                tankDeathCycle.addSprite(deathSprite);
                 tankDeathCycle.repeat = false;
-
-                tankDeathCycle.addSprite(tankSprite);
+                
                 tankSprite.isAnimating = true;
                 self.cycleList.add(tankDeathCycle);
             }
@@ -160,9 +167,6 @@
 
                 var bossCycle = sjs.Cycle([
                     [15, 15, 5], [192, 14, 5], [367, 13, 5]
-                    //,[544, 14, 5]
-                    //,[367, 52, 5]
-                   //,[192, 52, 5]
                 ]);
 
                 var gameOverSprite = self.tankLayer.Sprite('@Url.Content("~/Content/Images/gameover2.gif")');
@@ -175,7 +179,7 @@
 
                 gameOverBossSprite.size(152, 215);
                 gameOverBossSprite.move(10, 10);
-                gameOverBossSprite.update();
+              //  gameOverBossSprite.update();
 
                 bossCycle.addSprite(gameOverBossSprite);
 
@@ -206,7 +210,6 @@
                         console.log('removing tank sprite ' + sprite.serverId);
                         tankSprites.splice(spriteIndex, 1);
                         sprite.remove();
-                        //sprite.update();
                     } else {
 
                         //console.log('Updating tank ' + sprite.serverId);
@@ -220,7 +223,7 @@
                         }
                         if (viewStateTank.IsHit) {
                             console.log("{0} is hit!".format(viewStateTank.Name));
-                            //self.animateTankDeath(sprite);
+                            self.animateTankDeath(sprite);
                         }
 
                         if (!sprite.isAnimating) {
@@ -279,8 +282,6 @@
                         var y = viewStateShell.Point.Y;
                         shellSprite.setX(x);
                         shellSprite.setY(y);
-                        self.shellCycle.addSprite(shellSprite);
-
                         // console.log('Moving shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                         shellSprite.update();
                     }
@@ -301,9 +302,10 @@
                         var y = viewStateShell.Point.Y;
                         shellSprite.move(x, y);
                         shellSprite.serverId = viewStateShell.Id;
+                        shellSprite.update();
 
                         shellSprites.push(shellSprite);
-                        shellSprite.update();
+                        self.shellCycle.addSprite(shellSprite);
                         console.log('Added shell ' + shellSprite.serverId + ' (' + x + ',' + y + ')');
                     }
                 }

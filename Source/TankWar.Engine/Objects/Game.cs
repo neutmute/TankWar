@@ -59,7 +59,7 @@ namespace TankWar.Engine
         private Game()
         {
             _gameClock = new Timer();
-            _gameClock.Interval = 20;
+            _gameClock.Interval = 25;
             _gameClock.Elapsed += GameTick;
             _gameClock.Stop();
 
@@ -236,7 +236,8 @@ namespace TankWar.Engine
 
             if (activeTanks.Count == 0)
             {
-                Stop();
+                //Log.Info("All tanks dead");
+                //Stop();
             }
 
             if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds.TotalMilliseconds)

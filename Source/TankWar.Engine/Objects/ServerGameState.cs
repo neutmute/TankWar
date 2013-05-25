@@ -30,7 +30,7 @@ namespace TankWar.Engine.Objects
 
         public List<Tank> AllTanks
         {
-            get{ return (Players.Select(p => p.Tank)).ToList();}
+            get{ return (Players.Where(p => p.Status != PlayerStatus.WaitingForName).Select(p => p.Tank)).ToList();}
         }
 
         public List<Shell> AllShells
