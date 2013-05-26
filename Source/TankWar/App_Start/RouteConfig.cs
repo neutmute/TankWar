@@ -18,8 +18,7 @@ namespace TankWar
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
-//                defaults: new { controller = "Gamepad", action = "Index", id = UrlParameter.Optional }
-                defaults: new { controller = "Home", action = "Preso", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

@@ -197,7 +197,7 @@
     <Content Include="Content\Sprites\gameboss.gif" />
     <Content Include="Content\images\gameover.gif" />
     <Content Include="Content\images\inProgress.jpg" />
-    <None Include="Views\Home\Preso.cshtml" />
+    <None Include="Properties\PublishProfiles\AWS.pubxml" />
     <Content Include="Content\deckJs\core\deck.core.css" />
     <Content Include="Content\deckJs\core\deck.core.js" />
     <Content Include="Content\deckJs\extensions\goto\deck.goto.css" />
@@ -223,6 +223,11 @@
     <Content Include="Content\deckJs\themes\transition\horizontal-slide.css" />
     <Content Include="Content\deckJs\themes\transition\vertical-slide.css" />
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
+    <None Include="Properties\PublishProfiles\LocalVM.pubxml" />
+    <Content Include="Views\Home\Preso.cshtml" />
+    <None Include="Web.AWS.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-responsive.css" />
