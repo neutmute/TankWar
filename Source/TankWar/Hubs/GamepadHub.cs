@@ -43,7 +43,7 @@ namespace TankWar.Hubs
 
         public void SetTurret(int power, int angle)
         {
-            Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
+            //Log.Info("{2} turret={0}, {1}", power, angle, GetPlayerName());
 
             var player = FindPlayer();
             if (player != null)

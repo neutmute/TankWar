@@ -254,7 +254,35 @@ myWebSocket.close();</code></pre>
         </ul>
     </section>
     
-     <section class="slide">
+        <section class="slide">
+            <h2>SignalR - Server Side Code</h2>
+            <div class="slide">
+                <h5>Push a message to the client</h5>
+                <pre><code>public void PushPlayerStatus(Player player)
+{
+    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
+    context.Clients.Client(player.ConnectionId).receivePlayerStatus(player.Status.ToString());
+}
+</code></pre>
+            </div>
+            <div class="slide">
+                <h5>Receive a message from the client</h5>
+                <pre><code>public class GamepadHub : Hub
+{
+    public void SetTurret(int power, int angle)
+    {
+        var player = FindPlayer();
+        if (player != null)
+        {
+            player.Tank.Turret.Angle = angle;
+            player.Tank.Turret.Power = power;
+        }
+    }
+...</code></pre>
+            </div>
+        </section>
+    
+    <section class="slide">
          <h2>SignalR - Client Side</h2>
           <div class="slide">
          <h4>Gamepad Receiving</h4>
