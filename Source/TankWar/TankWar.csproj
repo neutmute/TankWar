@@ -188,15 +188,27 @@
     </Compile>
     <Compile Include="Hubs\CoreHub.cs" />
     <Compile Include="Hubs\GamepadHub.cs" />
+    <Compile Include="Hubs\GamepadHubClientsProxy.cs" />
     <Compile Include="Hubs\ViewPortHub.cs" />
     <Compile Include="Hubs\ViewPortHubClientsProxy.cs" />
     <Compile Include="Models\ViewPortModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\images\countdown.jpg" />
     <Content Include="Content\images\gameover2.gif" />
+    <Content Include="Content\slides\caniuse.jpg" />
+    <Content Include="Content\slides\choice2.gif" />
+    <Content Include="Content\slides\demoTime.jpg" />
+    <Content Include="Content\slides\choice1.jpg" />
+    <Content Include="Content\slides\gmailPush.jpg" />
+    <Content Include="Content\slides\iDontAlways.jpg" />
+    <Content Include="Content\slides\longpolling.png" />
+    <Content Include="Content\slides\poll-ws-compare.gif" />
+    <Content Include="Content\slides\PollingKills.jpg" />
+    <Content Include="Content\slides\WebSocketFrame.png" />
     <Content Include="Content\Sprites\gameboss.gif" />
     <Content Include="Content\images\gameover.gif" />
     <Content Include="Content\images\inProgress.jpg" />
+    <Content Include="App_Code\Templates.cshtml" />
     <None Include="Properties\PublishProfiles\AWS.pubxml" />
     <Content Include="Content\deckJs\core\deck.core.css" />
     <Content Include="Content\deckJs\core\deck.core.js" />
@@ -341,7 +353,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />

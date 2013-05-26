@@ -105,10 +105,8 @@
             }
 
             this.sendTurretStatus = function() {
-
                 if (connected) {
                     self.hub.server.setTurret(self.power(), self.angle())
-                        //.done(this.updatePlayerStatus)
                         .fail(self.handleError);
                 }
             }

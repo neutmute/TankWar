@@ -1,0 +1,7 @@
+﻿@helper SlideQRCode(string url)
+{
+    <div>
+     <img src="http://chart.apis.google.com/chart?cht=qr&chs=300x300&choe=UTF-8&chld=H&chl=@url"/>
+        <a href="@url">@url</a>
+    </div>
+}

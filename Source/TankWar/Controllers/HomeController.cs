@@ -13,6 +13,7 @@ namespace TankWar.Controllers
 
         public ActionResult Index()
         {
+           
             return View();
         }
 

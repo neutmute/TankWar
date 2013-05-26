@@ -30,27 +30,269 @@
 	
 	<!-- Required Modernizr file -->
     @Scripts.Render("~/bundles/modernizr")
+    
 </head>
 <body class="deck-container">
 
 <!-- Begin slides. Just make elements with a class of slide. -->
 
 <section class="slide">
-	<h1>Web Sockets & SignalR</h1>
+	<h1>WebSockets & SignalR</h1>
 </section>
 
 <section class="slide">
-	<h1>Content</h1>
+    <h2>How to push updates?</h2>
+    <p>HTTP works well for client fetches</p>
+    <p>How to notify the client of server side events though?</p>
+    <img src="@Url.Content("~/Content/slides/gmailPush.jpg")" alt="Push" />
 </section>
 
-<section class="slide">
-	<h1>Here</h1>
+    <section class="slide">
+        <h2>Polling - old school</h2>
+    
+        <pre><code>&lt;meta http-equiv="refresh" content="600"&gt; </code></pre>
+    </section>
+    
+    <section class="slide">
+    <h2>Polling - Web 2.0</h2>
+    
+        <pre>
+<code>
+setInterval(function(){
+    $.ajax({ url: "server", success: function(data){
+        //Update your dashboard gauge
+        salesGauge.setValue(data.value);
+    }, dataType: "json"});
+}, 30000);
+</code>
+</pre>
+</section>
+    
+      <section class="slide">
+    <h2>Long Polling</h2>
+     
+          <img src="@Url.Content("~/Content/slides/longPolling.png")" alt="Push" />
+          <p class="slide">Unthrottled server events can cause higher load than timer driven polling</p>
+</section>
+   
+    <section class="slide">
+    <h2>HTTP Polling has overheads...</h2>
+     <h3>Request Headers</h3>
+        <pre><code>GET /PollingStock//PollingStock HTTP/1.1
+
+Host: localhost:8080
+
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+
+Accept-Language: en-us
+
+Accept-Encoding: gzip,deflate
+
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+
+Keep-Alive: 300
+
+Connection: keep-alive
+
+Referer: http://www.example.com/PollingStock/
+
+Cookie: showInheritedConstant=false; showInheritedProtectedConstant=false; 
+showInheritedProperty=false; showInheritedProtectedProperty=false; 
+showInheritedMethod=false; showInheritedProtectedMethod=false; 
+showInheritedEvent=false; showInheritedStyle=false; showInheritedEffect=false
+</code>
+
+    </pre>
 </section>
 
-<!-- End slides. -->
+    <section class="slide">
+        <h3>Response Headers</h3>
+        <pre><code>HTTP/1.x 200 OK
 
+X-Powered-By: Servlet/2.5
 
-<!-- Begin extension snippets. Add or remove as needed. -->
+Server: Sun Java System Application Server 9.1_02
+
+Content-Type: text/html;charset=UTF-8
+
+Content-Length: 21
+
+Date: Sat, 07 Nov 2009 00:32:46 GMT
+</code>
+
+    </pre>
+    </section>
+    
+    <section class="slide">
+        <h2>In summary...</h2>
+        <img src="@Url.Content("~/Content/slides/pollingKills.jpg")" alt="Push" />
+    </section>
+    
+    <section class="slide">
+        <h2>HTML 5 WebSockets</h2>
+        <p class="slide">
+            Once established, data frames can be sent back and forth between the client and the server. 
+        </p>
+
+        <p class="slide">
+            Both text and binary frames can be sent in either direction at the same time. 
+        </p>
+        <div class="slide">
+        <p >Client requests an upgrade:</p>
+        
+        <pre>
+<code>GET ws://echo.websocket.org/?encoding=text HTTP/1.1
+Origin: http://websocket.org
+Cookie: __utma=99as
+Connection: Upgrade
+Host: echo.websocket.org
+Sec-WebSocket-Key: uRovscZjNol/umbTt5uKmw==
+Upgrade: websocket
+Sec-WebSocket-Version: 13
+</code>
+</pre>
+            </div>
+    </section>
+
+    <section class="slide">
+        <p>If the server understands the WebSocket protocol, it responds:</p>
+        
+        <pre>
+<code>HTTP/1.1 101 WebSocket Protocol Handshake
+Date: Fri, 10 Feb 2012 17:38:18 GMT
+Connection: Upgrade
+Server: Kaazing Gateway
+Upgrade: WebSocket
+Access-Control-Allow-Origin: http://websocket.org
+Access-Control-Allow-Credentials: true
+Sec-WebSocket-Accept: rLHCkw/SKsO9GAH/ZSFhBATDKrU=
+Access-Control-Allow-Headers: content-type
+</code>
+</pre>
+    </section>
+    
+    
+    <section class="slide">
+        <h2>WebSocket overhead</h2>
+
+        <p>
+            The data is framed with two bytes. Text frames use a terminator, while binary frames use a length prefix. 
+        </p>
+        <img src="@Url.Content("~/Content/slides/WebSocketFrame.png")" alt="Push" />
+    </section>
+    
+    @*<section class="slide">
+        <h2>Polling vs WebSocket Overhead</h2>
+        <img src="@Url.Content("~/Content/slides/poll-ws-compare.gif")" alt="Push" />
+        <ul>
+            <li></li>
+        </ul>
+    </section>*@
+    
+    <section class="slide">
+        <h2>WebSocket Usage</h2>
+        <pre><code>var myWebSocket = new WebSocket("ws://www.websockets.org");</code></pre>
+        <pre class="slide"><code>myWebSocket.onopen = function(evt) { alert("opened..."); };
+myWebSocket.onmessage = function(evt) { alert( "Received: "  +  evt.data); };
+myWebSocket.onclose = function(evt) { alert("closed."); };
+</code></pre>
+        <pre class="slide"><code>myWebSocket.send("Hello WebSockets!");
+myWebSocket.close();</code></pre>
+    </section>
+    
+    
+    <section class="slide">
+        <h2>SignalR (for ASP.NET)</h2>
+        <blockquote cite="http://en.wikipedia.org/wiki/SignalR">
+        <p>SignalR is a server-side software system designed for writing scalable Internet applications, notably web servers. Programs are written on the server side in C#, using event-driven, asynchronous I/O to minimize overhead and maximize scalability.</p>
+        <p><cite>Wikipedia</cite></p>
+        </blockquote>
+    </section>
+
+    <section class="slide">
+        <h2>TLDR: SignalR</h2>
+        <img src="@Url.Content("~/Content/slides/demoTime.jpg")" alt="Push" />
+    </section>
+    
+    
+    <section class="slide">
+        <h2>Choose your side</h2>
+        <table>
+            <tr>
+                <td><img width="300" src="@Url.Content("~/Content/slides/choice1.jpg")" /></td>
+                <td>
+                    
+                    @Templates.SlideQRCode(Url.Action("Index", "Gamepad", null, this.Request.Url.Scheme))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr /></td>
+            </tr>
+            <tr>
+                <td><img width="300" src="@Url.Content("~/Content/slides/choice2.gif")" /></td>
+                <td>
+                    @Templates.SlideQRCode(Url.Action("Index", "Viewport", null, this.Request.Url.Scheme))
+                </td>
+            </tr>
+        </table>
+    </section>
+    
+    <section class="slide">
+        <h2>SignalR - Server Side</h2>
+        <h5>PersistentConnection.cs</h5>
+        <ul class="slide">
+            <li class="slide">Lower level</li>
+            <li class="slide">Must map/decode your own messages from text</li>
+        </ul>
+        <h5 class="slide">Hub.cs</h5>
+        <ul>
+            <li class="slide">Built on PersistentConnections</li>
+            <li class="slide">Allows RPC between server and client (both ways)</li>
+            <li class="slide">Model binding</li>
+        </ul>
+    </section>
+    
+     <section class="slide">
+         <h2>SignalR - Client Side</h2>
+          <div class="slide">
+         <h4>Gamepad Receiving</h4>
+         <pre><code>$.connection.gamepadHub.client.notifyGameStatus = viewModel.notifyGameStatus;
+$.connection.gamepadHub.client.receivePlayerStatus = viewModel.receivePlayerStatus;
+
+$.connection.hub.start().done(function() {
+    viewModel.init();
+});
+</code></pre>
+         
+             </div>
+         <div class="slide">
+         <h4>Gamepad Sending</h4>
+         <pre><code>this.sendTurretStatus = function() {
+    if (connected) {
+        self.hub.server.setTurret(self.power(), self.angle())
+            .fail(self.handleError);
+    }
+}
+</code></pre>
+             </div>
+     </section>
+    
+
+    <section class="slide">
+           <h2>Whats the catch?</h2>
+        <img src="@Url.Content("~/Content/slides/caniuse.jpg")" alt="Push" />
+        <p class="slide">SignalR degrades to long polling for legacy clients</p>
+    </section>
+    
+    
+    <section class="slide">
+        <h2>In summary...</h2>
+        <img src="@Url.Content("~/Content/slides/iDontAlways.jpg")" alt="Push" />
+    </section>
+
+    <!-- Begin extension snippets. Add or remove as needed. -->
 
 <!-- deck.navigation snippet -->
 <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
