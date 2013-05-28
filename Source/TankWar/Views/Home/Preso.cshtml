@@ -46,7 +46,7 @@
         <h2>How to push updates?</h2>
         <p>HTTP works well for client fetches</p>
         <p>How to notify the client of server side events though?</p>
-        <img src="@Url.Content("~/Content/slides/gmailPush.jpg")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/gmailPush.jpg")" />
     </section>
 
     <section class="slide">
@@ -75,7 +75,7 @@ setInterval(function(){
     <section class="slide">
         <h2>Long Polling</h2>
 
-        <img src="@Url.Content("~/Content/slides/longPolling.png")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/longPolling.png")" />
         <p class="slide">Unthrottled server events can cause higher load than timer driven polling</p>
     </section>
 
@@ -123,7 +123,7 @@ Date: Tue, 28 May 2013 00:32:46 GMT
 
     <section class="slide">
         <h2>In summary...</h2>
-        <img src="@Url.Content("~/Content/slides/pollingKills.jpg")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/pollingKills.jpg")" />
     </section>
 
     <section class="slide">
@@ -179,12 +179,12 @@ Access-Control-Allow-Headers: content-type
         <p>
             The data is framed with two bytes. Text frames use a terminator, while binary frames use a length prefix. 
         </p>
-        <img src="@Url.Content("~/Content/slides/WebSocketFrame.png")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/WebSocketFrame.png")" />
     </section>
 
     @*<section class="slide">
         <h2>Polling vs WebSocket Overhead</h2>
-        <img src="@Url.Content("~/Content/slides/poll-ws-compare.gif")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/poll-ws-compare.gif")" />
         <ul>
             <li></li>
         </ul>
@@ -218,11 +218,12 @@ myWebSocket.close();</code></pre>
 
     <section class="slide">
         <h2>TL;DR</h2>
-        <img src="@Url.Content("~/Content/slides/demoTime.jpg")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/demoTime.jpg")" />
     </section>
 
     <section class="slide">
-        insert TW block diagram here
+        <h2>Demo Architecture</h2>
+        <img src="@Url.Content("~/Content/slides/BlockDiagram.gif")" />
     </section>
 
     <section class="slide">
@@ -335,14 +336,14 @@ $.connection.hub.start().done(function() {
 
     <section class="slide">
         <h2>Whats the catch?</h2>
-        <img src="@Url.Content("~/Content/slides/caniuse.jpg")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/caniuse.jpg")" />
         <p class="slide">SignalR degrades to long polling for legacy clients</p>
     </section>
 
 
     <section class="slide">
         <h2>In summary...</h2>
-        <img src="@Url.Content("~/Content/slides/iDontAlways.jpg")" alt="Push" />
+        <img src="@Url.Content("~/Content/slides/iDontAlways.jpg")" />
     </section>
 
     <!-- Begin extension snippets. Add or remove as needed. -->
