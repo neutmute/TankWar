@@ -36,9 +36,11 @@
 
 <!-- Begin slides. Just make elements with a class of slide. -->
 
-<section class="slide">
-	<h1>WebSockets & SignalR</h1>
-</section>
+    <section class="slide">
+        <div>
+            <h1>WebSockets</h1>
+        </div>
+    </section>
 
 <section class="slide">
     <h2>How to push updates?</h2>
@@ -59,10 +61,12 @@
         <pre>
 <code>
 setInterval(function(){
-    $.ajax({ url: "server", success: function(data){
-        //Update your dashboard gauge
-        salesGauge.setValue(data.value);
-    }, dataType: "json"});
+    $.ajax({ 
+        url: "http://foo.com/gauges/speed"
+        ,success: function(data){
+            speedGauge.setValue(data.value);
+        }
+        ,dataType: "json"});
 }, 30000);
 </code>
 </pre>
@@ -76,28 +80,20 @@ setInterval(function(){
 </section>
    
     <section class="slide">
-    <h2>HTTP Polling has overheads...</h2>
+        <h2>HTTP Polling has overheads...</h2>
+        <p>GET /gauges/speed</p>
+        <div class="slide">
      <h3>Request Headers</h3>
-        <pre><code>GET /PollingStock//PollingStock HTTP/1.1
-
+        <pre><code>GET /gauges/speed HTTP/1.1
 Host: localhost:8080
-
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5
-
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-
 Accept-Language: en-us
-
 Accept-Encoding: gzip,deflate
-
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
-
 Keep-Alive: 300
-
 Connection: keep-alive
-
 Referer: http://www.example.com/PollingStock/
-
 Cookie: showInheritedConstant=false; showInheritedProtectedConstant=false; 
 showInheritedProperty=false; showInheritedProtectedProperty=false; 
 showInheritedMethod=false; showInheritedProtectedMethod=false; 
@@ -105,21 +101,21 @@ showInheritedEvent=false; showInheritedStyle=false; showInheritedEffect=false
 </code>
 
     </pre>
+            </div>
 </section>
 
     <section class="slide">
         <h3>Response Headers</h3>
         <pre><code>HTTP/1.x 200 OK
-
 X-Powered-By: Servlet/2.5
-
 Server: Sun Java System Application Server 9.1_02
-
 Content-Type: text/html;charset=UTF-8
+Content-Length: 5
+Date: Tue, 28 May 2013 00:32:46 GMT
+</code>
 
-Content-Length: 21
-
-Date: Sat, 07 Nov 2009 00:32:46 GMT
+    </pre>
+                <pre class="slide"><code>53.23
 </code>
 
     </pre>
@@ -204,7 +200,7 @@ myWebSocket.close();</code></pre>
     
     
     <section class="slide">
-        <h2>SignalR (for ASP.NET)</h2>
+        <h2>SignalR</h2>
         <blockquote cite="http://en.wikipedia.org/wiki/SignalR">
         <p>SignalR is a server-side software system designed for writing scalable Internet applications, notably web servers. Programs are written on the server side in C#, using event-driven, asynchronous I/O to minimize overhead and maximize scalability.</p>
         <p><cite>Wikipedia</cite></p>
@@ -212,10 +208,14 @@ myWebSocket.close();</code></pre>
     </section>
 
     <section class="slide">
-        <h2>TLDR: SignalR</h2>
+        <h2>TLDR:</h2>
         <img src="@Url.Content("~/Content/slides/demoTime.jpg")" alt="Push" />
     </section>
     
+    
+    <section class="slide">
+        insert TW block diagram here
+    </section>
     
     <section class="slide">
         <h2>Choose your side</h2>
