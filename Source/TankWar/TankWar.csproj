@@ -195,6 +195,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\images\countdown.jpg" />
     <Content Include="Content\images\gameover2.gif" />
+    <Content Include="Content\slides\BlockDiagram.gif" />
     <Content Include="Content\slides\caniuse.jpg" />
     <Content Include="Content\slides\choice2.gif" />
     <Content Include="Content\slides\demoTime.jpg" />
@@ -204,6 +205,7 @@
     <Content Include="Content\slides\longpolling.png" />
     <Content Include="Content\slides\poll-ws-compare.gif" />
     <Content Include="Content\slides\PollingKills.jpg" />
+    <Content Include="Content\slides\showMeTheCode.jpg" />
     <Content Include="Content\slides\WebSocketFrame.png" />
     <Content Include="Content\Sprites\gameboss.gif" />
     <Content Include="Content\images\gameover.gif" />
@@ -237,6 +239,7 @@
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
     <None Include="Properties\PublishProfiles\LocalVM.pubxml" />
     <Content Include="Views\Home\Preso.cshtml" />
+    <Content Include="Views\Shared\_DeckJsLayout.cshtml" />
     <None Include="Web.AWS.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -8,13 +8,9 @@ namespace TankWar.Controllers
 {
     public class GamepadController : Controller
     {
-        //
-        // GET: /Gamepad/
-
         public ActionResult Index()
         {
             return View();
         }
-
     }
 }

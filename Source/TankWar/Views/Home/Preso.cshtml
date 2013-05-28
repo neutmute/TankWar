@@ -33,9 +33,7 @@
 
 </head>
 <body class="deck-container">
-
-    <!-- Begin slides. Just make elements with a class of slide. -->
-
+    
     <section class="slide">
         <div>
             <h1>WebSockets</h1>
@@ -222,7 +220,7 @@ myWebSocket.close();</code></pre>
     </section>
 
     <section class="slide">
-        <h2>Demo Architecture</h2>
+        <h2>Demo</h2>
         <img src="@Url.Content("~/Content/slides/BlockDiagram.gif")" />
     </section>
 
@@ -265,39 +263,7 @@ myWebSocket.close();</code></pre>
             <li class="slide">Model binding</li>
         </ul>
     </section>
-
-    <section class="slide">
-        <h2>SignalR - Push to Client</h2>
-        <div class="slide">
-            <h5>Server Push</h5>
-            <pre><code>public void PushPlayerStatus(Player player)
-{
-    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
-
-    context
-        .Clients
-        .Client(player.ConnectionId)
-        .receivePlayerStatus(player.Status.ToString());
-}
-</code></pre>
-        </div>
-       
-        <div class="slide">
-            <h4>Client Receive</h4>
-            <pre><code>$.connection.gamepadHub.client
-    .notifyGameStatus = viewModel.notifyGameStatus;
-
-$.connection.gamepadHub.client
-    .receivePlayerStatus = viewModel.receivePlayerStatus;
-
-$.connection.hub.start().done(function() {
-    viewModel.init();
-});
-</code></pre>
-
-        </div>
-    </section>
-
+    
     <section class="slide">
         <h2>SignalR - Client to Server</h2>
         <div class="slide">
@@ -335,6 +301,39 @@ $.connection.hub.start().done(function() {
 
 
     <section class="slide">
+        <h2>SignalR - Push to Client</h2>
+        <div class="slide">
+            <h5>Server Push</h5>
+            <pre><code>public void PushPlayerStatus(Player player)
+{
+    IHubContext context = GlobalHost.ConnectionManager.GetHubContext&lt;GamepadHub&gt;();
+
+    context
+        .Clients
+        .Client(player.ConnectionId)
+        .receivePlayerStatus(player.Status.ToString());
+}
+</code></pre>
+        </div>
+       
+        <div class="slide">
+            <h4>Client Receive</h4>
+            <pre><code>$.connection.gamepadHub.client
+    .notifyGameStatus = viewModel.notifyGameStatus;
+
+$.connection.gamepadHub.client
+    .receivePlayerStatus = viewModel.receivePlayerStatus;
+
+$.connection.hub.start().done(function() {
+    viewModel.init();
+});
+</code></pre>
+
+        </div>
+    </section>
+
+
+    <section class="slide">
         <h2>Whats the catch?</h2>
         <img src="@Url.Content("~/Content/slides/caniuse.jpg")" />
         <p class="slide">SignalR degrades to long polling for legacy clients</p>
@@ -345,9 +344,21 @@ $.connection.hub.start().done(function() {
         <h2>In summary...</h2>
         <img src="@Url.Content("~/Content/slides/iDontAlways.jpg")" />
     </section>
+    
+    
+    <section class="slide">
+        <h2>Questions?</h2>
+    </section>
 
-    <!-- Begin extension snippets. Add or remove as needed. -->
+    <section class="slide">
+        <img src="@Url.Content("~/Content/slides/showMeTheCode.jpg")" />
 
+    </section>
+    
+    <section class="slide">
+        @Templates.SlideQRCode("https://github.com/neutmute/TankWar")
+    </section>
+              
     <!-- deck.navigation snippet -->
     <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
     <a href="#" class="deck-next-link" title="Next">&#8594;</a>
