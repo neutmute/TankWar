@@ -17,11 +17,12 @@ namespace TankWar.Models
         [DisplayName("Countdown (seconds)")]
         [Range(0, 300.00, ErrorMessage = "You want to wait that long, really?")]
         public int CountdownSeconds { get; set; }
-
-
+        
         [DisplayName("Maximum Game Time (minutes)")]
         [Range(1, 60.00, ErrorMessage = "You will be lucky to survive the first barrage, let alone that long")]
         public int MaximumGameTimeMinutes { get; set; }
+
+        public Area ViewSize { get; set; }
 
         public override string ToString()
         {
