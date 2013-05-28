@@ -266,18 +266,55 @@ myWebSocket.close();</code></pre>
     </section>
 
     <section class="slide">
-        <h2>SignalR - Server Side Code</h2>
+        <h2>SignalR - Push to Client</h2>
         <div class="slide">
-            <h5>Push a message to the client</h5>
+            <h5>Server Push</h5>
             <pre><code>public void PushPlayerStatus(Player player)
 {
     IHubContext context = GlobalHost.ConnectionManager.GetHubContext<GamepadHub>();
-    context.Clients.Client(player.ConnectionId).receivePlayerStatus(player.Status.ToString());
+
+    context
+        .Clients
+        .Client(player.ConnectionId)
+        .receivePlayerStatus(player.Status.ToString());
 }
 </code></pre>
         </div>
+       
         <div class="slide">
-            <h5>Receive a message from the client</h5>
+            <h4>Client Receive</h4>
+            <pre><code>$.connection.gamepadHub.client
+    .notifyGameStatus = viewModel.notifyGameStatus;
+
+$.connection.gamepadHub.client
+    .receivePlayerStatus = viewModel.receivePlayerStatus;
+
+$.connection.hub.start().done(function() {
+    viewModel.init();
+});
+</code></pre>
+
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>SignalR - Client to Server</h2>
+        <div class="slide">
+            <h4>Client Send</h4>
+            <pre><code>this.sendTurretStatus = function() {
+    if (connected) {
+        self.hub.server
+            .setTurret(
+                self.power()
+                ,self.angle())
+            .fail(self.handleError);
+    }
+}
+</code></pre>
+        </div>
+
+        <div class="slide">
+            <h5>Server Receive</h5>
             <pre><code>public class GamepadHub : Hub
 {
     public void SetTurret(int power, int angle)
@@ -291,31 +328,8 @@ myWebSocket.close();</code></pre>
     }
 ...</code></pre>
         </div>
-    </section>
 
-    <section class="slide">
-        <h2>SignalR - Client Side</h2>
-        <div class="slide">
-            <h4>Gamepad Receiving</h4>
-            <pre><code>$.connection.gamepadHub.client.notifyGameStatus = viewModel.notifyGameStatus;
-$.connection.gamepadHub.client.receivePlayerStatus = viewModel.receivePlayerStatus;
-
-$.connection.hub.start().done(function() {
-    viewModel.init();
-});
-</code></pre>
-
-        </div>
-        <div class="slide">
-            <h4>Gamepad Sending</h4>
-            <pre><code>this.sendTurretStatus = function() {
-    if (connected) {
-        self.hub.server.setTurret(self.power(), self.angle())
-            .fail(self.handleError);
-    }
-}
-</code></pre>
-        </div>
+        
     </section>
 
 
