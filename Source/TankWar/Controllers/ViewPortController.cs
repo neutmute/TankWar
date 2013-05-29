@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using NLog;
 using TankWar.Engine;
 using TankWar.Engine.Dto;
+using TankWar.Engine.Objects;
 using TankWar.Models;
 
 namespace TankWar.Controllers
@@ -18,20 +19,20 @@ namespace TankWar.Controllers
         public ActionResult Index()
         {
             var viewModel = new ViewPortModel();
-            viewModel.ViewSize = Game.Instance.Screen;
+            viewModel.ViewSize = Game.Instance.GameParameters.ViewPortSize;
             return View(viewModel);
         }
 
         public ActionResult Admin()
         {
-            var game = Game.Instance;
-            var model = new ViewPortAdminModel
-                {
-                    CountdownSeconds = game.CountDownSeconds
-                    ,GameLoopIntervalMilliseconds = game.GameLoopIntervalMilliseconds
-                    ,MaximumGameTimeMinutes = Convert.ToInt32(game.MaximumGameRunTimeMilliseconds.TotalMinutes) 
-                };
-            return View(model);
+            //var game = Game.Instance;
+            //var model = new ViewPortAdminModel
+            //    {
+            //        CountdownSeconds = game.CountDownSeconds
+            //        ,GameLoopIntervalMilliseconds = game.GameLoopIntervalMilliseconds
+            //        ,MaximumGameTimeMinutes = Convert.ToInt32(game.MaximumGameRunTimeMilliseconds.TotalMinutes) 
+            //    };
+            return View(Game.Instance.GameParameters);
         }
 
         [HttpPost]
@@ -56,17 +57,15 @@ namespace TankWar.Controllers
         }
 
         [HttpPost]
-        public ActionResult SetGameParams(ViewPortAdminModel model)
+        public ActionResult Admin(GameParameters model)
         {
             if (ModelState.IsValid)
             {
-                Game.Instance.CountDownSeconds = model.CountdownSeconds;
-                Game.Instance.GameLoopIntervalMilliseconds = model.GameLoopIntervalMilliseconds;
-                Game.Instance.MaximumGameRunTimeMilliseconds = TimeSpan.FromMinutes(model.MaximumGameTimeMinutes);
+                Game.Instance.GameParameters = model;
                 Log.Info("Changed game settings: {0}", model);
-
-            } 
-            return RedirectToAction("Admin");
+                return RedirectToAction("Admin");
+            }
+            return View(model);
         }
     }
 }

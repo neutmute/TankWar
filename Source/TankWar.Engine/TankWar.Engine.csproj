@@ -51,6 +51,7 @@
       <HintPath>..\..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -66,12 +67,16 @@
     <Compile Include="Dto\Turret.cs" />
     <Compile Include="Interfaces\IViewPortClient.cs" />
     <Compile Include="Interfaces\IViewPortHub.cs" />
+    <Compile Include="Objects\CartesianMapper.cs" />
     <Compile Include="Objects\CollisionHandler.cs" />
+    <Compile Include="Objects\Enums.cs" />
     <Compile Include="Objects\Game.cs" />
     <Compile Include="Dto\Message.cs" />
     <Compile Include="Dto\Point.cs" />
     <Compile Include="Dto\Sprite.cs" />
     <Compile Include="Dto\ViewPortState.cs" />
+    <Compile Include="Objects\GameParameters.cs" />
+    <Compile Include="Objects\PhysicsParam.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\ProjectileMotion.cs" />
     <Compile Include="Objects\ServerGameState.cs" />

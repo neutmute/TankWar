@@ -13,20 +13,9 @@
     <div class="span2"></div>
 </div>
 @section Scripts {
-    <script src="~/Scripts/sprite.js"></script>
-    
+    <script src="~/Scripts/custom/sprite.js"></script>
+    <script src="~/Scripts/custom/util.js"></script>
     <script>
-        //http://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format
-        if (!String.prototype.format) {
-            String.prototype.format = function() {
-                var args = arguments;
-                return this.replace(/{(\d+)}/g, function(match, number) {
-                    return typeof args[number] != 'undefined'
-                        ? args[number]
-                        : match;
-                });
-            };
-        }
 
         function TankModel(sprite) {
             var self = this;
@@ -138,7 +127,7 @@
                 if (self.scene != null) {
                     self.scene.reset();
                 } else {
-                    self.scene = sjs.Scene({ w: @Model.ViewSize.BottomRight.X , h: @Model.ViewSize.BottomRight.Y , parent: document.getElementById('sceneDiv'), autoPause: false });
+                    self.scene = sjs.Scene({ w: @Model.ViewSize.X , h: @Model.ViewSize.Y , parent: document.getElementById('sceneDiv'), autoPause: false });
                 }
 
                 self.scene.loadImages([tankSpriteUrl], function() {

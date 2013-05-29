@@ -191,6 +191,7 @@
     <Compile Include="Hubs\GamepadHubClientsProxy.cs" />
     <Compile Include="Hubs\ViewPortHub.cs" />
     <Compile Include="Hubs\ViewPortHubClientsProxy.cs" />
+    <Compile Include="Models\ModelBinders.cs" />
     <Compile Include="Models\ViewPortModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Content\images\countdown.jpg" />
@@ -236,6 +237,8 @@
     <Content Include="Content\deckJs\themes\transition\fade.css" />
     <Content Include="Content\deckJs\themes\transition\horizontal-slide.css" />
     <Content Include="Content\deckJs\themes\transition\vertical-slide.css" />
+    <Content Include="Scripts\Custom\util.js" />
+    <Content Include="Scripts\Custom\ko.bindings.js" />
     <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
     <None Include="Properties\PublishProfiles\LocalVM.pubxml" />
     <Content Include="Views\Home\Preso.cshtml" />
@@ -348,7 +351,7 @@
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\sprite.js" />
+    <Content Include="Scripts\Custom\sprite.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

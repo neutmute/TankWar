@@ -44,7 +44,7 @@ namespace TankWar.Engine.Objects
             }
         }
 
-        public ViewPortState ToViewPortState(Area screen)
+        public ViewPortState ToViewPortState(Point viewPortSize)
         {
             var aliveTankDtos = AllTanks.Where(t => !t.IsDead).Select(t => t.ToDto()).ToList();
             var aliveShellDtos = AllShells.Where(t => !t.IsDead).Select(t => t.ToDto()).ToList();
@@ -53,7 +53,7 @@ namespace TankWar.Engine.Objects
             viewPortState.Tanks = aliveTankDtos;
             viewPortState.Shells = aliveShellDtos;
 
-            var mapper = new CartesianMapper(screen);
+            var mapper = new CartesianMapper(viewPortSize);
 
             viewPortState.Tanks.ForEach(t => t.Point = mapper.CartesianToScreen(t.Point));
             viewPortState.Shells.ForEach(t => t.Point = mapper.CartesianToScreen(t.Point));

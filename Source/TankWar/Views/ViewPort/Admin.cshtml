@@ -1,28 +1,41 @@
 ﻿@{
     ViewBag.Title = "Admin";
 }
-@model ViewPortAdminModel
+@model TankWar.Engine.Objects.GameParameters
 
 <h2>Admin</h2>
 
+<fieldset>
+    <legend>Game Parameters</legend>
+    @using (Html.BeginForm())
+    {
+        @Html.EditorForModel();
+        
+        @Html.LabelFor(m => m.ViewPortSize)
+        @Html.EditorFor(m => m.ViewPortSize)
+        <br />
+        <input type="submit" class="btn btn-info btn-large" value="Set Parameters"/>
+
+    }
+</fieldset>
+
  <fieldset>
      <legend>God Mode</legend>
-     
+      @Html.ValidationSummary()
      <div class="row">
          <div class="span3">
+             <div class="span3">
              
-         <div class="span3">
-             
-            @using(Html.BeginForm("ResetGameState", "ViewPort"))
-            {
-                <input type="submit" class="btn btn-danger btn-large" value="Reset Game State"/>
-            }
+                 @using(Html.BeginForm("ResetGameState", "ViewPort"))
+                 {
+                     <input type="submit" class="btn btn-danger btn-large" value="Reset Game State"/>
+                 }
      
-         </div>
-            @using(Html.BeginForm("ForceStart", "ViewPort"))
-            {
-                <input type="submit" class="btn btn-info btn-large" value="Force Immediate Start"/>
-            }
+             </div>
+             @using(Html.BeginForm("ForceStart", "ViewPort"))
+             {
+                 <input type="submit" class="btn btn-info btn-large" value="Send Countdown to zero"/>
+             }
          </div>
          <div class="span3">
              
@@ -34,13 +47,3 @@
          </div>
      </div>
  </fieldset>
-
-<fieldset>
-    <legend>Game Parameters</legend>
-    @using (Html.BeginForm("SetGameParams", "ViewPort"))
-    {
-        @Html.EditorForModel();
-        <input type="submit" class="btn btn-info btn-large" value="Set Parameters"/>
-
-    }
-</fieldset>

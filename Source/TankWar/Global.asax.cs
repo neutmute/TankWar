@@ -10,6 +10,7 @@ using Kraken.Framework.Core;
 using NLog;
 using TankWar.Engine;
 using TankWar.Hubs;
+using TankWar.Models;
 
 namespace TankWar
 {
@@ -38,7 +39,8 @@ namespace TankWar
             Game.Instance.GetGamepadClients = () => new GamepadHubClientsProxy();
             Game.Instance.Init();
 
-            //Game.Instance.Start();
+            ModelBinders.Binders.Add(typeof(Point), new PointModelBinder());
+           
         }
     }
 }

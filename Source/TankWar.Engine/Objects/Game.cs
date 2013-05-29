@@ -15,28 +15,6 @@ using TankWar.Engine.Util;
 
 namespace TankWar.Engine
 {
-    //public class ExtensionMethods
-    //{
-    //    public static bool Contains(this List<Enum> )    
-    //}
-
-    public enum GameStatus
-    {
-        WaitingForPlayers,
-        Countdown,
-        Playing,
-        GameOver
-    }
-
-    public enum PlayerStatus
-    {
-        WaitingForName,
-        GameInCountdown,
-        GameInPlay,
-        Dead,
-        WaitingForNextGame
-    }
-
     public class Game
     {
         #region Fields
@@ -45,7 +23,7 @@ namespace TankWar.Engine
         private readonly Timer _countDownClock;
         private int _time;
         private int _countDown;
-        Stopwatch _stopwatch;
+        readonly Stopwatch _stopwatch;
 
         private int _shellCounter;
         #endregion
@@ -64,8 +42,9 @@ namespace TankWar.Engine
 
         private Game()
         {
+            GameParameters = new GameParameters();
+
             _gameClock = new Timer();
-            _gameClock.Interval = 25;
             _gameClock.Elapsed += GameTick;
             _gameClock.Stop();
 
@@ -74,37 +53,24 @@ namespace TankWar.Engine
             _countDownClock.Elapsed += CountdownTick;
             _countDownClock.Stop();
 
-            Screen = new Area(0, 0, 800, 400);
             _stopwatch = new Stopwatch();
             State = new ServerGameState();
             _shellCounter = 0;
             _time = 0;
-            CountDownSeconds = 1;
-            MaximumGameRunTimeMilliseconds = TimeSpan.FromMinutes(2);
         }
 
 
         #endregion
 
         #region Properties
-        public int CountDownSeconds { get; set; }
-
-        public int GameLoopIntervalMilliseconds
-        {
-            get { return Convert.ToInt32(_gameClock.Interval); }
-            set {_gameClock.Interval = value; }
-        }
-
-        public TimeSpan MaximumGameRunTimeMilliseconds { get; set; }
-
+        public GameParameters GameParameters { get; set; }
+        
         /// <summary>
         /// IOC property injection
         /// </summary>
         public Func<IViewPortClients> GetViewPortClients { get; set; }
 
         public Func<IGamepadClients> GetGamepadClients { get; set; }
-
-        public Area Screen { get; private set; }
 
         public ServerGameState State { get; private set; }
 
@@ -145,7 +111,7 @@ namespace TankWar.Engine
 
         private void StartCountdown()
         {
-            _countDown = CountDownSeconds;
+            _countDown = GameParameters.CountdownSeconds;
             State.Status = GameStatus.Countdown;
             _countDownClock.Start();
             BroadcastGameStateToGamepads();
@@ -167,16 +133,17 @@ namespace TankWar.Engine
         {
             _countDownClock.Stop();
             State.Status = GameStatus.Playing;
+            _gameClock.Interval = GameParameters.GameLoopIntervalMilliseconds;
             _gameClock.Start();
             _stopwatch.Reset();
             _stopwatch.Start();
 
             _time = 0;
-            Log.Info("Game on! Game loop interval = {0}ms", GameLoopIntervalMilliseconds);
+            Log.Info("Game on! Game loop interval = {0}ms", GameParameters.GameLoopIntervalMilliseconds);
 
             State.PositionTanks();
             
-            GetViewPortClients().StartGame(State.ToViewPortState((Screen)));
+            GetViewPortClients().StartGame(State.ToViewPortState((GameParameters.ViewPortSize)));
             UpdatePlayers(PlayerStatus.GameInCountdown, PlayerStatus.GameInPlay);
         }
 
@@ -225,7 +192,7 @@ namespace TankWar.Engine
             _time++;
 
             var shells = State.AllShells.Where(s => !s.IsDead).ToList();
-            var projectileMotion = new ProjectileMotion(_time, Screen, GameLoopIntervalMilliseconds);
+            var projectileMotion = new ProjectileMotion(_time, GameParameters.GameLoopIntervalMilliseconds);
             shells.ForEach(projectileMotion.Calculate);
 
             var tanks = State.AllTanks;
@@ -238,7 +205,7 @@ namespace TankWar.Engine
             tanks.ForEach(t => t.IsDead |= t.IsHit); // kill off tanks that got hit from the prior tick 
             activeShells.ForEach(s => activeTanks.ForEach(t => collisionDetector.Detect(s, t)));
             
-            GetViewPortClients().Tick(State.ToViewPortState((Screen)));
+            GetViewPortClients().Tick(State.ToViewPortState((GameParameters.ViewPortSize)));
             tanks.ForEach(t => t.IsFiring = false);
 
             if (activeTanks.Count == 0)
@@ -247,9 +214,9 @@ namespace TankWar.Engine
                 //Stop();
             }
 
-            if (_stopwatch.ElapsedMilliseconds > MaximumGameRunTimeMilliseconds.TotalMilliseconds)
+            if (_stopwatch.ElapsedMilliseconds > GameParameters.MaximumGameTimeMinutes * 1000 * 60)
             {
-                Log.Warn("Total allowed game time of {0} minutes elasped", MaximumGameRunTimeMilliseconds.TotalMinutes);
+                Log.Warn("Total allowed game time of {0} minutes elasped", GameParameters.MaximumGameTimeMinutes);
                 Stop();
             }
         }
