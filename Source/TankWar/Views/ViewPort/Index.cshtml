@@ -7,11 +7,15 @@
 <style>.sjs{border:2px #999 solid;}</style>
 
 <h5>View Port</h5>
-
 <div class="row">
     <div class="span10" id="sceneDiv"></div>
-    <div class="span2"></div>
 </div>
+<div class="row">
+    <ul data-bind="foreach: messages">
+        <li data-bind="text: Text"></li>
+    </ul>
+</div>
+    
 @section Scripts {
     <script src="~/Scripts/custom/sprite.js"></script>
     <script src="~/Scripts/custom/util.js"></script>
@@ -50,8 +54,18 @@
                 }
             }
         }
+        
+        function DashboardControllerClass(){
+            
+            var self = this;
+            self.messages = ko.observableArray();  
+                                             
+            self.receiveMessage = function(message) {
+                self.messages.push(message);
+            }
+        }
 
-        function sceneControllerClass() {
+        function SceneControllerClass() {
 
 
             var tankSpriteUrl = '@Url.Content("~/Content/Sprites/tank.gif")';
@@ -154,7 +168,9 @@
                 console.log('game over');
 
                 var bossCycle = sjs.Cycle([
-                    [15, 15, 5], [192, 14, 5], [367, 13, 5]
+                        [15, 15, 10]
+                    ,   [192, 14, 10]
+                    ,   [367, 13, 10]
                 ]);
 
                 var gameOverSprite = self.tankLayer.Sprite('@Url.Content("~/Content/Images/gameover2.gif")');
@@ -304,21 +320,26 @@
 
 
         $(document).ready(function() {
-
-            var sceneController = new sceneControllerClass();
+            
+            var viewModel = new DashboardControllerClass();
+            ko.applyBindings(viewModel);
+            
+            var sceneController = new SceneControllerClass();
 
             $.connection.viewPortHub.client.startGame = sceneController.startGame;
 
             $.connection.viewPortHub.client.gameOver = sceneController.gameOver;
 
             $.connection.viewPortHub.client.tick = sceneController.tick;
-
+            
+            $.connection.viewPortHub.client.receiveMessage = viewModel.receiveMessage;
+            
             $.connection.hub.start().done(function() {
                 console.log("Hub started");
                 $.connection.viewPortHub.server.ping();
             });
 
-
+            
         });
 
     </script>

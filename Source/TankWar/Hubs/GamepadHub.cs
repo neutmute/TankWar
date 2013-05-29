@@ -30,7 +30,8 @@ namespace TankWar.Hubs
         {
             var player = FindPlayer();
 
-            Log.Info("'{0}' is now known as '{1}'", GetPlayerName(), name);
+            new ViewPortHubClientsProxy().Notify("'{0}' is now known as '{1}'", GetPlayerName(), name);
+
             if (player.Tank != null)
             {
                 player.Tank.Name = name;

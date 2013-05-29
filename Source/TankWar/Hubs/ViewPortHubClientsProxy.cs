@@ -29,6 +29,17 @@ namespace TankWar.Hubs
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ViewPortHub>();
             context.Clients.All.gameOver();
         }
+
+        public void Notify(string format, params object[] args)
+        {
+            Notify(new Message { Text = string.Format(format, args) });
+        }
+
+        public void Notify(Message message)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ViewPortHub>();
+            context.Clients.All.receiveMessage(message);
+        }
         #endregion
 
 

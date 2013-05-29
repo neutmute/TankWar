@@ -13,7 +13,6 @@ namespace TankWar.Controllers
 {
     public class ViewPortController : Controller
     {
-
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         public ActionResult Index()
@@ -25,13 +24,6 @@ namespace TankWar.Controllers
 
         public ActionResult Admin()
         {
-            //var game = Game.Instance;
-            //var model = new ViewPortAdminModel
-            //    {
-            //        CountdownSeconds = game.CountDownSeconds
-            //        ,GameLoopIntervalMilliseconds = game.GameLoopIntervalMilliseconds
-            //        ,MaximumGameTimeMinutes = Convert.ToInt32(game.MaximumGameRunTimeMilliseconds.TotalMinutes) 
-            //    };
             return View(Game.Instance.GameParameters);
         }
 

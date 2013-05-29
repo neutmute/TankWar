@@ -92,6 +92,8 @@ namespace TankWar.Engine
             var player = new Player {ConnectionId = connectionId};
             State.Players.Add(player);
             player.Tank.Id = State.Players.Count;
+
+            BroadcastMessage("Player {0} has connected", connectionId);
             return player;
         }
 
@@ -100,20 +102,24 @@ namespace TankWar.Engine
             if (new []{GameStatus.WaitingForPlayers, GameStatus.Countdown, GameStatus.GameOver}.Contains(State.Status))
             {
                 SetPlayerStatus(player, PlayerStatus.GameInCountdown);
-                Log.Info("'{0}' joined, countdown starting from {1}!", player, _countDown);
-                StartCountdown();
+                BroadcastMessage("'{0}' is ready, countdown starting from {1}!", player, _countDown);
+                StartOrContinueCountdown();
             }
             else
             {
                 SetPlayerStatus(player, PlayerStatus.WaitingForNextGame);
+                BroadcastMessage("'{0}' is waiting for the next game", player);
             }
         }
 
-        private void StartCountdown()
+        private void StartOrContinueCountdown()
         {
-            _countDown = GameParameters.CountdownSeconds;
-            State.Status = GameStatus.Countdown;
-            _countDownClock.Start();
+            if (State.Status != GameStatus.Countdown)
+            {
+                _countDown = GameParameters.CountdownSeconds;
+                State.Status = GameStatus.Countdown;
+                _countDownClock.Start();
+            }
             BroadcastGameStateToGamepads();
         }
 
@@ -168,6 +174,13 @@ namespace TankWar.Engine
             GetGamepadClients().NotifyGameStatus(State.Status, _countDown);
         }
 
+        private void BroadcastMessage(string format, params object[] args)
+        {
+            var message = string.Format(format, args);
+            Log.Info(message);
+            GetViewPortClients().Notify(new Message { Text = message });
+        }
+
         public void Stop()
         {
             _stopwatch.Stop();
@@ -197,7 +210,11 @@ namespace TankWar.Engine
 
             var tanks = State.AllTanks;
 
-            var collisionDetector = new CollisionHandler(SetPlayerStatus);
+            var collisionDetector = new CollisionHandler((p, s) =>
+                {
+                    SetPlayerStatus(p, PlayerStatus.Dead);
+                    BroadcastMessage("'{0}' was killed by '{1}'", p.Tank.Name, s.Origin.Name);
+                });
 
             var activeShells = shells.Where(s => !s.IsDead).ToList();
             var activeTanks = tanks.Where(t => !t.IsDead).ToList();

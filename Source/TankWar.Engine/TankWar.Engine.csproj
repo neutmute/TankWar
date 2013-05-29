@@ -65,8 +65,8 @@
     </Compile>
     <Compile Include="Dto\Area.cs" />
     <Compile Include="Dto\Turret.cs" />
-    <Compile Include="Interfaces\IViewPortClient.cs" />
-    <Compile Include="Interfaces\IViewPortHub.cs" />
+    <Compile Include="Interfaces\IGamepadClients.cs" />
+    <Compile Include="Interfaces\IViewPortClients.cs" />
     <Compile Include="Objects\CartesianMapper.cs" />
     <Compile Include="Objects\CollisionHandler.cs" />
     <Compile Include="Objects\Enums.cs" />

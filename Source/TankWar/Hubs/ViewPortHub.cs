@@ -8,7 +8,7 @@ using TankWar.Engine.Interfaces;
 
 namespace TankWar.Hubs
 {
-    public class ViewPortHub : CoreHub, IViewPortHub
+    public class ViewPortHub : CoreHub
     {
 
         public void Ping()
