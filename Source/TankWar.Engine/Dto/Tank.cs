@@ -28,17 +28,21 @@ namespace TankWar.Engine
 
     public class Tank : TankDto
     {
+        #region Fields
+
         public const int Height = 40;
         public const int Width = 40;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Where the tank can get hit
         /// </summary>
-        public Area Target { 
-            get
-            {
-                return new Area(Point.X, Point.Y, Point.X + Width, Point.Y - Height);
-            }
+        public Area Target
+        {
+            get { return new Area(Point.X, Point.Y, Point.X + Width, Point.Y - Height); }
         }
 
         /// <summary>
@@ -52,10 +56,20 @@ namespace TankWar.Engine
 
         public Player Owner { get; set; }
 
+        public int Armour { get; set; }
+        #endregion
+        
+        #region Ctor
+
         public Tank()
         {
             Turret = new Turret();
+            Armour = 1;
         }
+
+        #endregion
+        
+        #region Methods
 
         public TankDto ToDto()
         {
@@ -74,6 +88,9 @@ namespace TankWar.Engine
             var objAsTank = obj as Tank;
             return objAsTank != null && objAsTank.Id == Id;
         }
+
+        #endregion
+
 
     }
 }

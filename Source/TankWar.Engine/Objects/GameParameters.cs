@@ -22,6 +22,15 @@ namespace TankWar.Engine.Objects
         [DisplayName("Maximum Game Time (minutes)")]
         public int MaximumGameTimeMinutes { get; set; }
 
+        [DisplayName("No kill time (seconds)")]
+        public int NoKillTimeSeconds { get; set; }
+
+        [DisplayName("Minimum Active Tanks")]
+        public int MinimumActiveTanks { get; set; }
+
+        [DisplayName("Tank Hit Strength")]
+        public int TankHitStrength { get; set; }
+
         [DisplayName("ViewPort Size")]
         [UIHint("String")]
         public Point ViewPortSize { get; set; }
@@ -29,9 +38,12 @@ namespace TankWar.Engine.Objects
         public GameParameters()
         {
             ViewPortSize = new Point(800, 400);
-            CountdownSeconds = 1;
+            CountdownSeconds = 10;
             MaximumGameTimeMinutes = 2;
             GameLoopIntervalMilliseconds = 25;
+            NoKillTimeSeconds = 20;
+            TankHitStrength = 5;
+            MinimumActiveTanks = 0;
         }
 
         public override string ToString()

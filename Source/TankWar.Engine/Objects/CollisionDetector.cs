@@ -10,14 +10,13 @@ namespace TankWar.Engine.Objects
 {
     public delegate void NotifyHitMethod(Player playerHit, Shell hitBy);
 
-    public class CollisionHandler
+    public class CollisionDetector
     {
         private readonly NotifyHitMethod _notifyHitMethod;
 
-        public CollisionHandler(NotifyHitMethod notifyHitMethod)
+        public CollisionDetector(NotifyHitMethod notifyHitMethod)
         {
             _notifyHitMethod = notifyHitMethod;
-          
         }
 
         public void Detect(Shell shell, Tank tank)
@@ -25,12 +24,10 @@ namespace TankWar.Engine.Objects
             var hit = IsHit(shell.Point, tank.Target);
             if (hit)
             {              
-                tank.IsHit = true;
-                shell.IsDead = true;
-
                 _notifyHitMethod(tank.Owner, shell);
             }
         }
+
         private  bool IsHit(Point point, Area area)
         {
             const int margin = 3;

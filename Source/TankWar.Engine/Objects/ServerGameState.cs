@@ -19,12 +19,16 @@ namespace TankWar.Engine.Objects
             Players = new List<Player>();
         }
 
-        public void PositionTanks()
+        public void InitialiseTanks(GameParameters gameParameters)
         {
+            var tankSpread = gameParameters.ViewPortSize.X / (Players.Count + 1);
+
             for (int i = 0; i < Players.Count; i++)
             {
                 var player = Players[i];
-                player.Tank.Point = new Point(i * 100 + 100, 20 + Tank.Height);
+                player.Tank.Armour = gameParameters.TankHitStrength;
+                var tankXcoord = ((i + 1) * tankSpread) - (tankSpread/2);
+                player.Tank.Point = new Point(tankXcoord, 20 + Tank.Height);
             }
         }
 

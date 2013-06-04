@@ -61,7 +61,7 @@
             self.messages = ko.observableArray();  
                                              
             self.receiveMessage = function(message) {
-                self.messages.push(message);
+                self.messages.unshift(message);
             }
         }
 

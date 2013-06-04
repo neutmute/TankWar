@@ -15,6 +15,8 @@ using TankWar.Engine.Util;
 
 namespace TankWar.Engine
 {
+    public delegate void BroadcastMessageMethod(string format, params object[] args);
+
     public class Game
     {
         #region Fields
@@ -23,7 +25,9 @@ namespace TankWar.Engine
         private readonly Timer _countDownClock;
         private int _time;
         private int _countDown;
-        readonly Stopwatch _stopwatch;
+        readonly Stopwatch _gameStopWatch;
+
+        NoKillTimePolicy _noKillPolicy;
 
         private int _shellCounter;
         #endregion
@@ -53,7 +57,7 @@ namespace TankWar.Engine
             _countDownClock.Elapsed += CountdownTick;
             _countDownClock.Stop();
 
-            _stopwatch = new Stopwatch();
+            _gameStopWatch = new Stopwatch();
             State = new ServerGameState();
             _shellCounter = 0;
             _time = 0;
@@ -91,8 +95,9 @@ namespace TankWar.Engine
         {
             var player = new Player {ConnectionId = connectionId};
             State.Players.Add(player);
-            player.Tank.Id = State.Players.Count;
 
+            player.Tank.Id = State.Players.Count;
+            
             BroadcastMessage("Player {0} has connected", connectionId);
             return player;
         }
@@ -139,15 +144,21 @@ namespace TankWar.Engine
         {
             _countDownClock.Stop();
             State.Status = GameStatus.Playing;
+            _noKillPolicy = new NoKillTimePolicy(BroadcastMessage);
+            
             _gameClock.Interval = GameParameters.GameLoopIntervalMilliseconds;
             _gameClock.Start();
-            _stopwatch.Reset();
-            _stopwatch.Start();
-
+            _gameStopWatch.Reset();
+            _gameStopWatch.Start();
+            
             _time = 0;
-            Log.Info("Game on! Game loop interval = {0}ms", GameParameters.GameLoopIntervalMilliseconds);
+            
+            State.InitialiseTanks(GameParameters);
 
-            State.PositionTanks();
+            BroadcastMessage(
+                "Game on! Game loop interval = {0}ms. Locations={1}"
+                , GameParameters.GameLoopIntervalMilliseconds
+                , State.Players.Select(p => p.Tank).ToCsv(",", t => t.Name + ":" + t.Point));
             
             GetViewPortClients().StartGame(State.ToViewPortState((GameParameters.ViewPortSize)));
             UpdatePlayers(PlayerStatus.GameInCountdown, PlayerStatus.GameInPlay);
@@ -178,12 +189,13 @@ namespace TankWar.Engine
         {
             var message = string.Format(format, args);
             Log.Info(message);
+            message = _gameStopWatch.Elapsed.ToString("mm\\:ss") + ": " + message;
             GetViewPortClients().Notify(new Message { Text = message });
         }
 
         public void Stop()
         {
-            _stopwatch.Stop();
+            _gameStopWatch.Stop();
             _gameClock.Stop();
             State.Status = GameStatus.GameOver;
             BroadcastGameStateToGamepads();
@@ -210,30 +222,46 @@ namespace TankWar.Engine
 
             var tanks = State.AllTanks;
 
-            var collisionDetector = new CollisionHandler((p, s) =>
-                {
-                    SetPlayerStatus(p, PlayerStatus.Dead);
-                    BroadcastMessage("'{0}' was killed by '{1}'", p.Tank.Name, s.Origin.Name);
-                });
 
             var activeShells = shells.Where(s => !s.IsDead).ToList();
             var activeTanks = tanks.Where(t => !t.IsDead).ToList();
-            
             tanks.ForEach(t => t.IsDead |= t.IsHit); // kill off tanks that got hit from the prior tick 
-            activeShells.ForEach(s => activeTanks.ForEach(t => collisionDetector.Detect(s, t)));
+
+
+            if (_noKillPolicy.IsInKillTimeZone(GameParameters, _gameStopWatch.Elapsed))
+            {
+                var collisionDetector = new CollisionDetector((p, s) =>
+                    {
+                        p.Tank.Armour--;
+                        s.IsDead = true;
+
+                        if (p.Tank.Armour == 0)
+                        {
+                            p.Tank.IsHit = true;
+                            SetPlayerStatus(p, PlayerStatus.Dead);
+                            BroadcastMessage("'{0}' was killed by '{1}'", p.Tank.Name, s.Origin.Name);
+                        }
+                        else
+                        {
+                            BroadcastMessage("'{0}' was hit by '{1}'. Armour left={2}", p.Tank.Name, s.Origin.Name, p.Tank.Armour);   
+                        }
+                    });
+
+                activeShells.ForEach(s => activeTanks.ForEach(t => collisionDetector.Detect(s, t)));
+            }
             
             GetViewPortClients().Tick(State.ToViewPortState((GameParameters.ViewPortSize)));
             tanks.ForEach(t => t.IsFiring = false);
 
-            if (activeTanks.Count == 0)
+            if (activeTanks.Count < GameParameters.MinimumActiveTanks)
             {
-                //Log.Info("All tanks dead");
-                //Stop();
+                BroadcastMessage("Game over. {0} won", activeTanks.ToCsv(",", t => t.Name));
+                Stop();
             }
 
-            if (_stopwatch.ElapsedMilliseconds > GameParameters.MaximumGameTimeMinutes * 1000 * 60)
+            if (_gameStopWatch.ElapsedMilliseconds > GameParameters.MaximumGameTimeMinutes * 1000 * 60)
             {
-                Log.Warn("Total allowed game time of {0} minutes elasped", GameParameters.MaximumGameTimeMinutes);
+                BroadcastMessage("Total allowed game time of {0} minutes elasped", GameParameters.MaximumGameTimeMinutes);
                 Stop();
             }
         }

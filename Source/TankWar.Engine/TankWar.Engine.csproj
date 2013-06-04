@@ -68,7 +68,7 @@
     <Compile Include="Interfaces\IGamepadClients.cs" />
     <Compile Include="Interfaces\IViewPortClients.cs" />
     <Compile Include="Objects\CartesianMapper.cs" />
-    <Compile Include="Objects\CollisionHandler.cs" />
+    <Compile Include="Objects\CollisionDetector.cs" />
     <Compile Include="Objects\Enums.cs" />
     <Compile Include="Objects\Game.cs" />
     <Compile Include="Dto\Message.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="Dto\Sprite.cs" />
     <Compile Include="Dto\ViewPortState.cs" />
     <Compile Include="Objects\GameParameters.cs" />
+    <Compile Include="Objects\NoKillTimePolicy.cs" />
     <Compile Include="Objects\PhysicsParam.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\ProjectileMotion.cs" />
