@@ -39,7 +39,6 @@ namespace TankWar.Engine.Objects
 
         public List<Shell> AllShells
         {
-            
             get
             {
                 var allShells = new List<Shell>();
