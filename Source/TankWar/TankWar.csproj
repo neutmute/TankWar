@@ -212,7 +212,6 @@
     <Content Include="Content\images\gameover.gif" />
     <Content Include="Content\images\inProgress.jpg" />
     <Content Include="App_Code\Templates.cshtml" />
-    <None Include="Properties\PublishProfiles\AWS.pubxml" />
     <Content Include="Content\deckJs\core\deck.core.css" />
     <Content Include="Content\deckJs\core\deck.core.js" />
     <Content Include="Content\deckJs\extensions\goto\deck.goto.css" />
