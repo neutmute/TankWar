@@ -1,3 +1,16 @@
-﻿<h1>Hello World</h1>
+﻿<h1>Tank War</h1>
+<p>An experiment in using SignalR &amp; Websockets.</p>
+<p>Battle other players in real time, controlling your tank's turrent in the <a href="@Url.Action("Index", "Gamepad", null, this.Request.Url.Scheme)">Gamepad</a> using two sliders to control your angle and power.</p>
+<p>Each change to a slider is transmitted via signalR to the GamePadHub and used to calculate the projectile motion of a shell upon firing.</p>
+<p>The server runs the game loop, ticking time forward every 25ms, calculating the updated shell positions and detecting shell/tank collisions.</p>
+<p>
+    View the action via the <a href="@Url.Action("Index", "Viewport", null, this.Request.Url.Scheme)">Viewport</a> which is receiving the updated turret settings and shell positions on every game tick. The canvas and sprites are rendered using <a href="https://github.com/batiste/sprite.js/">sprite.js</a>.
+    Try refreshing the viewport once the game starts if your tanks don't render properly.
+</p>
 
-
+<p>
+    Tweak game parameters and control the game using the <a href="@Url.Action("Admin", "Viewport", null, this.Request.Url.Scheme)">admin page</a>.
+</p>
+<p>
+    View the accompanying slide deck <a href="@Url.Action("Preso", "Home", null, this.Request.Url.Scheme)">here</a>
+</p>
