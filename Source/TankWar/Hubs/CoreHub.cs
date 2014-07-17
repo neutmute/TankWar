@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Kraken.Framework.Core.Web;
 using Microsoft.AspNet.SignalR;
 using NLog;
 
 namespace TankWar.Hubs
 {
+    public static class WebLogic
+    {
+        public static string ClientIdentity
+        {
+            get
+            {
+                return "nancy needs help here";
+            }
+        }
+    }
+
     public class CoreHub: Hub
     {
         private static readonly Logger _Log = LogManager.GetCurrentClassLogger();

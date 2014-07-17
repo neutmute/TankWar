@@ -11,27 +11,27 @@ namespace TankWar.Content
     /// <summary>
     /// Summary description for GetNameImage
     /// </summary>
-    public class GetNameImage : IHttpHandler
+    public class GetNameImage 
     {
 
-        public void ProcessRequest(HttpContext context)
-        {
-            var name = context.Request.QueryString["text"];
-            if (name == null)
-            {
-                name = "_";
-            }
+        //public void ProcessRequest(HttpContext context)
+        //{
+        //    var name = context.Request.QueryString["text"];
+        //    if (name == null)
+        //    {
+        //        name = "_";
+        //    }
 
-            name = name.PadRight(40, ' '); // sprite doesn't repeat
+        //    name = name.PadRight(40, ' '); // sprite doesn't repeat
 
-            var font = new Font("Courier New", 10);
-            var image = DrawText(name, font, Color.Black, Color.White);
-            var memoryStream = new MemoryStream();
-            image.Save(memoryStream, ImageFormat.Gif);
+        //    var font = new Font("Courier New", 10);
+        //    var image = DrawText(name, font, Color.Black, Color.White);
+        //    var memoryStream = new MemoryStream();
+        //    image.Save(memoryStream, ImageFormat.Gif);
 
-            context.Response.ContentType = "image/gif";
-            context.Response.BinaryWrite(memoryStream.ToArray());
-        }
+        //    context.Response.ContentType = "image/gif";
+        //    context.Response.BinaryWrite(memoryStream.ToArray());
+        //}
 
         private Image DrawText(String text, Font font, Color textColor, Color backColor)
         {

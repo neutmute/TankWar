@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Kraken.Framework.Core;
+using Kraken.Core;
 
 [assembly: AssemblyTitle("TankWar.Web")]
 [assembly: AssemblyDescription("TankWar Web")]

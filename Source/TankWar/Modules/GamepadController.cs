@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Nancy;
 
 namespace TankWar.Controllers
 {
-    public class GamepadController : Controller
+    public class GamepadController : NancyModule
     {
-        public ActionResult Index()
+        public GamepadController()
         {
-            return View();
+            Get["/"] = parameters => "Hello World";
         }
     }
 }

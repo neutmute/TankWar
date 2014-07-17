@@ -32,14 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FastMember">
       <HintPath>..\..\packages\FastMember.1.0.0.9\lib\net40\FastMember.dll</HintPath>
     </Reference>
-    <Reference Include="Kraken.Framework.Core">
-      <HintPath>..\..\ReferencedAssemblies\Kraken.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Kraken.Framework.Core.FullFx">
-      <HintPath>..\..\ReferencedAssemblies\Kraken.Framework.Core.FullFx.dll</HintPath>
+    <Reference Include="Kraken.Core">
+      <HintPath>..\..\packages\Kraken.Core.4.5.0.20\lib\net40\Kraken.Core.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
