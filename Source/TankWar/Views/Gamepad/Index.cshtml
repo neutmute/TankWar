@@ -1,5 +1,7 @@
-﻿@{
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@{
     ViewBag.Title = "Tank War Gamepad";
+    Layout = "../Shared/_Layout.cshtml";
 }
 
 <div style="display:none" data-bind="visible:true">

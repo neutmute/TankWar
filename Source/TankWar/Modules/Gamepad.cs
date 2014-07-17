@@ -6,11 +6,11 @@ using Nancy;
 
 namespace TankWar.Controllers
 {
-    public class GamepadController : NancyModule
+    public class Gamepad : NancyModule
     {
-        public GamepadController()
+        public Gamepad()
         {
-            Get["/"] = parameters => "Hello World";
+            Get["/"] = parameters => View["Index.cshtml"];
         }
     }
 }

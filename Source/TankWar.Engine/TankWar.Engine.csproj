@@ -38,9 +38,6 @@
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FastMember">
-      <HintPath>..\..\packages\FastMember.1.0.0.9\lib\net40\FastMember.dll</HintPath>
-    </Reference>
     <Reference Include="Kraken.Core">
       <HintPath>..\..\packages\Kraken.Core.4.5.0.20\lib\net40\Kraken.Core.dll</HintPath>
     </Reference>

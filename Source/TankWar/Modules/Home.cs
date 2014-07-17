@@ -6,10 +6,10 @@ using Nancy;
 
 namespace TankWar.Controllers
 {
-    public class HomeController : NancyModule
+    public class Home : NancyModule
     {
 
-        public HomeController()
+        public Home()
         {
             Get["/"] = parameters => View["Index.cshtml"];
             Get["/preso"] = parameters => View["Preso.cshtml"];

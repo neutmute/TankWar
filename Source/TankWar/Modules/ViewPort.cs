@@ -11,12 +11,12 @@ using Nancy;
 
 namespace TankWar.Controllers
 {
-    public class ViewPortController : NancyModule
+    public class ViewPort : NancyModule
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
 
-        public ViewPortController()
+        public ViewPort()
         {
             var viewModel = new ViewPortModel();
             viewModel.ViewSize = Game.Instance.GameParameters.ViewPortSize;
