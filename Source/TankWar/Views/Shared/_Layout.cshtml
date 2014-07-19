@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    @*@Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/themes/base/css")
-    @Scripts.Render("~/bundles/modernizr")*@
+    @Html.Raw(Styles.Render("~/Content/css").ToString())
+    @*@Html.Raw(Styles.Render("~/Content/themes/base/css").ToString())
+    @Html.Raw(Scripts.Render("~/bundles/modernizr").ToString())*@
     <link href="~/favicon.ico" rel="icon" type="image/x-icon" />
      <style>
       body {
@@ -21,9 +21,9 @@
         @RenderBody()
      </div> <!-- /container -->
 
-    @*@Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/signalr")
-    @Scripts.Render("~/bundles/jqueryui")*@
+    @*@Html.Raw(Scripts.Render("~/bundles/jquery").ToString())
+    @Html.Raw(Scripts.Render("~/bundles/signalr").ToString())
+    @Html.Raw(Scripts.Render("~/bundles/jqueryui").ToString())*@
     <script src="~/Scripts/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
     <script src="~/Scripts/knockout-2.2.1.js" type="text/javascript"></script>
     <script src="~/signalr/hubs" type="text/javascript"></script>

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Kraken.Core;
 using Microsoft.Owin.Hosting;
+using Nancy;
+using Nancy.Owin;
 using NLog;
 using Owin;
 
@@ -59,6 +61,8 @@ namespace TankWar
                 url = "http://*:8080";
             }
 
+
+
             options.Urls.Add(url);
             return options;
         }
@@ -68,6 +72,7 @@ namespace TankWar
     {
         public void Configuration(IAppBuilder app)
         {
+            app.UseNancy(options => options.PassThroughWhenStatusCodesAre(HttpStatusCode.NotFound));
             app.MapSignalR();
             app.UseNancy();
         }
