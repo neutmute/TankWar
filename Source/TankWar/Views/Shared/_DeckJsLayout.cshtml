@@ -1,7 +1,6 @@
 ﻿@{
     Layout = null;
 }
-@using System.Web.Optimization
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +28,8 @@
     <link rel="stylesheet" href="~/Content/DeckJs/themes/transition/horizontal-slide.css">
 
     <!-- Required Modernizr file -->
-    @Scripts.Render("~/bundles/modernizr")
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
 
 </head>
 <body class="deck-container">
@@ -62,7 +62,7 @@
 
     <!-- Required JS files. -->
 
-    @Scripts.Render("~/bundles/jquery")
+    <script src="/Scripts/jquery-2.0.0.js"></script>
     
     <!-- Extension JS files. Add or remove as needed. -->
     <script src="~/Content/DeckJs/core/deck.core.js"></script>

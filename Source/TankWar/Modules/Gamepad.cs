@@ -8,7 +8,7 @@ namespace TankWar.Controllers
 {
     public class Gamepad : NancyModule
     {
-        public Gamepad()
+        public Gamepad() : base("/gamepad")
         {
             Get["/"] = parameters => View["Index.cshtml"];
         }

@@ -16,7 +16,7 @@ namespace TankWar.Controllers
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
 
-        public ViewPort()
+        public ViewPort() : base("/viewport")
         {
             var viewModel = new ViewPortModel();
             viewModel.ViewSize = Game.Instance.GameParameters.ViewPortSize;

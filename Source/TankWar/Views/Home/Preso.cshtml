@@ -1,8 +1,8 @@
-﻿@{
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@{
     ViewBag.Title = "WebSockets";
-    Layout = "~/Views/Shared/_DeckJsLayout.cshtml";
+    Layout = "../Shared/_DeckJsLayout.cshtml";
 }
-    
     <section class="slide">
         <div>
             <h1>@ViewBag.Title</h1>
@@ -148,14 +148,6 @@ Access-Control-Allow-Headers: content-type
         <img src="@Url.Content("~/Content/slides/WebSocketFrame.png")" />
     </section>
 
-    @*<section class="slide">
-        <h2>Polling vs WebSocket Overhead</h2>
-        <img src="@Url.Content("~/Content/slides/poll-ws-compare.gif")" />
-        <ul>
-            <li></li>
-        </ul>
-    </section>*@
-
     <section class="slide">
         <h2>WebSocket Usage</h2>
         <pre><code>var myWebSocket = new WebSocket("ws://www.websockets.org");</code></pre>
@@ -199,7 +191,7 @@ myWebSocket.close();</code></pre>
                 <td>
                     <img width="300" src="@Url.Content("~/Content/slides/choice1.jpg")" /></td>
                 <td>
-                    @Templates.SlideQRCode(Url.Action("Index", "Gamepad", null, this.Request.Url.Scheme))
+                    @*@Templates.SlideQRCode("/gamepad")*@
                 </td>
             </tr>
             <tr>
@@ -211,7 +203,7 @@ myWebSocket.close();</code></pre>
                 <td>
                     <img width="300" src="@Url.Content("~/Content/slides/choice2.gif")" /></td>
                 <td>
-                    @Templates.SlideQRCode(Url.Action("Index", "Viewport", null, this.Request.Url.Scheme))
+                    @*@Templates.SlideQRCode("/viewport")*@
                 </td>
             </tr>
         </table>
@@ -318,7 +310,7 @@ $.connection.hub.start().done(function() {
     </section>
     
     <section class="slide">
-        @Templates.SlideQRCode("https://github.com/neutmute/TankWar")
+        @*@Templates.SlideQRCode("https://github.com/neutmute/TankWar")*@
     </section>
               
   

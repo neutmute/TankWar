@@ -1,5 +1,4 @@
-@using TankWar.Models
-@model ViewPortModel
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<ViewPortModel>
 @{
     ViewBag.Title = "View Port";
 }
@@ -16,7 +15,7 @@
     </ul>
 </div>
     
-@section Scripts {
+@section scripts {
     <script src="~/Scripts/custom/sprite.js"></script>
     <script src="~/Scripts/custom/util.js"></script>
     <script>
@@ -83,13 +82,6 @@
                 var cycle;
                 while (cycle = self.cycleList.iterate()) {
                     cycle.next();
-                    //if (cycle.done) {
-                    //    //for (var i=0;i<cycle.sprites.length;i++) {
-                    //    //    cycle.sprites.isAnimating = false;
-                    //    //}
-                    //    cycle.reset();
-                    //    self.cycleList.remove(cycle);
-                    //}
                     cycle.update();
                 }
             }
