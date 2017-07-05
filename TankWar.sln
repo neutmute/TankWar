@@ -4,8 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{43DEA78A-5C07-4993-8EC4-5873D39256B5}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TankWar", "Source\TankWar\TankWar.csproj", "{1D39C8AD-2734-4013-90AF-4748B8C9737A}"
@@ -41,3 +39,4 @@ Global
 		{7FA595E9-141A-45F6-A8D0-8B5286FE7EC7} = {5E496D7E-9ACD-42A5-91D3-B9D0E13F1769}
 	EndGlobalSection
 EndGlobal
+
