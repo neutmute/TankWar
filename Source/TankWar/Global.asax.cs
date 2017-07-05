@@ -6,7 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Kraken.Framework.Core;
+using Kraken.Core;
 using NLog;
 using TankWar.Engine;
 using TankWar.Hubs;
@@ -32,8 +32,7 @@ namespace TankWar
 
             Log.Info("-------------------------------------------------------------------------------------------------------");
             var appdata = ExecutionEnvironment.GetApplicationMetadata();
-            appdata.LogStartup();
-
+            Log.Info(appdata.ToString());
 
             Game.Instance.GetViewPortClients = () => new ViewPortHubClientsProxy();
             Game.Instance.GetGamepadClients = () => new GamepadHubClientsProxy();

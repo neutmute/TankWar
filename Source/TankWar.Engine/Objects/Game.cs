@@ -6,7 +6,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using Kraken.Framework.Core;
+using Kraken.Core;
 using NLog;
 using TankWar.Engine.Dto;
 using TankWar.Engine.Interfaces;
