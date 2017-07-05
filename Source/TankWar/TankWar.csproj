@@ -215,7 +215,8 @@
     <Content Include="Content\images\countdown.jpg" />
     <Content Include="Content\images\gameover2.gif" />
     <Content Include="Content\slides\BlockDiagram.gif" />
-    <Content Include="Content\slides\caniuse.jpg" />
+    <Content Include="Content\slides\caniuse2013.jpg" />
+    <Content Include="Content\slides\caniuse2017.png" />
     <Content Include="Content\slides\choice2.gif" />
     <Content Include="Content\slides\demoTime.jpg" />
     <Content Include="Content\slides\choice1.jpg" />
